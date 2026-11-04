@@ -3,13 +3,15 @@
 
 1. Tạo knowledge base riêng cho lần chạy (cấu hình của scripts/setup.py).
 2. Upload tài liệu mẫu trong eval/documents.json, chờ parse xong.
-3. Kiểm tra chunk: footnote còn, tiêu đề Điều không bị cắt ngang, mọi chunk NFC.
+3. Kiểm tra chunk: footnote còn, tiêu đề Điều không bị cắt ngang, breadcrumb
+   của chunk con có Chương/Điều, mọi chunk NFC.
 4. Chạy Bộ kiểm tra keyword (eval/keyword-set.json) qua hybrid-search ở 3 chế
    độ: keyword (disable_vector_match), vector (disable_keywords_match), hybrid.
 5. Ghi recall@k, MRR, câu trượt và metadata vào results/<thời điểm>-<commit>.json.
 
 Kiểm tra chunk fail không làm script thoát lỗi (Fork chưa vá fail là baseline).
-Script thoát mã 1 khi tài liệu parse lỗi hoặc API lỗi.
+Script thoát mã 1 khi tài liệu parse lỗi hoặc API lỗi. Ngoài HTTP API, script đọc
+tokenizer BM25 và breadcrumb của chunk bằng psql, vì API không trả hai thông tin này.
     python3 scripts/e2e.py [--keep-kb] [--out results/baseline.json]
 """
 
@@ -109,9 +111,12 @@ def list_chunks(client, knowledge_id):
         page += 1
 
 
-def check_chunks(docs, chunks_by_doc):
-    """Kiểm tra footnote, tiêu đề Điều và NFC. Mỗi kiểm tra báo pass/fail riêng."""
-    footnotes_missing, headings_missing, non_nfc = [], [], []
+def check_chunks(docs, chunks_by_doc, headers):
+    """Kiểm tra footnote, tiêu đề Điều, breadcrumb và NFC. Mỗi kiểm tra báo pass/fail riêng.
+
+    headers: {chunk id: breadcrumb (context_header)}.
+    """
+    footnotes_missing, headings_missing, breadcrumbs_wrong, non_nfc = [], [], [], []
     for doc in docs:
         chunks = chunks_by_doc.get(doc["id"], [])
         # Chunk con (text) là thứ được tìm kiếm; chunk cha chỉ dùng để trả lời.
@@ -122,6 +127,13 @@ def check_chunks(docs, chunks_by_doc):
         for heading in doc.get("headings", []):
             if not any(norm(heading) in t for t in texts):
                 headings_missing.append({"doc": doc["id"], "text": heading})
+        # Breadcrumb lấy ở đầu chunk: chunk con chứa đoạn text phải có đủ các tiêu đề.
+        for want in doc.get("breadcrumbs", []):
+            got = [headers.get(c["id"], "") for c in chunks
+                   if c["chunk_type"] == "text" and norm(want["text"]) in norm(c["content"])]
+            if not any(all(norm(h) in norm(g) for h in want["header"]) for g in got):
+                breadcrumbs_wrong.append({"doc": doc["id"], "text": want["text"],
+                                          "want": want["header"], "got": got})
         for c in chunks:
             if not unicodedata.is_normalized("NFC", c["content"]):
                 non_nfc.append({"doc": doc["id"], "chunk_type": c["chunk_type"],
@@ -133,6 +145,7 @@ def check_chunks(docs, chunks_by_doc):
     return {
         "footnotes": result(footnotes_missing, sum(len(d.get("footnotes", [])) for d in docs)),
         "dieu_headings": result(headings_missing, sum(len(d.get("headings", [])) for d in docs)),
+        "breadcrumbs": result(breadcrumbs_wrong, sum(len(d.get("breadcrumbs", [])) for d in docs)),
         "nfc": result(non_nfc, sum(len(v) for v in chunks_by_doc.values())),
     }
 
@@ -187,14 +200,33 @@ def score(per_question):
             "unanswerable": len(per_question) - len(answerable), "modes": modes}
 
 
+def psql(sql):
+    """Chạy một câu SQL trong container postgres, trả về stdout dạng -tA."""
+    cmd = [str(ROOT / "scripts" / "compose.sh"), "exec", "-T", "postgres", "sh", "-c",
+           'psql -X -tA -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f -']
+    return subprocess.run(cmd, input=sql, capture_output=True, text=True, timeout=60,
+                          check=True).stdout
+
+
+def context_headers(knowledge_ids):
+    """Breadcrumb (context_header) của mọi chunk, đọc từ postgres (API không trả trường này)."""
+    if not knowledge_ids:
+        return {}
+    ids = ", ".join(f"'{k}'" for k in knowledge_ids)
+    try:
+        out = psql("SELECT json_object_agg(id, coalesce(context_header, '')) FROM chunks "
+                   f"WHERE knowledge_id IN ({ids})")
+    except (OSError, subprocess.SubprocessError) as err:
+        print(f"Không đọc được breadcrumb: {err}", file=sys.stderr)
+        return {}
+    return json.loads(out.strip() or "null") or {}
+
+
 def bm25_tokenizer():
     """Tokenizer của chỉ mục BM25, đọc từ postgres (API không công bố thông tin này)."""
-    sql = ("SELECT indexdef FROM pg_indexes WHERE tablename = 'embeddings' "
-           "AND indexdef ILIKE '%USING bm25%'")
-    cmd = [str(ROOT / "scripts" / "compose.sh"), "exec", "-T", "postgres", "sh", "-c",
-           f'psql -X -tA -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "{sql}"']
     try:
-        out = subprocess.run(cmd, capture_output=True, text=True, timeout=60, check=True).stdout
+        out = psql("SELECT indexdef FROM pg_indexes WHERE tablename = 'embeddings' "
+                   "AND indexdef ILIKE '%USING bm25%'")
     except (OSError, subprocess.SubprocessError) as err:
         print(f"Không đọc được tokenizer BM25: {err}", file=sys.stderr)
         return {"name": "unknown", "indexdef": None}
@@ -254,7 +286,9 @@ def main():
             doc_results.append(entry)
             print(f"Parse {doc['file']}: {status}")
 
-        chunk_checks = check_chunks(docs, chunks_by_doc)
+        headers = context_headers([e["knowledge_id"] for e in doc_results
+                                   if e["id"] in chunks_by_doc])
+        chunk_checks = check_chunks(docs, chunks_by_doc, headers)
         for name, check in chunk_checks.items():
             print(f"Kiểm tra chunk {name}: {'PASS' if check['pass'] else 'FAIL'} "
                   f"({len(check['failed'])}/{check['checked']} lỗi)")

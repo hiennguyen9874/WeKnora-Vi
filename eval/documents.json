@@ -21,6 +21,21 @@
         "Điều 13. Thành lập đội phòng cháy và chữa cháy chuyên ngành",
         "Điều 15. Tem kiểm định phương tiện phòng cháy và chữa cháy",
         "Điều 6. Kiểm tra điều kiện bảo đảm an toàn về cứu nạn, cứu hộ của cơ quan Công an"
+      ],
+      "breadcrumbs": [
+        {
+          "text": "Thông tư này có hiệu lực thi hành kể từ ngày 24 tháng 8 năm 2024",
+          "header": [
+            "Điều 4. Hiệu lực thi hành"
+          ]
+        },
+        {
+          "text": "Giấy chứng nhận bảo hiểm cháy, nổ bắt buộc",
+          "header": [
+            "Điều 1. Sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA",
+            "Điều 4. Hồ sơ quản lý, theo dõi hoạt động phòng cháy và chữa cháy"
+          ]
+        }
       ]
     },
     {
@@ -57,6 +72,29 @@
         "Điều 21. Điều khoản chuyển tiếp",
         "Điều 22. Hiệu lực thi hành",
         "Điều 23. Trách nhiệm thi hành"
+      ],
+      "breadcrumbs": [
+        {
+          "text": "Vàng miếng là sản phẩm vàng được dập thành miếng",
+          "header": [
+            "Chương I",
+            "Điều 3. Giải thích từ ngữ"
+          ]
+        },
+        {
+          "text": "Có vốn điều lệ từ 100 tỷ đồng trở lên",
+          "header": [
+            "Chương III",
+            "Điều 11. Điều kiện cấp Giấy phép kinh doanh mua, bán vàng miếng"
+          ]
+        },
+        {
+          "text": "Quy mô dự trữ ngoại hối nhà nước",
+          "header": [
+            "Chương V",
+            "Điều 16. Trách nhiệm của Ngân hàng Nhà nước"
+          ]
+        }
       ]
     },
     {
@@ -74,7 +112,8 @@
         "được bãi bỏ theo quy định tại điểm 2 khoản 2.1 mục II",
         "Phụ lục này được bổ sung theo quy định tại khoản 2 Điều 10 của Thông tư số 42/2019/TT-BCT"
       ],
-      "headings": []
+      "headings": [],
+      "breadcrumbs": []
     }
   ]
 }

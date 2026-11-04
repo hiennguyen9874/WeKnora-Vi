@@ -43,11 +43,12 @@ python3 scripts/setup.py
 1. Đăng nhập bằng `WEKNORA_ADMIN_EMAIL`, chưa có tài khoản thì đăng ký.
 2. Kiểm tra bốn model built-in đã được nạp.
 3. Ghi `PADDLEOCR_VL_ENDPOINT` vào tenant parser settings.
-4. Tạo knowledge base `WEKNORA_KB_NAME` nếu chưa có knowledge base cùng tên. Knowledge base đã có thì chỉ đưa kích thước chunk (`CHUNK_SIZES` trong script) về giá trị đã chốt, cấu hình khác giữ nguyên; tài liệu đã nạp phải nạp lại mới chunk theo kích thước mới. Muốn tạo lại theo toàn bộ cấu hình mới thì xoá nó trên UI rồi chạy lại.
+4. Tạo knowledge base `WEKNORA_KB_NAME` nếu chưa có knowledge base cùng tên. Knowledge base đã có thì chỉ đưa cấu hình chunk (`CHUNKING` trong script: strategy và kích thước) về giá trị đã chốt, cấu hình khác giữ nguyên; tài liệu đã nạp phải nạp lại mới chunk theo cấu hình mới. Muốn tạo lại theo toàn bộ cấu hình mới thì xoá nó trên UI rồi chạy lại.
 
 Knowledge base mẫu dùng cấu hình sau:
 
 - PDF và ảnh (JPG/JPEG/PNG/BMP/TIFF) đi qua `paddleocr_vl`, DOCX/XLSX dùng parser `builtin`.
+- Chunking strategy `auto`: chunker cắt theo tiêu đề Chương/Mục/Điều và gắn breadcrumb (xem [Chunker cho văn bản pháp lý](#chunker-cho-văn-bản-pháp-lý)). Bỏ trống strategy là tầng legacy, không cắt theo tiêu đề.
 - Bật parent-child: chunk cha 4096 ký tự, chunk con 384 ký tự, token limit 512, ngôn ngữ chunker `vi` (xem [Kích thước chunk](#kích-thước-chunk)).
 - Separators: `\n\n`, `\n`, `. `, `; `.
 - Mô tả ảnh bằng tiếng Việt qua model `builtin-vlm`.
@@ -98,7 +99,7 @@ Chưa có kết quả nghiệm thu trên stack thật; cấu hình và script kh
 
 ## Script E2E
 
-Chạy trên stack đã dựng và đã chạy `scripts/setup.py`. Script chỉ gọi HTTP API của WeKnora (thêm một lệnh `psql` để đọc tên tokenizer BM25, vì API không trả thông tin này):
+Chạy trên stack đã dựng và đã chạy `scripts/setup.py`. Script chỉ gọi HTTP API của WeKnora, thêm `psql` để đọc tên tokenizer BM25 và breadcrumb của chunk, vì API không trả hai thông tin này:
 
 ```sh
 python3 scripts/e2e.py                            # ghi results/<thời điểm>-<commit Fork>.json
@@ -113,6 +114,7 @@ Mỗi lần chạy:
 3. Kiểm tra chunk con (`text`), mỗi kiểm tra báo PASS/FAIL riêng:
    - `footnotes`: mỗi đoạn trong `footnotes` của tài liệu nằm trọn trong một chunk;
    - `dieu_headings`: mỗi tiêu đề trong `headings` (ví dụ `Điều 4. Hiệu lực thi hành`) nằm trọn trong một chunk, tức là không bị cắt ngang;
+   - `breadcrumbs`: với mỗi mục trong `breadcrumbs` của tài liệu, một chunk con chứa `text` có breadcrumb (`context_header`) chứa mọi chuỗi trong `header`, ví dụ `Chương III` và `Điều 11. ...`. API không trả breadcrumb nên script đọc nó bằng `psql`;
    - `nfc`: mọi chunk (cả chunk cha) ở dạng Unicode NFC.
 4. Gửi từng câu của Bộ kiểm tra keyword tới `hybrid-search` với `match_count` 10, `skip_context_enrichment` và ngưỡng 0, ở 3 chế độ: `keyword` (`disable_vector_match`), `vector` (`disable_keywords_match`), `hybrid`.
 5. Xoá knowledge base, trừ khi có `--keep-kb`.
@@ -147,7 +149,7 @@ Script in tóm tắt, rồi ghi file JSON:
 - `search.modes.<chế độ>`: `recall@k` (k = 1, 3, 5, 10) là tỉ lệ câu có đáp án mà kết quả trúng đầu tiên nằm trong top k. `mrr` là trung bình 1/hạng của kết quả trúng đầu tiên, câu không trúng trong top 10 tính 0. `failed` là danh sách câu trượt.
 - `questions`: từng câu, với hạng trúng (`rank`, `null` là trượt), điểm cao nhất và 3 kết quả đầu ở mỗi chế độ.
 
-`results/` bị gitignore, trừ `results/baseline.json` (Fork chưa vá), `results/chunker-vi.json` (sau vá chunker) và `results/chars-per-token.json`.
+`results/` bị gitignore, trừ `results/baseline.json` (Fork chưa vá), `results/chunker-vi.json` (sau vá chunker), `results/chunker-legal.json` (sau vá tiêu đề văn bản pháp lý) và `results/chars-per-token.json`.
 
 ## Kích thước chunk
 
@@ -176,9 +178,9 @@ Tỉ lệ của `vi` trong Fork là 2,5 (khoảng p10), thấp hơn trung bình 
 
 ### Cỡ đã chốt
 
-`scripts/setup.py` (`CHUNK_SIZES`): `languages: ["vi"]`, chunk cha 4096, chunk con 384, token limit 512.
+`scripts/setup.py` (`CHUNKING`): `languages: ["vi"]`, chunk cha 4096, chunk con 384, token limit 512.
 
-- Chunk cha 4096 ký tự chứa trọn một Điều, trừ hai Điều dài nhất. Chunker hiện chưa cắt theo Điều, nên một chunk cha có thể gồm vài Điều ngắn.
+- Chunk cha 4096 ký tự chứa trọn một Điều, trừ hai Điều dài nhất. Chunker cắt ở ranh giới Điều rồi gộp các Điều ngắn liền nhau cho tới khi chunk cha đạt khoảng 2048 ký tự (không quá 4096), nên một chunk cha có thể gồm vài Điều ngắn nhưng không bắt đầu giữa một Điều (trừ Điều dài hơn 4096).
 - Chunk con 384 ký tự (khoảng 120 token). Cặp 4096 / 384 là cặp duy nhất đã thử không tệ hơn baseline ở chỉ số nào của vector và hybrid. Chunk con lớn hơn tăng R@10 nhưng giảm R@1 và MRR; 3000 / 384 tăng vector nhưng hybrid giảm R@3 (0,56 xuống 0,44) và MRR.
 - Token limit 512 chỉ là trần an toàn khi ai đó tăng cỡ chunk con; với 384 ký tự nó không cắt gì.
 
@@ -194,6 +196,29 @@ E2E trên Fork đã vá (`fd7a2586fd58-dirty`), 9 câu có đáp án:
 | 3000 / 768 | 0,44 / 0,78 / 0,58 | 0,33 / 0,67 / 0,46 |
 
 Bộ kiểm tra keyword hiện chỉ có 9 câu có đáp án, nên mỗi câu đổi hạng là 0,11 điểm recall. Chạy lại so sánh này khi có bộ đầy đủ.
+
+## Chunker cho văn bản pháp lý
+
+Bản vá chunker của Fork cho văn bản pháp lý tiếng Việt (`internal/infrastructure/chunker`):
+
+- Dòng `Phần`/`Chương`/`Mục` kèm số La Mã hoặc Ả Rập, và `Điều N.` (cả `Điều 11a.`), là tiêu đề, dù OCR trả về dạng `## ...` hay dòng thường. Cấp của chúng theo cấu trúc luật: Phần > Chương > Mục > Điều, còn Điều trong ngoặc kép (`“Điều 4. ...`, nội dung được sửa đổi) nằm dưới Điều sửa đổi nó. Dòng nhắc tới Điều trong câu (`Điều 37 của Thông tư ...`) không phải tiêu đề.
+- Khoản (`1.`, `2.`) không phải tiêu đề với `languages: ["vi"]`; các ngôn ngữ khác giữ mẫu `1. Title` như cũ.
+- Dòng tiêu đề Chương/Mục/Điều không bị cắt, kể cả khi dài hơn chunk con (Điều 1 của Thông tư 32/2024 dài khoảng 520 ký tự). Trước đây separator `. ` tách `Điều 1.` khỏi tên Điều.
+- Section quá lớn được cắt ở tiêu đề con trước (Chương dài cắt ở từng Điều), chỉ phần còn quá lớn mới cắt theo separator.
+- Breadcrumb của chunk con là đường tiêu đề tại đầu chunk con đó, ví dụ `## Chương III ... > #### Điều 11. ...`, kể cả khi chunk cha gộp vài Điều ngắn.
+- Tiêu đề viết hoa nhận chữ hoa có dấu tiếng Việt (`NHỮNG QUY ĐỊNH CHUNG`), chân trang nhận `Trang N` và `Trang N/M`. Hai mẫu này chỉ dùng ở tầng heuristic, cho tài liệu không có tiêu đề Markdown.
+
+Mọi điều trên chỉ chạy khi chunking strategy là `auto` (hoặc `heading`/`heuristic`). `scripts/setup.py` đặt `auto`.
+
+E2E (`results/chunker-legal.json`, Fork `456b05ec45f9-dirty`, 4096 / 384):
+
+| Lần chạy | `dieu_headings` | Keyword R@1 / MRR | Vector R@1 / MRR | Hybrid R@1 / MRR |
+| --- | --- | --- | --- | --- |
+| Baseline (legacy, chưa vá) | 1/27 fail | 0,44 / 0,50 | 0,56 / 0,60 | 0,44 / 0,52 |
+| `chunker-vi` (legacy, vá ngôn ngữ) | 1/27 fail | 0,44 / 0,50 | 0,56 / 0,60 | 0,44 / 0,52 |
+| **`chunker-legal` (auto, vá tiêu đề)** | pass | 0,56 / 0,56 | 0,78 / 0,78 | 0,78 / 0,78 |
+
+Kiểm tra `breadcrumbs` pass 5/5. R@10 không đổi ở cả ba chế độ: câu đúng chỉ lên hạng 1 (q01, q05, q06, q08). Không câu nào tụt hạng ở chế độ nào. Bộ câu hỏi hiện chưa có câu dạng "Điều X Khoản Y", nên chưa đo được loại câu này. q07 (footnote) và q09 (bảng) vẫn trượt.
 
 ## Nâng commit Fork
 
