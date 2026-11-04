@@ -1,0 +1,187 @@
+# WeKnora tiếng Việt: app, frontend và docreader build từ submodule Fork
+# (references/WeKnora), cùng postgres (ParadeDB), redis và neo4j.
+#
+# Chạy qua scripts/compose.sh để image được tag theo commit Fork:
+#   ./scripts/compose.sh up -d --build
+#
+# Cấu hình nằm trong .env (copy từ .env.example). Service app nạp toàn bộ .env
+# qua env_file, nên mọi biến WeKnora đọc được đều có thể đặt trong .env.
+
+name: weknora-vi
+
+services:
+  frontend:
+    image: weknora-vi/frontend:${WEKNORA_FORK_COMMIT:?chạy qua scripts/compose.sh}
+    build:
+      context: ./references/WeKnora/frontend
+      args:
+        VITE_FRONTEND_COMMIT: ${WEKNORA_FORK_COMMIT:-}
+        NPM_REGISTRY: ${NPM_REGISTRY:-}
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    environment:
+      - TZ=${TZ:-Asia/Ho_Chi_Minh}
+      - DEFAULT_LOCALE=${DEFAULT_LOCALE:-en-US}
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
+      - APP_HOST=app
+      - APP_PORT=8080
+      - APP_SCHEME=http
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+
+  app:
+    image: weknora-vi/app:${WEKNORA_FORK_COMMIT:?chạy qua scripts/compose.sh}
+    build:
+      context: ./references/WeKnora
+      dockerfile: docker/Dockerfile.app
+      args:
+        - VERSION_ARG=${WEKNORA_FORK_VERSION:-}
+        - COMMIT_ID_ARG=${WEKNORA_FORK_COMMIT:-}
+        - APK_MIRROR_ARG=${APK_MIRROR_ARG:-}
+        - GOPROXY_ARG=${GOPROXY_ARG:-}
+    # Chỉ mở cho máy host (setup/E2E script gọi REST API ở đây).
+    # Người dùng vào qua frontend; nginx của frontend proxy /api tới app.
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
+    volumes:
+      - data-files:/data/files
+      - docreader-tmp:/tmp/docreader:ro
+      - ./config/builtin_models.yaml:/app/config/builtin_models.yaml:ro
+    env_file:
+      - .env
+    environment:
+      # Biến bắt buộc của builtin_models.yaml: thiếu thì compose dừng ngay,
+      # thay vì app bỏ qua cả file model.
+      - LLM_BASE_URL=${LLM_BASE_URL:?điền LLM_BASE_URL trong .env}
+      - LLM_MODEL_NAME=${LLM_MODEL_NAME:?điền LLM_MODEL_NAME trong .env}
+      - LLM_CONTEXT_WINDOW=${LLM_CONTEXT_WINDOW:?điền LLM_CONTEXT_WINDOW trong .env}
+      - EMBEDER_GATEWAY_URL=${EMBEDER_GATEWAY_URL:?điền EMBEDER_GATEWAY_URL trong .env}
+      - EMBEDER_GATEWAY_API_KEY=${EMBEDER_GATEWAY_API_KEY:?điền EMBEDER_GATEWAY_API_KEY trong .env}
+      # Hạ tầng cố định của stack này.
+      - GIN_MODE=release
+      - TZ=${TZ:-Asia/Ho_Chi_Minh}
+      - DB_DRIVER=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - RETRIEVE_DRIVER=postgres
+      - DOCREADER_ADDR=docreader:50051
+      - DOCREADER_TRANSPORT=grpc
+      - REDIS_ADDR=redis:6379
+      - STREAM_MANAGER_TYPE=redis
+      - STORAGE_TYPE=local
+      - LOCAL_STORAGE_BASE_DIR=/data/files
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USERNAME=neo4j
+      - OLLAMA_OPTIONAL=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      docreader:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    restart: unless-stopped
+    # Để container gọi được LLM/embeder-gateway/gateway OCR chạy trên host.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  docreader:
+    image: weknora-vi/docreader:${WEKNORA_FORK_COMMIT:?chạy qua scripts/compose.sh}
+    build:
+      context: ./references/WeKnora
+      dockerfile: docker/Dockerfile.docreader
+      args:
+        - APT_MIRROR=${APT_MIRROR:-}
+    expose:
+      - "50051"
+    volumes:
+      - docreader-tmp:/tmp/docreader
+    environment:
+      - TZ=${TZ:-Asia/Ho_Chi_Minh}
+      - DOCREADER_IMAGE_OUTPUT_DIR=/tmp/docreader
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
+      - SSRF_WHITELIST=${SSRF_WHITELIST:-}
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=localhost:50051"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  postgres:
+    image: paradedb/paradedb:v0.25.11-pg17
+    environment:
+      - TZ=${TZ:-Asia/Ho_Chi_Minh}
+      - POSTGRES_USER=${DB_USER:?điền DB_USER trong .env}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:?điền DB_PASSWORD trong .env}
+      - POSTGRES_DB=${DB_NAME:?điền DB_NAME trong .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    stop_grace_period: 1m
+
+  redis:
+    image: redis:7.0-alpine
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?điền REDIS_PASSWORD trong .env}"]
+    environment:
+      - TZ=${TZ:-Asia/Ho_Chi_Minh}
+      - REDISCLI_AUTH=${REDIS_PASSWORD}
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:2025.10.1
+    environment:
+      - TZ=${TZ:-Asia/Ho_Chi_Minh}
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:?điền NEO4J_PASSWORD trong .env}
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4JLABS_PLUGINS=["apoc"]
+    volumes:
+      - neo4j-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$${NEO4J_AUTH#neo4j/}\" 'RETURN 1' >/dev/null"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis-data:
+  neo4j-data:
+  data-files:
+  docreader-tmp:

@@ -1,0 +1,70 @@
+# Model built-in của deployment, mount vào /app/config/builtin_models.yaml.
+# App đọc file này mỗi lần khởi động và upsert theo `id` (xem
+# references/WeKnora/internal/types/builtin_models_config.go).
+#
+# ${NAME} được thay bằng biến môi trường lấy từ .env TRƯỚC khi parse YAML.
+# Biến rỗng hoặc thiếu sẽ giữ nguyên chuỗi ${NAME}; với trường số như
+# context_window thì cả file bị bỏ qua, nên compose.yaml bắt buộc các biến này.
+#
+# Đổi dimension, model embedding hoặc Document Instruction của gateway thì phải
+# embed lại toàn bộ knowledge base (ADR 0001).
+
+builtin_models:
+  # LLM chat, cũng là VLM (supports_vision) khi chat có ảnh.
+  - id: builtin-llm
+    type: KnowledgeQA
+    source: remote
+    is_default: true
+    name: ${LLM_MODEL_NAME}
+    parameters:
+      provider: generic
+      base_url: ${LLM_BASE_URL}
+      api_key: ${LLM_API_KEY}
+      supports_vision: true
+      context_window: ${LLM_CONTEXT_WINDOW}
+
+  # Cùng endpoint với LLM chat. Knowledge base chỉ nhận model loại VLLM cho
+  # vlm_config (mô tả ảnh), nên LLM được khai báo thêm một dòng loại này.
+  - id: builtin-vlm
+    type: VLLM
+    source: remote
+    is_default: true
+    name: ${LLM_MODEL_NAME}
+    parameters:
+      provider: generic
+      base_url: ${LLM_BASE_URL}
+      api_key: ${LLM_API_KEY}
+
+  # Qwen3-VL-Embedding-2B qua embeder-gateway, cắt MRL còn 1024 chiều (ADR 0001).
+  # Tên model phải chứa "qwen3-vl-embedding" để khớp preset trong catalog.
+  - id: builtin-embedding
+    type: Embedding
+    source: remote
+    is_default: true
+    name: Qwen3-VL-Embedding-2B
+    parameters:
+      provider: generic
+      base_url: ${EMBEDER_GATEWAY_URL}
+      api_key: ${EMBEDER_GATEWAY_API_KEY}
+      embedding_parameters:
+        dimension: 1024
+        supports_dimension_override: true
+      spec:
+        compat:
+          input_type_field: input_type
+          max_batch_size: 64
+
+  # Qwen3-VL-Reranker-2B qua embeder-gateway, chỉ rerank text.
+  - id: builtin-rerank
+    type: Rerank
+    source: remote
+    is_default: true
+    name: Qwen3-VL-Reranker-2B
+    parameters:
+      provider: generic
+      base_url: ${EMBEDER_GATEWAY_URL}
+      api_key: ${EMBEDER_GATEWAY_API_KEY}
+      extra_config:
+        score_scale: probability
+      spec:
+        input: [text]
