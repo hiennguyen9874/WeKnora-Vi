@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Gọi docker compose với tag image là commit của submodule Fork.
+# Gọi docker compose với tag image là commit của Fork.
 #   ./scripts/compose.sh up -d --build
 # Fork có thay đổi chưa commit thì tag thêm hậu tố -dirty.
 set -euo pipefail
@@ -8,7 +8,7 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fork="$root/references/WeKnora"
 
 if [[ ! -f "$fork/VERSION" ]]; then
-  echo "Không thấy submodule Fork ở $fork. Chạy: git submodule update --init references/WeKnora" >&2
+  echo "Không thấy Fork ở $fork. Chạy: git submodule update --init references/WeKnora" >&2
   exit 1
 fi
 if [[ ! -f "$root/.env" ]]; then

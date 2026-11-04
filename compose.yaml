@@ -1,4 +1,4 @@
-# WeKnora tiếng Việt: app, frontend và docreader build từ submodule Fork
+# WeKnora tiếng Việt: app, frontend và docreader build từ Fork
 # (references/WeKnora), cùng postgres (ParadeDB), redis và neo4j.
 #
 # Chạy qua scripts/compose.sh để image được tag theo commit Fork:
