@@ -10,6 +10,11 @@ Repo triển khai WeKnora để hỏi đáp trên tài liệu tiếng Việt. Ng
 | `config/builtin_models.yaml` | LLM, VLM, embedding, rerank khai báo sẵn, đọc biến từ `.env` |
 | `scripts/setup.py` | Cấu hình sau khi dựng: endpoint PaddleOCR-VL, knowledge base mẫu |
 | `scripts/check-db.sh` | In `lc_ctype`, chỉ mục và EXPLAIN truy vấn vector |
+| `scripts/e2e.py` | Script E2E: nạp tài liệu mẫu, kiểm tra chunk, đo recall@k và MRR |
+| `eval/documents.json` | Tài liệu mẫu (nguồn, sha256) và các kiểm tra chunk của từng tài liệu |
+| `eval/keyword-set.json` | Bộ kiểm tra keyword |
+| `fixtures/legal/` | Tài liệu mẫu: văn bản pháp luật công khai |
+| `results/baseline.json` | Kết quả E2E trên Fork chưa vá |
 
 ## Cần có trước
 
@@ -90,6 +95,59 @@ Chưa có kết quả nghiệm thu trên stack thật; cấu hình và script kh
 - [ ] Upload PDF scan tiếng Việt, xác nhận parse qua gateway OCR và text đúng dấu.
 - [ ] Hỏi trên tài liệu trong Web UI tiếng Anh, xác nhận câu trả lời tiếng Việt có trích dẫn.
 - [ ] Chạy lệnh kiểm tra database ở trên, lưu `docs/db-check.txt`, xác nhận `lc_ctype` và EXPLAIN dùng HNSW 1024.
+
+## Script E2E
+
+Chạy trên stack đã dựng và đã chạy `scripts/setup.py`. Script chỉ gọi HTTP API của WeKnora (thêm một lệnh `psql` để đọc tên tokenizer BM25, vì API không trả thông tin này):
+
+```sh
+python3 scripts/e2e.py                            # ghi results/<thời điểm>-<commit Fork>.json
+python3 scripts/e2e.py --out results/baseline.json  # chỉ khi chốt lại baseline
+python3 scripts/e2e.py --keep-kb                  # giữ knowledge base để xem chunk trên UI
+```
+
+Mỗi lần chạy:
+
+1. Tạo knowledge base `e2e-<thời điểm>` bằng đúng cấu hình của `scripts/setup.py`.
+2. Upload mọi tài liệu trong `eval/documents.json`, chờ tới khi tìm kiếm được (`finalizing`, tức là tóm tắt và knowledge graph có thể vẫn chạy nền). Ba tài liệu mẫu mất khoảng 5 phút qua gateway OCR.
+3. Kiểm tra chunk con (`text`), mỗi kiểm tra báo PASS/FAIL riêng:
+   - `footnotes`: mỗi đoạn trong `footnotes` của tài liệu nằm trọn trong một chunk;
+   - `dieu_headings`: mỗi tiêu đề trong `headings` (ví dụ `Điều 4. Hiệu lực thi hành`) nằm trọn trong một chunk, tức là không bị cắt ngang;
+   - `nfc`: mọi chunk (cả chunk cha) ở dạng Unicode NFC.
+4. Gửi từng câu của Bộ kiểm tra keyword tới `hybrid-search` với `match_count` 10, `skip_context_enrichment` và ngưỡng 0, ở 3 chế độ: `keyword` (`disable_vector_match`), `vector` (`disable_keywords_match`), `hybrid`.
+5. Xoá knowledge base, trừ khi có `--keep-kb`.
+
+Kiểm tra chunk fail không làm script thoát lỗi: trên Fork chưa vá, kết quả fail là baseline. Script thoát mã 1 khi tài liệu parse lỗi hoặc API lỗi.
+
+### Bộ kiểm tra keyword
+
+`eval/keyword-set.json` có dạng:
+
+```json
+{"questions": [
+  {"id": "q05", "query": "Vàng miếng là gì?", "form": "nfd", "answerable": true,
+   "expected": ["Vàng miếng là sản phẩm vàng được dập thành miếng"],
+   "doc": "vbhn-117-2026-nd-nhnn", "tags": ["nfd", "dinh-nghia"]},
+  {"id": "q10", "query": "...", "answerable": false, "tags": ["khong-co-dap-an"]}
+]}
+```
+
+- `expected`: các đoạn văn bản, kết quả nào chứa một trong các đoạn này là trúng. Không dùng chunk ID, vì ID đổi mỗi lần nạp. Khi so khớp, cả hai phía được chuẩn hoá NFC, bỏ `**` và gộp khoảng trắng. Chọn đoạn ngắn, chỉ xuất hiện ở chỗ đúng, không vắt qua ô bảng hay ranh giới chunk.
+- `answerable: false`: câu không có đáp án trong tài liệu mẫu, không có `expected` và không tính vào điểm. File kết quả vẫn ghi điểm cao nhất của nó ở từng chế độ.
+- `form`: `nfc` (mặc định) hoặc `nfd`; script đổi câu hỏi sang dạng này trước khi gửi. Câu không dấu thì viết thẳng không dấu trong `query`.
+- `doc` (id trong `eval/documents.json`) và `tags` chỉ để đọc kết quả.
+
+### Đọc kết quả
+
+Script in tóm tắt, rồi ghi file JSON:
+
+- `fork`, `tokenizer`, `models.embedding` (tên, số chiều), `chunking`: cấu hình đã đo. So sánh hai lần chạy chỉ có nghĩa khi biết phần nào đã đổi.
+- `documents`: trạng thái parse, số giây tới khi tìm kiếm được, số chunk con và chunk cha.
+- `chunk_checks.<tên>`: `pass`, số mục đã kiểm tra và danh sách mục fail.
+- `search.modes.<chế độ>`: `recall@k` (k = 1, 3, 5, 10) là tỉ lệ câu có đáp án mà kết quả trúng đầu tiên nằm trong top k. `mrr` là trung bình 1/hạng của kết quả trúng đầu tiên, câu không trúng trong top 10 tính 0. `failed` là danh sách câu trượt.
+- `questions`: từng câu, với hạng trúng (`rank`, `null` là trượt), điểm cao nhất và 3 kết quả đầu ở mỗi chế độ.
+
+`results/` bị gitignore, trừ `results/baseline.json`.
 
 ## Nâng commit Fork
 

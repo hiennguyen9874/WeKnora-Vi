@@ -1,3 +1,6 @@
 /.pi/
 /.env
 __pycache__
+# Kết quả E2E: chỉ commit bản baseline.
+/results/*
+!/results/baseline.json

@@ -1,0 +1,1026 @@
+{
+  "run": {
+    "started_at": "2026-11-04T22:25:19+07:00",
+    "finished_at": "2026-11-04T22:30:07+07:00",
+    "kb_id": "6417d35f-9948-4ab4-8dc5-d2dcdb51e60d",
+    "kb_name": "e2e-20261104-222519",
+    "kb_kept": false
+  },
+  "fork": {
+    "commit": "fd7a2586fd58",
+    "version": "0.8.3",
+    "db_version": "133"
+  },
+  "tokenizer": {
+    "name": "chinese_lindera",
+    "indexdef": "CREATE INDEX embeddings_search_idx ON public.embeddings USING bm25 (id, knowledge_base_id, content, knowledge_id, chunk_id) WITH (key_field=id, text_fields='{\n                \"content\": {\n                  \"tokenizer\": {\"type\": \"chinese_lindera\"}\n                }\n            }')"
+  },
+  "models": {
+    "embedding": {
+      "id": "builtin-embedding",
+      "name": "Qwen3-VL-Embedding-2B",
+      "dimension": 1024
+    },
+    "summary": {
+      "id": "builtin-llm",
+      "name": "qwen3.8-27b"
+    }
+  },
+  "chunking": {
+    "chunk_overlap": 0,
+    "chunk_size": 0,
+    "enable_parent_child": true,
+    "parser_engine_rules": [
+      {
+        "engine": "paddleocr_vl",
+        "file_types": [
+          "pdf",
+          "jpg",
+          "jpeg",
+          "png",
+          "bmp",
+          "tiff"
+        ]
+      },
+      {
+        "engine": "builtin",
+        "file_types": [
+          "docx",
+          "xlsx"
+        ]
+      }
+    ],
+    "separators": [
+      "\n\n",
+      "\n",
+      ". ",
+      "; "
+    ]
+  },
+  "documents": [
+    {
+      "id": "tt-32-2024-bca",
+      "file": "fixtures/legal/32-2024-tt-bca.pdf",
+      "knowledge_id": "7d5851a8-41e6-4776-b507-762d7300e4de",
+      "parse_status": "finalizing",
+      "error": null,
+      "seconds_to_searchable": 70,
+      "text_chunks": 55,
+      "parent_chunks": 5
+    },
+    {
+      "id": "vbhn-117-2026-nd-nhnn",
+      "file": "fixtures/legal/117-2026-vbhn-nd-nhnn.pdf",
+      "knowledge_id": "0aa66a8d-c46a-4498-a63f-e3870e2593ff",
+      "parse_status": "finalizing",
+      "error": null,
+      "seconds_to_searchable": 90,
+      "text_chunks": 105,
+      "parent_chunks": 8
+    },
+    {
+      "id": "vbhn-136-2026-tt-bct",
+      "file": "fixtures/legal/136-2026-vbhn-tt-bct.pdf",
+      "knowledge_id": "cd2d6aae-df9b-464c-8c42-3b65960a6968",
+      "parse_status": "finalizing",
+      "error": null,
+      "seconds_to_searchable": 285,
+      "text_chunks": 138,
+      "parent_chunks": 10
+    }
+  ],
+  "chunk_checks": {
+    "footnotes": {
+      "pass": false,
+      "checked": 6,
+      "failed": [
+        {
+          "doc": "vbhn-117-2026-nd-nhnn",
+          "text": "Nghị định số 232/2025/NĐ-CP có căn cứ ban hành như sau"
+        },
+        {
+          "doc": "vbhn-117-2026-nd-nhnn",
+          "text": "Tên Chương này được sửa đổi theo quy định tại khoản 6 Điều 1"
+        },
+        {
+          "doc": "vbhn-117-2026-nd-nhnn",
+          "text": "Điều này được bổ sung theo quy định tại khoản 7 Điều 1"
+        },
+        {
+          "doc": "vbhn-117-2026-nd-nhnn",
+          "text": "Điểm này được sửa đổi, bổ sung theo quy định tại khoản 4 Điều 2"
+        },
+        {
+          "doc": "vbhn-136-2026-tt-bct",
+          "text": "được bãi bỏ theo quy định tại điểm 2 khoản 2.1 mục II"
+        },
+        {
+          "doc": "vbhn-136-2026-tt-bct",
+          "text": "Phụ lục này được bổ sung theo quy định tại khoản 2 Điều 10 của Thông tư số 42/2019/TT-BCT"
+        }
+      ]
+    },
+    "dieu_headings": {
+      "pass": false,
+      "checked": 27,
+      "failed": [
+        {
+          "doc": "tt-32-2024-bca",
+          "text": "Điều 1. Sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA"
+        }
+      ]
+    },
+    "nfc": {
+      "pass": true,
+      "checked": 321,
+      "failed": []
+    }
+  },
+  "search": {
+    "match_count": 10,
+    "answerable": 9,
+    "unanswerable": 2,
+    "modes": {
+      "keyword": {
+        "recall@1": 0.4444,
+        "recall@3": 0.5556,
+        "recall@5": 0.5556,
+        "recall@10": 0.5556,
+        "mrr": 0.5,
+        "failed": [
+          {
+            "id": "q05",
+            "query": "Vàng miếng là gì?"
+          },
+          {
+            "id": "q06",
+            "query": "dieu kien cap giay phep san xuat vang mieng"
+          },
+          {
+            "id": "q07",
+            "query": "Tên Chương nào được sửa đổi theo khoản 6 Điều 1 Nghị định 232/2025/NĐ-CP?"
+          },
+          {
+            "id": "q09",
+            "query": "Lô hàng giấy dạng cuộn lớn có từ 6 đến 20 cuộn thì chọn bao nhiêu cuộn để lấy mẫu?"
+          }
+        ]
+      },
+      "vector": {
+        "recall@1": 0.5556,
+        "recall@3": 0.6667,
+        "recall@5": 0.6667,
+        "recall@10": 0.7778,
+        "mrr": 0.6049,
+        "failed": [
+          {
+            "id": "q07",
+            "query": "Tên Chương nào được sửa đổi theo khoản 6 Điều 1 Nghị định 232/2025/NĐ-CP?"
+          },
+          {
+            "id": "q09",
+            "query": "Lô hàng giấy dạng cuộn lớn có từ 6 đến 20 cuộn thì chọn bao nhiêu cuộn để lấy mẫu?"
+          }
+        ]
+      },
+      "hybrid": {
+        "recall@1": 0.4444,
+        "recall@3": 0.5556,
+        "recall@5": 0.6667,
+        "recall@10": 0.7778,
+        "mrr": 0.5176,
+        "failed": [
+          {
+            "id": "q07",
+            "query": "Tên Chương nào được sửa đổi theo khoản 6 Điều 1 Nghị định 232/2025/NĐ-CP?"
+          },
+          {
+            "id": "q09",
+            "query": "Lô hàng giấy dạng cuộn lớn có từ 6 đến 20 cuộn thì chọn bao nhiêu cuộn để lấy mẫu?"
+          }
+        ]
+      }
+    }
+  },
+  "questions": [
+    {
+      "id": "q01",
+      "query": "Thông tư 32/2024/TT-BCA có hiệu lực thi hành từ ngày nào?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "scan",
+        "ngay-thang"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": 2,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "Thông tư này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2017./.” Điều 37 của Thông tư số 42/2019/TT-BCT, có hiệu lực kể từ ngày 05 tháng 02 năm 2020 quy định "
+            },
+            {
+              "score": 0.9585792441238158,
+              "match_type": 1,
+              "content": "## Điều 4. Hiệu lực thi hành Thông tư này có hiệu lực thi hành kể từ ngày 24 tháng 8 năm 2024. ## Điều 5. Trách nhiệm thi hành 1. Cục trưởng Cục Cảnh sát phòng "
+            },
+            {
+              "score": 0.9191842867284004,
+              "match_type": 1,
+              "content": "1. Thay thế cụm từ “Phụ lục III ban hành kèm theo Nghị định số 136/2020/NĐ-CP” tại Điều 7 Thông tư số 149/2020/TT-BCA bằng cụm từ “Phụ lục III ban hành kèm theo"
+            }
+          ]
+        },
+        "vector": {
+          "rank": 1,
+          "top_score": 0.7799188519747811,
+          "top": [
+            {
+              "score": 0.7799188519747811,
+              "match_type": 0,
+              "content": "## Điều 4. Hiệu lực thi hành Thông tư này có hiệu lực thi hành kể từ ngày 24 tháng 8 năm 2024. ## Điều 5. Trách nhiệm thi hành 1. Cục trưởng Cục Cảnh sát phòng "
+            },
+            {
+              "score": 0.7704505323448092,
+              "match_type": 0,
+              "content": "Thông tư này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2017./.” Điều 37 của Thông tư số 42/2019/TT-BCT, có hiệu lực kể từ ngày 05 tháng 02 năm 2020 quy định "
+            },
+            {
+              "score": 0.7115190272939929,
+              "match_type": 0,
+              "content": "Điều 1."
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "top_score": 0.9951612903225807,
+          "top": [
+            {
+              "score": 0.9951612903225807,
+              "match_type": 0,
+              "content": "## Điều 4. Hiệu lực thi hành Thông tư này có hiệu lực thi hành kể từ ngày 24 tháng 8 năm 2024. ## Điều 5. Trách nhiệm thi hành 1. Cục trưởng Cục Cảnh sát phòng "
+            },
+            {
+              "score": 0.9887096774193547,
+              "match_type": 0,
+              "content": "Thông tư này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2017./.” Điều 37 của Thông tư số 42/2019/TT-BCT, có hiệu lực kể từ ngày 05 tháng 02 năm 2020 quy định "
+            },
+            {
+              "score": 0.9285081585081584,
+              "match_type": 0,
+              "content": "4. Trong quá trình thực hiện nếu có vướng mắc, các tổ chức, cá nhân phản ánh về Bộ Công Thương để được hướng dẫn, giải quyết./.” Điều 2, Điều 3, Điều 4 của Thôn"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q02",
+      "query": "Tem mẫu E dùng để dán lên những phương tiện phòng cháy chữa cháy nào?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "scan"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": 1,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "d) Tem mẫu D dùng để dán lên các loại phương tiện: Van báo động, van tràn ngập của hệ thống chữa cháy; ống và phụ kiện đường ống phi kim loại dùng trong hệ thốn"
+            },
+            {
+              "score": 0.9538714697634407,
+              "match_type": 1,
+              "content": "e) Tem mẫu G dùng để dán lên các đầu phun chất chữa cháy các loại. 2. Quản lý, in, phát hành tem kiểm định phương tiện phòng cháy và chữa cháy a) Tem kiểm định "
+            },
+            {
+              "score": 0.9324406365938369,
+              "match_type": 1,
+              "content": "a) Tem mẫu A dùng để dán lên các loại phương tiện: Máy bơm chữa cháy; dụng cụ (téc, phuy, bình, can) chứa chất chữa cháy quy định tại mục 3 Phụ lục VII ban hành"
+            }
+          ]
+        },
+        "vector": {
+          "rank": 1,
+          "top_score": 0.8515839447354648,
+          "top": [
+            {
+              "score": 0.8515839447354648,
+              "match_type": 0,
+              "content": "d) Tem mẫu D dùng để dán lên các loại phương tiện: Van báo động, van tràn ngập của hệ thống chữa cháy; ống và phụ kiện đường ống phi kim loại dùng trong hệ thốn"
+            },
+            {
+              "score": 0.8283341048997709,
+              "match_type": 0,
+              "content": "a) Tem mẫu A dùng để dán lên các loại phương tiện: Máy bơm chữa cháy; dụng cụ (téc, phuy, bình, can) chứa chất chữa cháy quy định tại mục 3 Phụ lục VII ban hành"
+            },
+            {
+              "score": 0.7826773802170189,
+              "match_type": 0,
+              "content": "c) Tem mẫu C dùng để dán lên các loại phương tiện: Tủ trung tâm báo cháy, đầu báo cháy các loại, chuông báo cháy, đèn báo cháy, nút ấn báo cháy; tủ điều khiển h"
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "top_score": 0.9999999999999998,
+          "top": [
+            {
+              "score": 0.9999999999999998,
+              "match_type": 0,
+              "content": "d) Tem mẫu D dùng để dán lên các loại phương tiện: Van báo động, van tràn ngập của hệ thống chữa cháy; ống và phụ kiện đường ống phi kim loại dùng trong hệ thốn"
+            },
+            {
+              "score": 0.9791858678955452,
+              "match_type": 0,
+              "content": "a) Tem mẫu A dùng để dán lên các loại phương tiện: Máy bơm chữa cháy; dụng cụ (téc, phuy, bình, can) chứa chất chữa cháy quy định tại mục 3 Phụ lục VII ban hành"
+            },
+            {
+              "score": 0.9637152777777777,
+              "match_type": 0,
+              "content": "c) Tem mẫu C dùng để dán lên các loại phương tiện: Tủ trung tâm báo cháy, đầu báo cháy các loại, chuông báo cháy, đèn báo cháy, nút ấn báo cháy; tủ điều khiển h"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q03",
+      "query": "Kho dầu mỏ có tổng dung tích từ bao nhiêu m³ trở lên phải thành lập đội phòng cháy và chữa cháy chuyên ngành?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "scan",
+        "so-lieu"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": 1,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "2. Kho dự trữ cấp quốc gia; kho dầu mỏ, sản phẩm dầu mỏ có tổng dung tích 15.000 m³ trở lên; nhà máy thủy điện có công suất từ 300 MW trở lên; nhà máy nhiệt điệ"
+            },
+            {
+              "score": 0.7496813716034804,
+              "match_type": 1,
+              "content": "c) Bản sao bản vẽ tổng mặt bằng thể hiện giao thông, nguồn nước phục vụ chữa cháy, bố trí công năng của các hạng mục, dây chuyền công nghệ trong cơ sở đã được c"
+            },
+            {
+              "score": 0.7037381365442515,
+              "match_type": 1,
+              "content": "5. Sửa đổi, bổ sung Điều 13 như sau: ## “Điều 13. Thành lập đội phòng cháy và chữa cháy chuyên ngành Các cơ sở sau đây thành lập đội phòng cháy và chữa cháy chu"
+            }
+          ]
+        },
+        "vector": {
+          "rank": 1,
+          "top_score": 0.6370381551902347,
+          "top": [
+            {
+              "score": 0.6370381551902347,
+              "match_type": 0,
+              "content": "2. Kho dự trữ cấp quốc gia; kho dầu mỏ, sản phẩm dầu mỏ có tổng dung tích 15.000 m³ trở lên; nhà máy thủy điện có công suất từ 300 MW trở lên; nhà máy nhiệt điệ"
+            },
+            {
+              "score": 0.5929273422895347,
+              "match_type": 0,
+              "content": "5. Sửa đổi, bổ sung Điều 13 như sau: ## “Điều 13. Thành lập đội phòng cháy và chữa cháy chuyên ngành Các cơ sở sau đây thành lập đội phòng cháy và chữa cháy chu"
+            },
+            {
+              "score": 0.583502831454184,
+              "match_type": 0,
+              "content": "Trường hợp các cơ sở hoặc khu công nghiệp, khu chế xuất, khu công nghệ cao, cụm công nghiệp trong cùng một khuôn viên hoặc liền kề nhau và do một đơn vị trực ti"
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "top_score": 0.9999999999999998,
+          "top": [
+            {
+              "score": 0.9999999999999998,
+              "match_type": 0,
+              "content": "2. Kho dự trữ cấp quốc gia; kho dầu mỏ, sản phẩm dầu mỏ có tổng dung tích 15.000 m³ trở lên; nhà máy thủy điện có công suất từ 300 MW trở lên; nhà máy nhiệt điệ"
+            },
+            {
+              "score": 0.9791858678955452,
+              "match_type": 0,
+              "content": "5. Sửa đổi, bổ sung Điều 13 như sau: ## “Điều 13. Thành lập đội phòng cháy và chữa cháy chuyên ngành Các cơ sở sau đây thành lập đội phòng cháy và chữa cháy chu"
+            },
+            {
+              "score": 0.9637152777777777,
+              "match_type": 0,
+              "content": "Trường hợp các cơ sở hoặc khu công nghiệp, khu chế xuất, khu công nghệ cao, cụm công nghiệp trong cùng một khuôn viên hoặc liền kề nhau và do một đơn vị trực ti"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q04",
+      "query": "Vàng trang sức, mỹ nghệ phải có hàm lượng vàng từ bao nhiêu Kara trở lên?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "dinh-nghia"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": 1,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "Trong Nghị định này, các từ ngữ dưới đây được hiểu như sau: 1. Vàng trang sức, mỹ nghệ là các sản phẩm vàng có hàm lượng từ 8 Kara (tương đương 33,33%) trở lên,"
+            },
+            {
+              "score": 0.6134054731284385,
+              "match_type": 1,
+              "content": "10.⁹ Việc thanh toán mua, bán vàng có giá trị từ 05 triệu đồng trong ngày trở lên của một khách hàng phải được thực hiện bằng phương tiện thanh toán không dùng "
+            },
+            {
+              "score": 0.5634795751870276,
+              "match_type": 1,
+              "content": "4.¹⁹ Doanh nghiệp có đăng ký hoạt động sản xuất, gia công vàng trang sức, mỹ nghệ, có hợp đồng gia công vàng trang sức, mỹ nghệ với nước ngoài"
+            }
+          ]
+        },
+        "vector": {
+          "rank": 1,
+          "top_score": 0.865562252942336,
+          "top": [
+            {
+              "score": 0.865562252942336,
+              "match_type": 0,
+              "content": "Trong Nghị định này, các từ ngữ dưới đây được hiểu như sau: 1. Vàng trang sức, mỹ nghệ là các sản phẩm vàng có hàm lượng từ 8 Kara (tương đương 33,33%) trở lên,"
+            },
+            {
+              "score": 0.6897426861281163,
+              "match_type": 0,
+              "content": "3.28 Bộ Khoa học và Công nghệ chủ trì, phối hợp với Ngân hàng Nhà nước và các cơ quan liên quan có trách nhiệm xây dựng, công bố tiêu chuẩn quốc gia đối với vàn"
+            },
+            {
+              "score": 0.6790294149779696,
+              "match_type": 0,
+              "content": "a) Các tổ chức đang hoạt động sản xuất vàng trang sức, mỹ nghệ phải thực hiện đăng ký kinh doanh lại với cơ quan đăng ký kinh doanh và hoàn tất thủ tục xin cấp "
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": 1,
+          "top_score": 0.9999999999999998,
+          "top": [
+            {
+              "score": 0.9999999999999998,
+              "match_type": 0,
+              "content": "Trong Nghị định này, các từ ngữ dưới đây được hiểu như sau: 1. Vàng trang sức, mỹ nghệ là các sản phẩm vàng có hàm lượng từ 8 Kara (tương đương 33,33%) trở lên,"
+            },
+            {
+              "score": 0.9746471774193547,
+              "match_type": 0,
+              "content": "3.28 Bộ Khoa học và Công nghệ chủ trì, phối hợp với Ngân hàng Nhà nước và các cơ quan liên quan có trách nhiệm xây dựng, công bố tiêu chuẩn quốc gia đối với vàn"
+            },
+            {
+              "score": 0.9550505050505048,
+              "match_type": 0,
+              "content": "a) Các tổ chức đang hoạt động sản xuất vàng trang sức, mỹ nghệ phải thực hiện đăng ký kinh doanh lại với cơ quan đăng ký kinh doanh và hoàn tất thủ tục xin cấp "
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q05",
+      "query": "Vàng miếng là gì?",
+      "form": "nfd",
+      "answerable": true,
+      "tags": [
+        "nfd",
+        "dinh-nghia"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": null,
+          "top_score": 0.11754204332828522,
+          "top": [
+            {
+              "score": 0.11754204332828522,
+              "match_type": 1,
+              "content": "Sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA ngày 31 tháng 12 năm 2020 của Bộ trưởng Bộ Công an quy định chi tiết một số điều và biện pháp thi h"
+            },
+            {
+              "score": 0.11753048002719879,
+              "match_type": 1,
+              "content": "Hồ sơ quản lý, theo dõi hoạt động phòng cháy và chữa cháy của cơ sở thuộc danh mục quy định tại Phụ lục III ban hành kèm theo Nghị định số 50/2024/NĐ-CP ngày 10"
+            },
+            {
+              "score": 0.11750044673681259,
+              "match_type": 1,
+              "content": "Bộ trưởng Bộ Công an ban hành Thông tư sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA ngày 31 tháng 12 năm 2020 của Bộ trưởng Bộ Công an quy định "
+            }
+          ]
+        },
+        "vector": {
+          "rank": 1,
+          "top_score": 0.5484205314004754,
+          "top": [
+            {
+              "score": 0.5484205314004754,
+              "match_type": 0,
+              "content": "2.³ Vàng miếng là sản phẩm vàng được dập thành miếng, có đóng chữ, số chỉ khối lượng, chất lượng, có ký mã hiệu của doanh nghiệp và ngân hàng thương mại được Ng"
+            },
+            {
+              "score": 0.49827090515928707,
+              "match_type": 0,
+              "content": "## Điều 2. Đối tượng áp dụng Nghị định này áp dụng đối với tổ chức, cá nhân có hoạt động kinh doanh vàng trên lãnh thổ Việt Nam và cơ quan, tổ chức, cá nhân khá"
+            },
+            {
+              "score": 0.475106847787112,
+              "match_type": 0,
+              "content": "a) Là doanh nghiệp được thành lập theo quy định của pháp luật Việt Nam, có đăng ký hoạt động sản xuất, gia công vàng trang sức, mỹ nghệ; b) Nhu cầu nhập khẩu và"
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": 5,
+          "top_score": 0.863961693548387,
+          "top": [
+            {
+              "score": 0.863961693548387,
+              "match_type": 0,
+              "content": "6.6 Hoạt động sản xuất vàng miếng, kinh doanh mua, bán vàng miếng là hoạt động kinh doanh có điều kiện và phải được Ngân hàng Nhà nước cấp Giấy phép sản xuất và"
+            },
+            {
+              "score": 0.7947331947331947,
+              "match_type": 0,
+              "content": "# Summary Nghị định hợp nhất về quản lý hoạt động kinh doanh vàng tại Việt Nam. Văn bản là Nghị định hợp nhất số 117/2026/VBHN-NĐ-NHNN về quản lý hoạt động kinh"
+            },
+            {
+              "score": 0.726349684845163,
+              "match_type": 0,
+              "content": "6. Ngân hàng Nhà nước đăng tải trên trang thông tin điện tử Ngân hàng Nhà nước giá mua, giá bán vàng miếng do doanh nghiệp, tổ chức tín dụng được Ngân hàng Nhà "
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q06",
+      "query": "dieu kien cap giay phep san xuat vang mieng",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "khong-dau",
+        "tieu-de-dieu"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": null,
+          "top_score": 0.31344544887542725,
+          "top": [
+            {
+              "score": 0.31344544887542725,
+              "match_type": 1,
+              "content": "Sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA ngày 31 tháng 12 năm 2020 của Bộ trưởng Bộ Công an quy định chi tiết một số điều và biện pháp thi h"
+            },
+            {
+              "score": 0.313414603471756,
+              "match_type": 1,
+              "content": "Hồ sơ quản lý, theo dõi hoạt động phòng cháy và chữa cháy của cơ sở thuộc danh mục quy định tại Phụ lục III ban hành kèm theo Nghị định số 50/2024/NĐ-CP ngày 10"
+            },
+            {
+              "score": 0.31333449482917786,
+              "match_type": 1,
+              "content": "Bộ trưởng Bộ Công an ban hành Thông tư sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA ngày 31 tháng 12 năm 2020 của Bộ trưởng Bộ Công an quy định "
+            }
+          ]
+        },
+        "vector": {
+          "rank": 3,
+          "top_score": 0.7355955687642136,
+          "top": [
+            {
+              "score": 0.7355955687642136,
+              "match_type": 0,
+              "content": "6.6 Hoạt động sản xuất vàng miếng, kinh doanh mua, bán vàng miếng là hoạt động kinh doanh có điều kiện và phải được Ngân hàng Nhà nước cấp Giấy phép sản xuất và"
+            },
+            {
+              "score": 0.7149577091673882,
+              "match_type": 0,
+              "content": "d) Có quy định nội bộ quy định về sản xuất vàng miếng bao gồm những nội dung cơ bản như quy trình nhập nguyên liệu; quy trình sản xuất vàng miếng; quy trình giá"
+            },
+            {
+              "score": 0.7124407038564277,
+              "match_type": 0,
+              "content": "3. Ngân hàng Nhà nước quy định thủ tục và hồ sơ cấp Giấy phép kinh doanh mua, bán vàng miếng đối với doanh nghiệp, tổ chức tín dụng. ## Điều 11a. Điều kiện cấp "
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": 8,
+          "top_score": 0.9065668202764976,
+          "top": [
+            {
+              "score": 0.9065668202764976,
+              "match_type": 0,
+              "content": "d) Có quy định nội bộ quy định về sản xuất vàng miếng bao gồm những nội dung cơ bản như quy trình nhập nguyên liệu; quy trình sản xuất vàng miếng; quy trình giá"
+            },
+            {
+              "score": 0.901098901098901,
+              "match_type": 0,
+              "content": "6.6 Hoạt động sản xuất vàng miếng, kinh doanh mua, bán vàng miếng là hoạt động kinh doanh có điều kiện và phải được Ngân hàng Nhà nước cấp Giấy phép sản xuất và"
+            },
+            {
+              "score": 0.8205727554179566,
+              "match_type": 0,
+              "content": "a) Các tổ chức đang hoạt động sản xuất vàng trang sức, mỹ nghệ phải thực hiện đăng ký kinh doanh lại với cơ quan đăng ký kinh doanh và hoàn tất thủ tục xin cấp "
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q07",
+      "query": "Tên Chương nào được sửa đổi theo khoản 6 Điều 1 Nghị định 232/2025/NĐ-CP?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "footnote"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": null,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "² Khoản này được sửa đổi, bổ sung theo quy định tại khoản 1 Điều 1 của Nghị định số 232/2025/NĐ-CP, có hiệu lực kể từ ngày 10 tháng 10 năm 2025. ³ Khoản này đượ"
+            },
+            {
+              "score": 0.7880488214676844,
+              "match_type": 1,
+              "content": "Căn cứ Luật Đầu tư số 143/2025/QH15; Theo đề nghị của Thống đốc Ngân hàng Nhà nước Việt Nam; Chính phủ ban hành Nghị định sửa đổi, bổ sung một số điều của Nghị "
+            },
+            {
+              "score": 0.7569583916648077,
+              "match_type": 1,
+              "content": "1. Nghị định số 232/2025/NĐ-CP ngày 26 tháng 8 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của C"
+            }
+          ]
+        },
+        "vector": {
+          "rank": null,
+          "top_score": 0.7032269721175433,
+          "top": [
+            {
+              "score": 0.7032269721175433,
+              "match_type": 0,
+              "content": "² Khoản này được sửa đổi, bổ sung theo quy định tại khoản 1 Điều 1 của Nghị định số 232/2025/NĐ-CP, có hiệu lực kể từ ngày 10 tháng 10 năm 2025. ³ Khoản này đượ"
+            },
+            {
+              "score": 0.6057038920883967,
+              "match_type": 0,
+              "content": "1. Nghị định số 232/2025/NĐ-CP ngày 26 tháng 8 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của C"
+            },
+            {
+              "score": 0.6048884316683955,
+              "match_type": 0,
+              "content": "2. Sửa đổi, bổ sung khoản 1 Điều 8 như sau:"
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": null,
+          "top_score": 0.9999999999999998,
+          "top": [
+            {
+              "score": 0.9999999999999998,
+              "match_type": 0,
+              "content": "² Khoản này được sửa đổi, bổ sung theo quy định tại khoản 1 Điều 1 của Nghị định số 232/2025/NĐ-CP, có hiệu lực kể từ ngày 10 tháng 10 năm 2025. ³ Khoản này đượ"
+            },
+            {
+              "score": 0.9791858678955452,
+              "match_type": 0,
+              "content": "1. Nghị định số 232/2025/NĐ-CP ngày 26 tháng 8 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của C"
+            },
+            {
+              "score": 0.9623487903225807,
+              "match_type": 0,
+              "content": "Căn cứ Luật Đầu tư số 143/2025/QH15; Theo đề nghị của Thống đốc Ngân hàng Nhà nước Việt Nam; Chính phủ ban hành Nghị định sửa đổi, bổ sung một số điều của Nghị "
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q08",
+      "query": "Hàm lượng chì (Pb) trong khăn giấy và giấy vệ sinh không được lớn hơn bao nhiêu?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "bang"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": 1,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "| TT | Tên chỉ tiêu | Mức quy định | |----|------------------------------------------------------------------------------------------------|---------------| | 6"
+            },
+            {
+              "score": 0.6490171899308039,
+              "match_type": 1,
+              "content": "Trong quy chuẩn này, các từ ngữ dưới đây được hiểu như sau: 1.3.1.⁶ Giấy tissue: Là loại giấy đã được làm nhăn, gồm một hoặc nhiều lớp giấy có định lượng thấp ("
+            },
+            {
+              "score": 0.6379079710635854,
+              "match_type": 1,
+              "content": "<tr><td>29</td><td>Tỷ lệ độ bền kéo ướt/độ bền kéo<br>khô, không nhỏ hơn, %</td><td colspan=\"4\">≥5</td><td>-</td><td>-</td><td>-</td></tr></table> <table> <tr><"
+            }
+          ]
+        },
+        "vector": {
+          "rank": 9,
+          "top_score": 0.7273324363538661,
+          "top": [
+            {
+              "score": 0.7273324363538661,
+              "match_type": 0,
+              "content": "## 2.2.3. Các chỉ tiêu hóa học Các sản phẩm khăn giấy, giấy vệ sinh và giấy tissue phải đáp ứng các yêu cầu về chỉ tiêu hóa học quy định trong Bảng 2. Bảng 2 – "
+            },
+            {
+              "score": 0.7214378293935785,
+              "match_type": 0,
+              "content": "## 2.2.3. Các chỉ tiêu vi sinh Các sản phẩm khăn giấy, giấy vệ sinh và giấy tissue phải đáp ứng các yêu cầu về chỉ tiêu vi sinh quy định trong Bảng 3. /Bảng 3 –"
+            },
+            {
+              "score": 0.716613483344564,
+              "match_type": 0,
+              "content": "## 1. QUY ĐỊNH CHUNG ## 1.1. Phạm vi điều chỉnh 1.1.1. Quy chuẩn này quy định mức giới hạn của các chỉ tiêu cơ lý, hóa học, vi sinh, phương pháp thử, các yêu cầ"
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": 3,
+          "top_score": 0.9363051470588234,
+          "top": [
+            {
+              "score": 0.9363051470588234,
+              "match_type": 0,
+              "content": "Bột giấy tái chế sử dụng trong sản xuất khăn giấy và giấy vệ sinh được sản xuất từ các loại giấy văn phòng phù hợp với Tiêu chuẩn quốc gia TCVN 5946: 2007 – Giấ"
+            },
+            {
+              "score": 0.9250750750750749,
+              "match_type": 0,
+              "content": "## 1. QUY ĐỊNH CHUNG ## 1.1. Phạm vi điều chỉnh 1.1.1. Quy chuẩn này quy định mức giới hạn của các chỉ tiêu cơ lý, hóa học, vi sinh, phương pháp thử, các yêu cầ"
+            },
+            {
+              "score": 0.9188405797101448,
+              "match_type": 0,
+              "content": "| TT | Tên chỉ tiêu | Mức quy định | |----|------------------------------------------------------------------------------------------------|---------------| | 6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q09",
+      "query": "Lô hàng giấy dạng cuộn lớn có từ 6 đến 20 cuộn thì chọn bao nhiêu cuộn để lấy mẫu?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [
+        "bang",
+        "so-lieu"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": null,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "b) Đối với sản phẩm giấy dạng cuộn lớn, thực hiện lấy mẫu theo các bước như sau: - Bước 1: Căn cứ vào số lượng cuộn, chọn số cuộn để lấy mẫu theo bảng 6 như sau"
+            },
+            {
+              "score": 0.8395182313979888,
+              "match_type": 1,
+              "content": "- Theo chế độ lấy mẫu thường, từ lô hàng lựa chọn ngẫu nhiên 07 cuộn. Tiến hành lấy 21 mẫu trên 07 cuộn được chọn theo hướng dẫn tại bước 2 điểm b mục 3.1.3.2; "
+            },
+            {
+              "score": 0.836564776616354,
+              "match_type": 1,
+              "content": "- Theo chế độ lấy mẫu giảm, từ lô hàng lựa chọn ngẫu nhiên 01 bao gói. Từ 01 bao gói được chọn, tiến hành lấy 01 mẫu đại diện cho lô hàng, khối lượng của mẫu đư"
+            }
+          ]
+        },
+        "vector": {
+          "rank": null,
+          "top_score": 0.879016047863704,
+          "top": [
+            {
+              "score": 0.879016047863704,
+              "match_type": 0,
+              "content": "b) Đối với sản phẩm giấy dạng cuộn lớn, thực hiện lấy mẫu theo các bước như sau: - Bước 1: Căn cứ vào số lượng cuộn, chọn số cuộn để lấy mẫu theo bảng 6 như sau"
+            },
+            {
+              "score": 0.8680978089847992,
+              "match_type": 0,
+              "content": "b) Đối với sản phẩm giấy dạng cuộn lớn, tiến hành chọn một (01) cuộn ngẫu nhiên trong lô hàng. Phương pháp lấy mẫu trên 01 cuộn giấy được thực hiện như quy định"
+            },
+            {
+              "score": 0.8303100210104774,
+              "match_type": 0,
+              "content": "Với các cuộn giấy không cắt được các ô theo kích thước 300 mm x 450 mm, tờ mẫu được lấy bằng cách cắt hết chiều ngang (chiều rộng) của cuộn tạo thành một tập, s"
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": null,
+          "top_score": 0.9999999999999998,
+          "top": [
+            {
+              "score": 0.9999999999999998,
+              "match_type": 0,
+              "content": "b) Đối với sản phẩm giấy dạng cuộn lớn, thực hiện lấy mẫu theo các bước như sau: - Bước 1: Căn cứ vào số lượng cuộn, chọn số cuộn để lấy mẫu theo bảng 6 như sau"
+            },
+            {
+              "score": 0.9746471774193547,
+              "match_type": 0,
+              "content": "b) Đối với sản phẩm giấy dạng cuộn lớn, tiến hành chọn một (01) cuộn ngẫu nhiên trong lô hàng. Phương pháp lấy mẫu trên 01 cuộn giấy được thực hiện như quy định"
+            },
+            {
+              "score": 0.9468954248366012,
+              "match_type": 0,
+              "content": "Với các cuộn giấy không cắt được các ô theo kích thước 300 mm x 450 mm, tờ mẫu được lấy bằng cách cắt hết chiều ngang (chiều rộng) của cuộn tạo thành một tập, s"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q10",
+      "query": "Người lao động phải đóng bảo hiểm xã hội bắt buộc bao nhiêu phần trăm tiền lương?",
+      "form": "nfc",
+      "answerable": false,
+      "tags": [
+        "khong-co-dap-an"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": null,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "1) Giấy chứng nhận bảo hiểm cháy, nổ bắt buộc đối với cơ sở thuộc danh mục cơ sở có nguy hiểm về cháy, nổ quy định tại Phụ lục II ban hành kèm theo Nghị định số"
+            },
+            {
+              "score": 0.42321864079504806,
+              "match_type": 1,
+              "content": "Phương án chữa cháy cơ sở thuộc diện quản lý về phòng cháy và chữa cháy, khu dân cư, phương tiện giao thông cơ giới có yêu cầu đặc biệt về bảo đảm an toàn phòng"
+            },
+            {
+              "score": 0.38748323993716416,
+              "match_type": 1,
+              "content": "Tổ chức, cá nhân thực hiện hoạt động sản xuất, gia công, kinh doanh mua, bán vàng trang sức, mỹ nghệ có trách nhiệm tuân thủ quy định của pháp luật về chất lượn"
+            }
+          ]
+        },
+        "vector": {
+          "rank": null,
+          "top_score": 0.49649317940720405,
+          "top": [
+            {
+              "score": 0.49649317940720405,
+              "match_type": 0,
+              "content": "1) Giấy chứng nhận bảo hiểm cháy, nổ bắt buộc đối với cơ sở thuộc danh mục cơ sở có nguy hiểm về cháy, nổ quy định tại Phụ lục II ban hành kèm theo Nghị định số"
+            },
+            {
+              "score": 0.40971961792642253,
+              "match_type": 0,
+              "content": "b) Có vốn điều lệ từ 100 tỷ đồng trở lên. c) Có kinh nghiệm hoạt động trong lĩnh vực kinh doanh mua, bán vàng từ 2 (hai) năm trở lên. d) Có số thuế đã nộp của h"
+            },
+            {
+              "score": 0.4080503552647865,
+              "match_type": 0,
+              "content": "“1. Người đứng đầu cơ sở, chủ phương tiện giao thông cơ giới có yêu cầu đặc biệt về bảo đảm an toàn phòng cháy và chữa cháy, chủ hộ gia đình, chủ rừng quy định "
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": null,
+          "top_score": 0.9999999999999998,
+          "top": [
+            {
+              "score": 0.9999999999999998,
+              "match_type": 0,
+              "content": "1) Giấy chứng nhận bảo hiểm cháy, nổ bắt buộc đối với cơ sở thuộc danh mục cơ sở có nguy hiểm về cháy, nổ quy định tại Phụ lục II ban hành kèm theo Nghị định số"
+            },
+            {
+              "score": 0.9360069747166521,
+              "match_type": 0,
+              "content": "b) Có vốn điều lệ từ 100 tỷ đồng trở lên. c) Có kinh nghiệm hoạt động trong lĩnh vực kinh doanh mua, bán vàng từ 2 (hai) năm trở lên. d) Có số thuế đã nộp của h"
+            },
+            {
+              "score": 0.935524256651017,
+              "match_type": 0,
+              "content": "“1. Người đứng đầu cơ sở, chủ phương tiện giao thông cơ giới có yêu cầu đặc biệt về bảo đảm an toàn phòng cháy và chữa cháy, chủ hộ gia đình, chủ rừng quy định "
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q11",
+      "query": "Thời hạn sử dụng tối đa của bình chữa cháy xách tay là bao nhiêu năm?",
+      "form": "nfc",
+      "answerable": false,
+      "tags": [
+        "khong-co-dap-an"
+      ],
+      "modes": {
+        "keyword": {
+          "rank": null,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "## A.4.4.3. Chuẩn bị mẫu thử Từ các mẫu còn nguyên bao gói được lấy theo A.1, lấy ra các phần mẫu để chuẩn bị mẫu thử. Chuẩn bị mẫu thử trong điều kiện vô trùng"
+            },
+            {
+              "score": 0.8846346064030208,
+              "match_type": 1,
+              "content": "2.3.2. Nội dung ghi nhãn hàng hóa phải có tối thiểu các thông tin sau: - Tên, địa chỉ của nhà sản xuất; - Tên, địa chỉ nhà nhập khẩu (đối với sản phẩm nhập khẩu"
+            },
+            {
+              "score": 0.8639750878188382,
+              "match_type": 1,
+              "content": "a) Tem mẫu A dùng để dán lên các loại phương tiện: Máy bơm chữa cháy; dụng cụ (téc, phuy, bình, can) chứa chất chữa cháy quy định tại mục 3 Phụ lục VII ban hành"
+            }
+          ]
+        },
+        "vector": {
+          "rank": null,
+          "top_score": 0.6087642471556818,
+          "top": [
+            {
+              "score": 0.6087642471556818,
+              "match_type": 0,
+              "content": "a) Tem mẫu A dùng để dán lên các loại phương tiện: Máy bơm chữa cháy; dụng cụ (téc, phuy, bình, can) chứa chất chữa cháy quy định tại mục 3 Phụ lục VII ban hành"
+            },
+            {
+              "score": 0.6048255784244321,
+              "match_type": 0,
+              "content": "d) Tem mẫu D dùng để dán lên các loại phương tiện: Van báo động, van tràn ngập của hệ thống chữa cháy; ống và phụ kiện đường ống phi kim loại dùng trong hệ thốn"
+            },
+            {
+              "score": 0.5785634765082369,
+              "match_type": 0,
+              "content": "Trong thời hạn 05 ngày làm việc, kể từ ngày nhận đủ hồ sơ hợp lệ theo quy định tại điểm b khoản 11 Điều 1 Nghị định số 50/2024/NĐ-CP, Trưởng phòng Phòng Cảnh sá"
+            }
+          ]
+        },
+        "hybrid": {
+          "rank": null,
+          "top_score": 0.9904761904761904,
+          "top": [
+            {
+              "score": 0.9904761904761904,
+              "match_type": 0,
+              "content": "a) Tem mẫu A dùng để dán lên các loại phương tiện: Máy bơm chữa cháy; dụng cụ (téc, phuy, bình, can) chứa chất chữa cháy quy định tại mục 3 Phụ lục VII ban hành"
+            },
+            {
+              "score": 0.9702481389578161,
+              "match_type": 0,
+              "content": "d) Tem mẫu D dùng để dán lên các loại phương tiện: Van báo động, van tràn ngập của hệ thống chữa cháy; ống và phụ kiện đường ống phi kim loại dùng trong hệ thốn"
+            },
+            {
+              "score": 0.9250750750750749,
+              "match_type": 0,
+              "content": "Trong thời hạn 05 ngày làm việc, kể từ ngày nhận đủ hồ sơ hợp lệ theo quy định tại điểm b khoản 11 Điều 1 Nghị định số 50/2024/NĐ-CP, Trưởng phòng Phòng Cảnh sá"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

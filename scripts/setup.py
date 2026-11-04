@@ -54,10 +54,11 @@ class Client:
         self.base_url = base_url.rstrip("/")
         self.token = None
 
-    def request(self, method, path, body=None, timeout=60):
-        data = None if body is None else json.dumps(body).encode("utf-8")
+    def request(self, method, path, body=None, timeout=60, content_type="application/json"):
+        # body đã là bytes (ví dụ multipart) thì gửi nguyên, còn lại encode JSON.
+        data = body if body is None or isinstance(body, bytes) else json.dumps(body).encode("utf-8")
         req = urllib.request.Request(self.base_url + path, data=data, method=method)
-        req.add_header("Content-Type", "application/json")
+        req.add_header("Content-Type", content_type)
         if self.token:
             req.add_header("Authorization", "Bearer " + self.token)
         try:
@@ -175,13 +176,26 @@ def knowledge_base_body(name):
     }
 
 
+def create_knowledge_base(client, name):
+    kb = client.request("POST", "/api/v1/knowledge-bases", knowledge_base_body(name))["data"]
+    print(f"Tạo knowledge base '{name}': {kb['id']}")
+    return kb["id"]
+
+
 def ensure_knowledge_base(client, name):
     for kb in client.request("GET", "/api/v1/knowledge-bases")["data"]:
         if kb["name"] == name:
             print(f"Knowledge base '{name}' đã có: {kb['id']} (không sửa)")
-            return
-    kb = client.request("POST", "/api/v1/knowledge-bases", knowledge_base_body(name))["data"]
-    print(f"Tạo knowledge base '{name}': {kb['id']}")
+            return kb["id"]
+    return create_knowledge_base(client, name)
+
+
+def connect(env):
+    """Đợi app sẵn sàng rồi trả về Client đã đăng nhập."""
+    client = Client(env.get("WEKNORA_URL") or f"http://localhost:{env.get('APP_PORT', '8080')}")
+    wait_healthy(client)
+    login(client, env)
+    return client
 
 
 def main():
@@ -192,10 +206,8 @@ def main():
     if missing:
         sys.exit(f"Thiếu biến trong .env: {', '.join(missing)}")
 
-    client = Client(env.get("WEKNORA_URL") or f"http://localhost:{env.get('APP_PORT', '8080')}")
-    wait_healthy(client)
     try:
-        login(client, env)
+        client = connect(env)
         check_builtin_models(client)
         set_paddleocr_endpoint(client, env["PADDLEOCR_VL_ENDPOINT"])
         ensure_knowledge_base(client, env["WEKNORA_KB_NAME"])

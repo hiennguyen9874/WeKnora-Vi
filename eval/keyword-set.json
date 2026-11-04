@@ -1,0 +1,89 @@
+{
+  "questions": [
+    {
+      "id": "q01",
+      "query": "Thông tư 32/2024/TT-BCA có hiệu lực thi hành từ ngày nào?",
+      "answerable": true,
+      "expected": ["Thông tư này có hiệu lực thi hành kể từ ngày 24 tháng 8 năm 2024"],
+      "doc": "tt-32-2024-bca",
+      "tags": ["scan", "ngay-thang"]
+    },
+    {
+      "id": "q02",
+      "query": "Tem mẫu E dùng để dán lên những phương tiện phòng cháy chữa cháy nào?",
+      "answerable": true,
+      "expected": ["Tem mẫu E dùng để dán lên các loại phương tiện: Bình chữa cháy"],
+      "doc": "tt-32-2024-bca",
+      "tags": ["scan"]
+    },
+    {
+      "id": "q03",
+      "query": "Kho dầu mỏ có tổng dung tích từ bao nhiêu m³ trở lên phải thành lập đội phòng cháy và chữa cháy chuyên ngành?",
+      "answerable": true,
+      "expected": ["kho dầu mỏ, sản phẩm dầu mỏ có tổng dung tích 15.000"],
+      "doc": "tt-32-2024-bca",
+      "tags": ["scan", "so-lieu"]
+    },
+    {
+      "id": "q04",
+      "query": "Vàng trang sức, mỹ nghệ phải có hàm lượng vàng từ bao nhiêu Kara trở lên?",
+      "answerable": true,
+      "expected": ["Vàng trang sức, mỹ nghệ là các sản phẩm vàng có hàm lượng từ 8 Kara"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["dinh-nghia"]
+    },
+    {
+      "id": "q05",
+      "query": "Vàng miếng là gì?",
+      "form": "nfd",
+      "answerable": true,
+      "expected": ["Vàng miếng là sản phẩm vàng được dập thành miếng"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["nfd", "dinh-nghia"]
+    },
+    {
+      "id": "q06",
+      "query": "dieu kien cap giay phep san xuat vang mieng",
+      "answerable": true,
+      "expected": ["Điều 11a. Điều kiện cấp Giấy phép sản xuất vàng miếng"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["khong-dau", "tieu-de-dieu"]
+    },
+    {
+      "id": "q07",
+      "query": "Tên Chương nào được sửa đổi theo khoản 6 Điều 1 Nghị định 232/2025/NĐ-CP?",
+      "answerable": true,
+      "expected": ["Tên Chương này được sửa đổi theo quy định tại khoản 6 Điều 1"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["footnote"]
+    },
+    {
+      "id": "q08",
+      "query": "Hàm lượng chì (Pb) trong khăn giấy và giấy vệ sinh không được lớn hơn bao nhiêu?",
+      "answerable": true,
+      "expected": ["Hàm lượng chì (Pb)"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["bang"]
+    },
+    {
+      "id": "q09",
+      "query": "Lô hàng giấy dạng cuộn lớn có từ 6 đến 20 cuộn thì chọn bao nhiêu cuộn để lấy mẫu?",
+      "answerable": true,
+      "expected": ["6 đến 20"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["bang", "so-lieu"]
+    },
+    {
+      "id": "q10",
+      "query": "Người lao động phải đóng bảo hiểm xã hội bắt buộc bao nhiêu phần trăm tiền lương?",
+      "answerable": false,
+      "tags": ["khong-co-dap-an"]
+    },
+    {
+      "id": "q11",
+      "query": "Thời hạn sử dụng tối đa của bình chữa cháy xách tay là bao nhiêu năm?",
+      "answerable": false,
+      "tags": ["khong-co-dap-an"]
+    }
+  ]
+}

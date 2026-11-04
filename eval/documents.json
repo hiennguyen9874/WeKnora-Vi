@@ -1,0 +1,80 @@
+{
+  "documents": [
+    {
+      "id": "tt-32-2024-bca",
+      "file": "fixtures/legal/32-2024-tt-bca.pdf",
+      "title": "Thông tư số 32/2024/TT-BCA ngày 10/7/2024 của Bộ trưởng Bộ Công an sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA và Thông tư số 08/2018/TT-BCA (phòng cháy, chữa cháy và cứu nạn, cứu hộ)",
+      "kind": [
+        "scan"
+      ],
+      "source": "Bản sao y điện tử của Bộ Công an (ký số ngày 11/7/2024), PDF ảnh quét 8 trang, do chủ dự án cung cấp",
+      "sha256": "949fd99949667f620d0ffe6ba9b853a87e960098c12614b02afc21a2ab22988b",
+      "footnotes": [],
+      "headings": [
+        "Điều 1. Sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA",
+        "Điều 2. Sửa đổi, bổ sung một số điều của Thông tư số 08/2018/TT-BCA",
+        "Điều 3. Sửa đổi, bổ sung cụm từ, bãi bỏ một số khoản",
+        "Điều 4. Hiệu lực thi hành",
+        "Điều 5. Trách nhiệm thi hành",
+        "Điều 4. Hồ sơ quản lý, theo dõi hoạt động phòng cháy và chữa cháy",
+        "Điều 10. Thời hạn thực tập phương án chữa cháy",
+        "Điều 13. Thành lập đội phòng cháy và chữa cháy chuyên ngành",
+        "Điều 15. Tem kiểm định phương tiện phòng cháy và chữa cháy",
+        "Điều 6. Kiểm tra điều kiện bảo đảm an toàn về cứu nạn, cứu hộ của cơ quan Công an"
+      ]
+    },
+    {
+      "id": "vbhn-117-2026-nd-nhnn",
+      "file": "fixtures/legal/117-2026-vbhn-nd-nhnn.pdf",
+      "title": "Văn bản hợp nhất số 117/2026/VBHN-NĐ-NHNN hợp nhất Nghị định về quản lý hoạt động kinh doanh vàng",
+      "kind": [
+        "footnote",
+        "text-layer"
+      ],
+      "source": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-117-2026-vbhn-nd-nhnn-470877.htm (Công báo số 576-VBHN ngày 29/10/2026)",
+      "sha256": "fb2b2551aeb5ed89fa276840a924013a66c2f559a5ab461ee0c323eac38b8c5f",
+      "footnotes": [
+        "Nghị định số 232/2025/NĐ-CP có căn cứ ban hành như sau",
+        "Tên Chương này được sửa đổi theo quy định tại khoản 6 Điều 1",
+        "Điều này được bổ sung theo quy định tại khoản 7 Điều 1",
+        "Điểm này được sửa đổi, bổ sung theo quy định tại khoản 4 Điều 2"
+      ],
+      "headings": [
+        "Điều 1. Phạm vi điều chỉnh",
+        "Điều 2. Đối tượng áp dụng",
+        "Điều 3. Giải thích từ ngữ",
+        "Điều 4. Nguyên tắc quản lý",
+        "Điều 10. Quản lý hoạt động kinh doanh mua, bán vàng miếng",
+        "Điều 11. Điều kiện cấp Giấy phép kinh doanh mua, bán vàng miếng",
+        "Điều 11a. Điều kiện cấp Giấy phép sản xuất vàng miếng",
+        "Điều 13. Xuất khẩu, nhập khẩu vàng trang sức, mỹ nghệ",
+        "Điều 14. Xuất khẩu, nhập khẩu vàng",
+        "Điều 15. Mang theo vàng khi xuất cảnh, nhập cảnh của cá nhân",
+        "Điều 16. Trách nhiệm của Ngân hàng Nhà nước",
+        "Điều 18. Phối hợp liên ngành về quản lý hoạt động kinh doanh vàng",
+        "Điều 19. Hành vi vi phạm trong hoạt động kinh doanh vàng",
+        "Điều 20. Chế độ báo cáo",
+        "Điều 21. Điều khoản chuyển tiếp",
+        "Điều 22. Hiệu lực thi hành",
+        "Điều 23. Trách nhiệm thi hành"
+      ]
+    },
+    {
+      "id": "vbhn-136-2026-tt-bct",
+      "file": "fixtures/legal/136-2026-vbhn-tt-bct.pdf",
+      "title": "Văn bản hợp nhất số 136/2026/VBHN-TT-BCT hợp nhất Thông tư ban hành Quy chuẩn kỹ thuật quốc gia đối với sản phẩm khăn giấy và giấy vệ sinh (QCVN 09:2015/BCT)",
+      "kind": [
+        "table",
+        "footnote",
+        "text-layer"
+      ],
+      "source": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-136-2026-vbhn-tt-bct-470888.htm (Công báo số 577-VBHN ngày 02/11/2026)",
+      "sha256": "7b77dd1219358e52d1a3277a3d77c107bfdf0f0eab0395c6f60a21b5d10a340f",
+      "footnotes": [
+        "được bãi bỏ theo quy định tại điểm 2 khoản 2.1 mục II",
+        "Phụ lục này được bổ sung theo quy định tại khoản 2 Điều 10 của Thông tư số 42/2019/TT-BCT"
+      ],
+      "headings": []
+    }
+  ]
+}
