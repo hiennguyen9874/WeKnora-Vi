@@ -1,0 +1,12 @@
+[submodule "references/embeder-gateway"]
+	path = references/embeder-gateway
+	url = git@github.com:hiennguyen9874/embeder-gateway.git
+[submodule "references/llm-wiki-rag"]
+	path = references/llm-wiki-rag
+	url = git@github.com:hiennguyen9874/llm-wiki.git
+[submodule "references/MonkeyOCRv2-B-Parsing-Gateway"]
+	path = references/MonkeyOCRv2-B-Parsing-Gateway
+	url = git@github.com:hiennguyen9874/MonkeyOCRv2-B-Parsing-Gateway.git
+[submodule "references/WeKnora"]
+	path = references/WeKnora
+	url = git@github.com:hiennguyen9874/WeKnora.git
