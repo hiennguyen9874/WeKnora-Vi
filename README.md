@@ -43,12 +43,12 @@ python3 scripts/setup.py
 1. Đăng nhập bằng `WEKNORA_ADMIN_EMAIL`, chưa có tài khoản thì đăng ký.
 2. Kiểm tra bốn model built-in đã được nạp.
 3. Ghi `PADDLEOCR_VL_ENDPOINT` vào tenant parser settings.
-4. Tạo knowledge base `WEKNORA_KB_NAME` nếu chưa có knowledge base cùng tên. Knowledge base đã có thì không bị sửa; muốn tạo lại theo cấu hình mới thì xoá nó trên UI rồi chạy lại.
+4. Tạo knowledge base `WEKNORA_KB_NAME` nếu chưa có knowledge base cùng tên. Knowledge base đã có thì chỉ đưa kích thước chunk (`CHUNK_SIZES` trong script) về giá trị đã chốt, cấu hình khác giữ nguyên; tài liệu đã nạp phải nạp lại mới chunk theo kích thước mới. Muốn tạo lại theo toàn bộ cấu hình mới thì xoá nó trên UI rồi chạy lại.
 
 Knowledge base mẫu dùng cấu hình sau:
 
 - PDF và ảnh (JPG/JPEG/PNG/BMP/TIFF) đi qua `paddleocr_vl`, DOCX/XLSX dùng parser `builtin`.
-- Bật parent-child. Kích thước chunk tạm để mặc định.
+- Bật parent-child: chunk cha 4096 ký tự, chunk con 384 ký tự, token limit 512, ngôn ngữ chunker `vi` (xem [Kích thước chunk](#kích-thước-chunk)).
 - Separators: `\n\n`, `\n`, `. `, `; `.
 - Mô tả ảnh bằng tiếng Việt qua model `builtin-vlm`.
 - Bật knowledge graph, với ví dụ trích thực thể từ văn bản luật.
@@ -147,7 +147,53 @@ Script in tóm tắt, rồi ghi file JSON:
 - `search.modes.<chế độ>`: `recall@k` (k = 1, 3, 5, 10) là tỉ lệ câu có đáp án mà kết quả trúng đầu tiên nằm trong top k. `mrr` là trung bình 1/hạng của kết quả trúng đầu tiên, câu không trúng trong top 10 tính 0. `failed` là danh sách câu trượt.
 - `questions`: từng câu, với hạng trúng (`rank`, `null` là trượt), điểm cao nhất và 3 kết quả đầu ở mỗi chế độ.
 
-`results/` bị gitignore, trừ `results/baseline.json`.
+`results/` bị gitignore, trừ `results/baseline.json` (Fork chưa vá), `results/chunker-vi.json` (sau vá chunker) và `results/chars-per-token.json`.
+
+## Kích thước chunk
+
+Bản vá chunker của Fork (`internal/infrastructure/chunker`): văn bản có từ 10% chữ cái chỉ tiếng Việt mới có (ă, đ, ơ, ư, ĩ, ũ và nguyên âm U+1EA0..U+1EF9) được nhận là `vi`; `vi` dùng tỉ lệ 2,5 ký tự/token, và khi không khai báo separators thì mặc định là `\n\n`, `\n`, `. `, `; `.
+
+### Đo ký tự/token
+
+```sh
+python3 scripts/e2e.py --keep-kb --out results/chunker-vi.json
+python3 scripts/measure_tokens.py --kb <kb_id trong run của file trên>   # ghi results/chars-per-token.json
+```
+
+Script gửi từng chunk con của tài liệu mẫu tới embeder-gateway (`EMBEDER_GATEWAY_URL`, hoặc `--embedder-url` nếu URL đó chỉ đúng từ container) và lấy `usage.prompt_tokens` trừ 20 token cố định của prompt format, tức là đếm bằng tokenizer thật của `Qwen3-VL-Embedding-2B`. Ký tự đếm bằng code point, như rune của chunker. Script cũng ghép lại toàn văn từ offset chunk để đo độ dài từng Điều, và dò giới hạn input của embedder. Xoá knowledge base `e2e-*` sau khi đo.
+
+Kết quả trên ba tài liệu mẫu (291 chunk con từ 100 ký tự):
+
+| Đo | Giá trị |
+| --- | --- |
+| Ký tự/token, toàn bộ | 3,18 |
+| Ký tự/token theo chunk: p5 / p10 / p50 | 2,31 / 2,48 / 3,25 (thấp nhất 1,62, bảng số) |
+| Giới hạn input của embedder | 8171 token nội dung |
+| Chunk con lớn nhất | 254 token |
+| Độ dài Điều: p50 / p90 | 560 / 2600 ký tự; chỉ hai Điều vượt 4096 (5019 và 6342) |
+
+Tỉ lệ của `vi` trong Fork là 2,5 (khoảng p10), thấp hơn trung bình để bảng và số không bị đếm thiếu token. Chunker còn nhân thêm 0,9, nên token limit 512 cho trần 1152 ký tự.
+
+### Cỡ đã chốt
+
+`scripts/setup.py` (`CHUNK_SIZES`): `languages: ["vi"]`, chunk cha 4096, chunk con 384, token limit 512.
+
+- Chunk cha 4096 ký tự chứa trọn một Điều, trừ hai Điều dài nhất. Chunker hiện chưa cắt theo Điều, nên một chunk cha có thể gồm vài Điều ngắn.
+- Chunk con 384 ký tự (khoảng 120 token). Cặp 4096 / 384 là cặp duy nhất đã thử không tệ hơn baseline ở chỉ số nào của vector và hybrid. Chunk con lớn hơn tăng R@10 nhưng giảm R@1 và MRR; 3000 / 384 tăng vector nhưng hybrid giảm R@3 (0,56 xuống 0,44) và MRR.
+- Token limit 512 chỉ là trần an toàn khi ai đó tăng cỡ chunk con; với 384 ký tự nó không cắt gì.
+
+E2E trên Fork đã vá (`fd7a2586fd58-dirty`), 9 câu có đáp án:
+
+| Cha / con | Vector R@1 / R@10 / MRR | Hybrid R@1 / R@10 / MRR |
+| --- | --- | --- |
+| Baseline (4096 / 384 mặc định, chưa vá) | 0,56 / 0,78 / 0,60 | 0,44 / 0,78 / 0,52 |
+| **4096 / 384 (đã chốt)** | 0,56 / 0,78 / 0,60 | 0,44 / 0,78 / 0,52 |
+| 4096 / 512 | 0,44 / 0,89 / 0,56 | 0,33 / 0,78 / 0,50 |
+| 3000 / 384 | 0,67 / 0,78 / 0,68 | 0,44 / 0,78 / 0,51 |
+| 3000 / 512 | 0,44 / 0,89 / 0,55 | 0,33 / 0,89 / 0,48 |
+| 3000 / 768 | 0,44 / 0,78 / 0,58 | 0,33 / 0,67 / 0,46 |
+
+Bộ kiểm tra keyword hiện chỉ có 9 câu có đáp án, nên mỗi câu đổi hạng là 0,11 điểm recall. Chạy lại so sánh này khi có bộ đầy đủ.
 
 ## Nâng commit Fork
 

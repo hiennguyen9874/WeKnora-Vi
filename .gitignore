@@ -1,6 +1,8 @@
 /.pi/
 /.env
 __pycache__
-# Kết quả E2E: chỉ commit bản baseline.
+# Kết quả E2E: chỉ commit baseline, kết quả sau vá chunker và phép đo ký tự/token.
 /results/*
 !/results/baseline.json
+!/results/chunker-vi.json
+!/results/chars-per-token.json

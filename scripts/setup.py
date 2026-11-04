@@ -4,7 +4,8 @@
 - Đăng nhập tài khoản trong .env (chưa có thì đăng ký).
 - Kiểm tra các model built-in từ config/builtin_models.yaml đã được nạp.
 - Đặt endpoint PaddleOCR-VL ở tenant parser settings.
-- Tạo knowledge base mẫu nếu chưa có knowledge base cùng tên.
+- Tạo knowledge base mẫu nếu chưa có knowledge base cùng tên; đã có thì chỉ đưa
+  kích thước chunk về giá trị đã chốt (CHUNK_SIZES).
 
 Chỉ dùng thư viện chuẩn của Python. Biến môi trường thắng giá trị trong .env.
     python3 scripts/setup.py
@@ -148,6 +149,21 @@ GRAPH_EXAMPLE = {
 }
 
 
+# Kích thước chunk đã chốt, xem README › Kích thước chunk.
+# - languages vi: token limit dùng tỉ lệ 2,5 ký tự/token đo trên Qwen3-VL-Embedding-2B.
+# - parent_chunk_size (ký tự): chứa trọn một Điều, trừ hai Điều dài nhất của tài liệu mẫu.
+# - child_chunk_size (ký tự): khoảng 120 token; cùng chunk cha 4096 là cặp duy nhất đã thử
+#   bằng E2E không tệ hơn baseline ở vector và hybrid.
+# - token_limit: trần cho chunk con (1152 ký tự với tỉ lệ vi), xa dưới giới hạn
+#   input 8171 token của embedder.
+CHUNK_SIZES = {
+    "languages": ["vi"],
+    "parent_chunk_size": 4096,
+    "child_chunk_size": 384,
+    "token_limit": 512,
+}
+
+
 def knowledge_base_body(name):
     return {
         "name": name,
@@ -155,8 +171,8 @@ def knowledge_base_body(name):
         "type": "document",
         "embedding_model_id": EMBEDDING_ID,
         "summary_model_id": LLM_ID,
-        # Kích thước chunk để mặc định; ticket chunker sẽ chốt sau.
         "chunking_config": {
+            **CHUNK_SIZES,
             "separators": ["\n\n", "\n", ". ", "; "],
             "enable_parent_child": True,
             "parser_engine_rules": [
@@ -185,9 +201,28 @@ def create_knowledge_base(client, name):
 def ensure_knowledge_base(client, name):
     for kb in client.request("GET", "/api/v1/knowledge-bases")["data"]:
         if kb["name"] == name:
-            print(f"Knowledge base '{name}' đã có: {kb['id']} (không sửa)")
+            print(f"Knowledge base '{name}' đã có: {kb['id']}")
+            sync_chunk_sizes(client, kb["id"])
             return kb["id"]
     return create_knowledge_base(client, name)
+
+
+def sync_chunk_sizes(client, kb_id):
+    """Đưa kích thước chunk của knowledge base đã có về CHUNK_SIZES, giữ nguyên cấu hình khác.
+
+    Chỉ áp cho tài liệu nạp sau; tài liệu đã có phải nạp lại để chunk theo kích thước mới.
+    """
+    kb = client.request("GET", f"/api/v1/knowledge-bases/{kb_id}")["data"]
+    chunking = kb.get("chunking_config") or {}
+    if all(chunking.get(k) == v for k, v in CHUNK_SIZES.items()):
+        print("Kích thước chunk đã đúng")
+        return
+    # PUT thay cả chunking_config; gửi lại cấu hình hiện có để không mất trường khác.
+    client.request("PUT", f"/api/v1/knowledge-bases/{kb_id}", {
+        "name": kb["name"], "description": kb.get("description", ""),
+        "config": {"chunking_config": {**chunking, **CHUNK_SIZES}},
+    })
+    print(f"Đặt kích thước chunk: {CHUNK_SIZES}")
 
 
 def connect(env):

@@ -1,0 +1,58 @@
+{
+  "measured_at": "2026-11-04T23:41:20+07:00",
+  "method": "Chunk con của tài liệu mẫu, đếm ký tự bằng số code point (như rune của Go), đếm token bằng usage.prompt_tokens của embeder-gateway trừ phần prompt format.",
+  "embedding_model": "Qwen3-VL-Embedding-2B",
+  "kb_id": "6d955bce-ade9-421d-8030-1e43e7f5fb5b",
+  "prompt_format_overhead_tokens": 20,
+  "embedder_input_limit_tokens": 8171,
+  "max_text_chunk_tokens": 254,
+  "documents": [
+    {
+      "file": "136-2026-vbhn-tt-bct.pdf",
+      "text_chunks": 138,
+      "chars": 41553,
+      "tokens": 13416,
+      "chars_per_token": 3.097,
+      "dieu": 8
+    },
+    {
+      "file": "117-2026-vbhn-nd-nhnn.pdf",
+      "text_chunks": 105,
+      "chars": 30337,
+      "tokens": 9226,
+      "chars_per_token": 3.288,
+      "dieu": 26
+    },
+    {
+      "file": "32-2024-tt-bca.pdf",
+      "text_chunks": 55,
+      "chars": 17505,
+      "tokens": 5491,
+      "chars_per_token": 3.188,
+      "dieu": 10
+    }
+  ],
+  "chars_per_token": {
+    "overall": 3.178,
+    "per_chunk_min_100_chars": {
+      "min": 1.62,
+      "p5": 2.31,
+      "p10": 2.48,
+      "p50": 3.25,
+      "p90": 3.92,
+      "p95": 5.02,
+      "max": 12.47
+    },
+    "chunks": 291
+  },
+  "dieu_chars": {
+    "min": 25,
+    "p5": 25.0,
+    "p10": 46.0,
+    "p50": 559.5,
+    "p90": 2600.0,
+    "p95": 6011.25,
+    "max": 31822,
+    "count": 44
+  }
+}
