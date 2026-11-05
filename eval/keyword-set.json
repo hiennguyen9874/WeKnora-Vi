@@ -51,7 +51,7 @@
     },
     {
       "id": "q07",
-      "query": "Tên Chương nào được sửa đổi theo khoản 6 Điều 1 Nghị định 232/2025/NĐ-CP?",
+      "query": "Theo chú thích 15 của 117/2026/VBHN-NĐ-NHNN, tên Chương III được sửa đổi theo khoản nào của Điều 1 Nghị định 232/2025/NĐ-CP?",
       "answerable": true,
       "expected": ["Tên Chương này được sửa đổi theo quy định tại khoản 6 Điều 1"],
       "doc": "vbhn-117-2026-nd-nhnn",
@@ -84,6 +84,156 @@
       "query": "Thời hạn sử dụng tối đa của bình chữa cháy xách tay là bao nhiêu năm?",
       "answerable": false,
       "tags": ["khong-co-dap-an"]
+    },
+    {
+      "id": "q12",
+      "query": "Theo Điều 11 khoản 1 của Nghị định về quản lý hoạt động kinh doanh vàng (117/2026/VBHN-NHNN), doanh nghiệp muốn được cấp Giấy phép kinh doanh mua, bán vàng miếng phải có vốn điều lệ tối thiểu bao nhiêu?",
+      "answerable": true,
+      "expected": ["Có vốn điều lệ từ 100 tỷ đồng trở lên"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["dieu-khoan", "so-tien"]
+    },
+    {
+      "id": "q13",
+      "query": "Theo Điều 11 khoản 2 của 117/2026/VBHN-NĐ-NHNN, tổ chức tín dụng xin Giấy phép kinh doanh mua, bán vàng miếng cần vốn điều lệ tối thiểu bao nhiêu?",
+      "answerable": true,
+      "expected": ["Có vốn điều lệ từ 3.000 (ba nghìn) tỷ đồng trở lên"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["dieu-khoan", "so-tien"]
+    },
+    {
+      "id": "q14",
+      "query": "vang nguyen lieu la gi?",
+      "answerable": true,
+      "expected": ["Vàng nguyên liệu là vàng dưới dạng khối, thỏi, hạt, miếng"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["khong-dau", "dinh-nghia"]
+    },
+    {
+      "id": "q15",
+      "query": "Vàng nguyên liệu là gì?",
+      "form": "nfd",
+      "answerable": true,
+      "expected": ["Vàng nguyên liệu là vàng dưới dạng khối, thỏi, hạt, miếng"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["nfd", "dinh-nghia"]
+    },
+    {
+      "id": "q16",
+      "query": "Vàng trang sức, mỹ nghệ phải có hàm lượng vàng từ bao nhiêu Kara trở lên?",
+      "form": "nfd",
+      "answerable": true,
+      "expected": ["Vàng trang sức, mỹ nghệ là các sản phẩm vàng có hàm lượng từ 8 Kara"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["nfd", "dinh-nghia"]
+    },
+    {
+      "id": "q17",
+      "query": "Theo QCVN 09:2015/BCT, nhãn khăn giấy và giấy vệ sinh phải có dấu hợp quy viết tắt là gì?",
+      "answerable": true,
+      "expected": ["Dấu hợp quy (dấu CR)"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["chu-viet-tat"]
+    },
+    {
+      "id": "q18",
+      "query": "Theo QCVN 09:2015/BCT viện dẫn TCVN 5946:2007, bột giấy tái chế để sản xuất khăn giấy và giấy vệ sinh được làm từ loại giấy nào?",
+      "answerable": true,
+      "expected": ["các loại giấy văn phòng phù hợp với Tiêu chuẩn quốc gia TCVN 5946"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["chu-viet-tat"]
+    },
+    {
+      "id": "q19",
+      "query": "Khách hàng mua, bán vàng tổng giá trị 5.000.000 đồng trong ngày có phải thanh toán không dùng tiền mặt không?",
+      "answerable": true,
+      "expected": ["Việc thanh toán mua, bán vàng có giá trị từ 05 triệu đồng trong ngày"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["so-tien"]
+    },
+    {
+      "id": "q20",
+      "query": "Doanh nghiệp có vốn điều lệ 1.000.000.000.000 đồng có đạt ngưỡng vốn để xin Giấy phép sản xuất vàng miếng theo Điều 11a khoản 1 không?",
+      "answerable": true,
+      "expected": ["Có vốn điều lệ từ 1.000 tỷ đồng trở lên"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["so-tien", "dieu-khoan"]
+    },
+    {
+      "id": "q21",
+      "query": "Điều 2 trong văn bản hợp nhất 136/2026/VBHN-TT-BCT ghi Thông tư có hiệu lực từ ngày nào?",
+      "answerable": true,
+      "expected": ["Thông tư này có hiệu lực từ ngày 01 tháng 01 năm 2017"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["ngay-thang"]
+    },
+    {
+      "id": "q22",
+      "query": "Theo văn bản hợp nhất 117/2026/VBHN-NĐ-NHNN, Nghị định 24/2012/NĐ-CP về quản lý hoạt động kinh doanh vàng có hiệu lực từ ngày nào?",
+      "answerable": true,
+      "expected": ["quản lý hoạt động kinh doanh vàng, có hiệu lực kể từ ngày 25 tháng 5 năm 2012"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["ngay-thang"]
+    },
+    {
+      "id": "q23",
+      "query": "Bảng 2 của QCVN 09:2015/BCT quy định độ ẩm của khăn giấy, giấy vệ sinh không lớn hơn bao nhiêu phần trăm?",
+      "answerable": true,
+      "expected": ["Độ ẩm, %, không lớn hơn"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["bang"]
+    },
+    {
+      "id": "q24",
+      "query": "Theo Bảng 2 của QCVN 09:2015/BCT, hàm lượng cadimi (Cd) trong khăn giấy và giấy vệ sinh không được lớn hơn bao nhiêu?",
+      "answerable": true,
+      "expected": ["Hàm lượng cadimi (Cd)"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["bang"]
+    },
+    {
+      "id": "q25",
+      "query": "Theo chú thích 16 của 117/2026/VBHN-NĐ-NHNN, Điều 11a về điều kiện cấp Giấy phép sản xuất vàng miếng được bổ sung theo khoản nào của Điều 1 Nghị định 232/2025/NĐ-CP?",
+      "answerable": true,
+      "expected": ["Điều này được bổ sung theo quy định tại khoản 7 Điều 1"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["footnote"]
+    },
+    {
+      "id": "q26",
+      "query": "Theo chú thích 10 của 136/2026/VBHN-TT-BCT, mục Phương pháp thử trong Bảng 2 - Chỉ tiêu hóa học bị bãi bỏ theo điểm, khoản nào của mục II Sửa đổi 01:2026 QCVN 09:2015/BCT?",
+      "answerable": true,
+      "expected": ["được bãi bỏ theo quy định tại điểm 3 khoản 2.1 mục II"],
+      "doc": "vbhn-136-2026-tt-bct",
+      "tags": ["footnote"]
+    },
+    {
+      "id": "q27",
+      "query": "Người lao động phải đóng BHXH tối thiểu bao nhiêu năm để được hưởng lương hưu?",
+      "answerable": false,
+      "tags": ["chu-viet-tat", "khong-co-dap-an"]
+    },
+    {
+      "id": "q28",
+      "query": "Mức giảm trừ gia cảnh khi tính thuế TNCN cho mỗi người phụ thuộc là bao nhiêu đồng/tháng?",
+      "answerable": false,
+      "tags": ["chu-viet-tat", "khong-co-dap-an"]
+    },
+    {
+      "id": "q29",
+      "query": "Theo Điều 14 khoản 3 của 117/2026/VBHN-NĐ-NHNN, hoạt động xuất khẩu, nhập khẩu vàng nguyên liệu của Ngân hàng Nhà nước được miễn những loại thuế nào?",
+      "answerable": true,
+      "expected": ["được miễn thuế xuất khẩu, thuế nhập khẩu theo quyết định của Thủ tướng"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["dieu-khoan"]
+    },
+    {
+      "id": "q30",
+      "query": "Vàng nguyên liệu là gì?",
+      "answerable": true,
+      "expected": ["Vàng nguyên liệu là vàng dưới dạng khối, thỏi, hạt, miếng"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["dinh-nghia"]
     }
   ]
 }

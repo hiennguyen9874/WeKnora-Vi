@@ -12,9 +12,10 @@ Repo triển khai WeKnora để hỏi đáp trên tài liệu tiếng Việt. Ng
 | `scripts/check-db.sh` | In `lc_ctype`, chỉ mục và EXPLAIN truy vấn vector |
 | `scripts/e2e.py` | Script E2E: nạp tài liệu mẫu, kiểm tra chunk, đo recall@k và MRR |
 | `eval/documents.json` | Tài liệu mẫu (nguồn, sha256) và các kiểm tra chunk của từng tài liệu |
-| `eval/keyword-set.json` | Bộ kiểm tra keyword |
+| `eval/keyword-set.json` | Bộ kiểm tra keyword đã duyệt: 30 câu (26 có đáp án, 4 không có đáp án) |
+| `eval/keyword-set-review.md` | Xác nhận duyệt, đáp án, vị trí nguồn và cách chạy baseline riêng |
 | `fixtures/legal/` | Tài liệu mẫu: văn bản pháp luật công khai |
-| `results/baseline.json` | Kết quả E2E trên Fork chưa vá |
+| `results/baseline.json` | Baseline đầy đủ 30 câu trên Fork chưa vá (#4) |
 
 ## Cần có trước
 
@@ -103,7 +104,7 @@ Chạy trên stack đã dựng và đã chạy `scripts/setup.py`. Script chỉ 
 
 ```sh
 python3 scripts/e2e.py                            # ghi results/<thời điểm>-<commit Fork>.json
-python3 scripts/e2e.py --out results/baseline.json  # chỉ khi chốt lại baseline
+# Chốt lại baseline: dùng stack Fork chưa vá riêng theo eval/keyword-set-review.md
 python3 scripts/e2e.py --keep-kb                  # giữ knowledge base để xem chunk trên UI
 ```
 
@@ -139,7 +140,11 @@ Kiểm tra chunk fail không làm script thoát lỗi: trên Fork chưa vá, k�
 - `form`: `nfc` (mặc định) hoặc `nfd`; script đổi câu hỏi sang dạng này trước khi gửi. Câu không dấu thì viết thẳng không dấu trong `query`.
 - `doc` (id trong `eval/documents.json`) và `tags` chỉ để đọc kết quả.
 
-`eval/keyword-set-proposed.json` chứa câu `q12` dạng “Điều 11 khoản 1” và đoạn đáp án lấy từ điểm b khoản 1 Điều 11 của `117/2026/VBHN-NHNN` (trang in 6). Đây là đề xuất chờ người dùng duyệt theo spec #1, **chưa được script E2E dùng để tính điểm**. Sau khi duyệt, chuyển câu vào `eval/keyword-set.json`, rồi chạy cùng bộ câu trên baseline và bản vá; không so sánh điểm tổng hợp của hai bộ câu khác nhau.
+`eval/keyword-set.json` là bộ đầy đủ **30 câu đã được người dùng duyệt** cho issue #4: 26 câu có đáp án, 4 câu không có đáp án, mỗi nhóm ca khó có ít nhất 2 câu. Bộ câu gồm seed, đề xuất `q12` của issue #8 và các câu mới; q07 được hỏi lại để đoạn mong đợi chứa đáp án. Xem [xác nhận duyệt, bảng đáp án và nguồn](eval/keyword-set-review.md), kèm lệnh kiểm tra không gọi dịch vụ và hướng dẫn chạy baseline trên stack riêng.
+
+Baseline đầy đủ đã chạy trên stack riêng với Fork chưa vá `fd7a2586fd58`, tokenizer `chinese_lindera`, embedding 1024 chiều; kết quả nằm trong `results/baseline.json`. Recall@10 keyword/vector/hybrid lần lượt là 0,6154 / 0,7692 / 0,8077. NFC pass; footnote, tiêu đề Điều và breadcrumb còn fail như ghi trong [bảng kết quả baseline](eval/keyword-set-review.md#kết-quả-baseline-đầy-đủ-4).
+
+Không so sánh điểm tổng hợp của bộ 30 câu với các kết quả seed cũ. Baseline seed lịch sử vẫn có trong Git tại commit `72f03bd`; các bảng ở phần chunker bên dưới cũng là kết quả seed lịch sử. Các lần so sánh mới phải dùng cùng bộ câu, tài liệu, model và cấu hình chunking.
 
 ### Đọc kết quả
 
@@ -197,7 +202,7 @@ E2E trên Fork đã vá (`fd7a2586fd58-dirty`), 9 câu có đáp án:
 | 3000 / 512 | 0,44 / 0,89 / 0,55 | 0,33 / 0,89 / 0,48 |
 | 3000 / 768 | 0,44 / 0,78 / 0,58 | 0,33 / 0,67 / 0,46 |
 
-Bộ kiểm tra keyword hiện chỉ có 9 câu có đáp án, nên mỗi câu đổi hạng là 0,11 điểm recall. Chạy lại so sánh này khi có bộ đầy đủ.
+Phép so sánh lịch sử trên chỉ có 9 câu có đáp án, nên mỗi câu đổi hạng là 0,11 điểm recall. Bộ hiện tại đã có 26 câu có đáp án; cần chạy lại cả baseline và các cỡ chunk trên cùng bộ này trước khi kết luận bằng điểm mới.
 
 ## Chunker cho văn bản pháp lý
 
@@ -221,7 +226,7 @@ E2E (`results/chunker-legal.json`, Fork `456b05ec45f9-dirty`, 4096 / 384):
 | `chunker-vi` (legacy, vá ngôn ngữ) | 1/27 fail | 0,44 / 0,50 | 0,56 / 0,60 | 0,44 / 0,52 |
 | **`chunker-legal` (auto, vá tiêu đề)** | pass | 0,56 / 0,56 | 0,78 / 0,78 | 0,78 / 0,78 |
 
-Kiểm tra `breadcrumbs` pass 5/5. R@10 không đổi ở cả ba chế độ: câu đúng chỉ lên hạng 1 (q01, q05, q06, q08). Không câu nào tụt hạng ở chế độ nào. Bộ câu hỏi đã chạy chưa có câu dạng "Điều X Khoản Y", nên chưa đo được loại câu này; câu `q12` đang chờ duyệt trong `eval/keyword-set-proposed.json`. q07 (footnote) và q09 (bảng) vẫn trượt.
+Trong lần chạy seed lịch sử trên, kiểm tra `breadcrumbs` pass 5/5. R@10 không đổi ở cả ba chế độ: câu đúng chỉ lên hạng 1 (q01, q05, q06, q08). Không câu nào tụt hạng ở chế độ nào. Bộ seed đó chưa có câu dạng "Điều X Khoản Y", nên chưa đo được loại câu này; bộ 30 câu đã duyệt hiện có q12, q13, q20 và q29 thuộc nhóm này. q07 (footnote) và q09 (bảng) trượt trong lần chạy seed đó.
 
 Các sửa lỗi sau review (Điều số La Mã, tiêu đề hoa trong breadcrumb và ngữ cảnh xuyên chunk cha) đã qua Go test, nhưng chưa build/deploy hay chạy lại E2E. Bảng trên là kết quả lịch sử, không phải nghiệm thu các sửa lỗi này.
 
