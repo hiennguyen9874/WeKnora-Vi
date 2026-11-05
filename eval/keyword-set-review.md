@@ -1,35 +1,15 @@
 # Duyệt Bộ kiểm tra keyword — issue #4, spec #1
 
-**Trạng thái: đã được người dùng duyệt và đưa vào sử dụng.**
-[`keyword-set.json`](keyword-set.json) có 30 câu, 26 câu có đáp án và 4 câu không
-có đáp án. Người dùng đã xác nhận toàn bộ bộ câu (gồm seed và q07 sửa lại);
-[xác nhận duyệt được ghi trong issue #4](https://github.com/hiennguyen9874/WeKnora-Vi/issues/4#issuecomment-6649594799).
-SHA-256 của bộ đã duyệt: `cda62006e513fb8d892f11a576d5f21308a57ed56e63cf490e6d2644d4bfa2a9`.
-File đề xuất đã được chuyển thành bộ đang dùng, không giữ bản song song.
-Baseline đầy đủ đã chạy qua script E2E và được lưu tại `results/baseline.json`.
+**Trạng thái: đã được người dùng duyệt và đưa vào sử dụng.** [`keyword-set.json`](keyword-set.json) có 30 câu, 26 câu có đáp án và 4 câu không có đáp án. Người dùng đã xác nhận toàn bộ bộ câu (gồm seed và q07 sửa lại); [xác nhận duyệt được ghi trong issue #4](https://github.com/hiennguyen9874/WeKnora-Vi/issues/4#issuecomment-6649594799). SHA-256 của bộ đã duyệt: `cda62006e513fb8d892f11a576d5f21308a57ed56e63cf490e6d2644d4bfa2a9`. File đề xuất đã được chuyển thành bộ đang dùng, không giữ bản song song. Baseline đầy đủ đã chạy qua script E2E và được lưu tại `results/baseline.json`.
 
 ## Phạm vi đã duyệt
 
-- Đọc `query`, `expected`, `doc`, `form` và `tags` trong JSON; dùng bảng dưới để
-  kiểm tra đáp án và vị trí nguồn. Nguồn và SHA-256 của PDF nằm trong
-  [`documents.json`](documents.json). Đây là câu hỏi trên tài liệu mẫu, không phải
-  khẳng định quy định pháp luật hiện hành.
-- `expected` là đoạn nhận diện chunk đúng, **không phải đáp án do LLM sinh**.
-  Các câu bảng dùng nhãn hàng duy nhất, không nối nhãn với ô số qua ký tự phân cách
-  Markdown. Vì vậy điểm retrieval không chứng minh ô số được OCR đúng; cần đối
-  chiếu các giá trị dưới đây khi duyệt. q06 tìm tiêu đề Điều, không chấm toàn bộ
-  các điều kiện bên dưới.
-- q01–q11 giữ câu seed, trừ q07 được hỏi lại về **khoản sửa đổi** để đoạn mong đợi
-  thực sự chứa đáp án; câu cũ hỏi tên Chương nhưng đoạn mong đợi chỉ là chú thích.
-  q12 giữ đề xuất của issue #8. q13–q30 là câu mới.
-- q04/q16 là cặp NFC/NFD; q14/q15/q30 là ba dạng không dấu/NFD/NFC của cùng câu.
-  Đây là chủ ý kiểm tra cách gõ, không phải các ý định độc lập. Tổng recall/MRR
-  sẽ tính từng biến thể như một câu, theo script E2E hiện có.
-- `form: "nfd"` để script chuyển sang Unicode tổ hợp ngay trước khi gửi; JSON vẫn
-  lưu chữ dễ đọc. Không tự bỏ dấu các câu khác.
-- BHXH/TNCN không có quy định trả lời trong tài liệu mẫu, nên q27/q28 là ca âm.
-  q17/q18 dùng chữ viết tắt thực sự có trong nguồn (QCVN, TCVN, CR), để nhóm
-  chữ viết tắt có cả câu tìm được đáp án, không chỉ câu âm.
+- Đọc `query`, `expected`, `doc`, `form` và `tags` trong JSON; dùng bảng dưới để kiểm tra đáp án và vị trí nguồn. Nguồn và SHA-256 của PDF nằm trong [`documents.json`](documents.json). Đây là câu hỏi trên tài liệu mẫu, không phải khẳng định quy định pháp luật hiện hành.
+- `expected` là đoạn nhận diện chunk đúng, **không phải đáp án do LLM sinh**. Các câu bảng dùng nhãn hàng duy nhất, không nối nhãn với ô số qua ký tự phân cách Markdown. Vì vậy điểm retrieval không chứng minh ô số được OCR đúng; cần đối chiếu các giá trị dưới đây khi duyệt. q06 tìm tiêu đề Điều, không chấm toàn bộ các điều kiện bên dưới.
+- q01–q11 giữ câu seed, trừ q07 được hỏi lại về **khoản sửa đổi** để đoạn mong đợi thực sự chứa đáp án; câu cũ hỏi tên Chương nhưng đoạn mong đợi chỉ là chú thích. q12 giữ đề xuất của issue #8. q13–q30 là câu mới.
+- q04/q16 là cặp NFC/NFD; q14/q15/q30 là ba dạng không dấu/NFD/NFC của cùng câu. Đây là chủ ý kiểm tra cách gõ, không phải các ý định độc lập. Tổng recall/MRR sẽ tính từng biến thể như một câu, theo script E2E hiện có.
+- `form: "nfd"` để script chuyển sang Unicode tổ hợp ngay trước khi gửi; JSON vẫn lưu chữ dễ đọc. Không tự bỏ dấu các câu khác.
+- BHXH/TNCN không có quy định trả lời trong tài liệu mẫu, nên q27/q28 là ca âm. q17/q18 dùng chữ viết tắt thực sự có trong nguồn (QCVN, TCVN, CR), để nhóm chữ viết tắt có cả câu tìm được đáp án, không chỉ câu âm.
 
 ## Phủ nhóm ca khó
 
@@ -47,8 +27,7 @@ Một câu có thể thuộc nhiều nhóm; chỉ nhóm `nfd` cần `form: "nfd"
 | Footnote (`footnote`) | 3 | q07, q25, q26 |
 | Không có đáp án (`khong-co-dap-an`) | 4 | q10, q11, q27, q28 |
 
-q19 và q20 viết tiền theo dạng phân nhóm hàng nghìn (`5.000.000 đồng`,
-`1.000.000.000.000 đồng`), trong khi nguồn viết `05 triệu đồng` và `1.000 tỷ đồng`.
+q19 và q20 viết tiền theo dạng phân nhóm hàng nghìn (`5.000.000 đồng`, `1.000.000.000.000 đồng`), trong khi nguồn viết `05 triệu đồng` và `1.000 tỷ đồng`.
 
 ## Đối chiếu đáp án và nguồn
 
@@ -58,12 +37,7 @@ Ký hiệu tài liệu theo `doc` trong JSON:
 - **Vàng**: `vbhn-117-2026-nd-nhnn` — `fixtures/legal/117-2026-vbhn-nd-nhnn.pdf`.
 - **Giấy**: `vbhn-136-2026-tt-bct` — `fixtures/legal/136-2026-vbhn-tt-bct.pdf`.
 
-Trang dưới đây là **số trang in**; với Vàng và Giấy, trang PDF = trang in trừ 1.
-BCA có trang PDF trùng trang in. Ba câu BCA đã đối chiếu trực tiếp ảnh scan;
-23 đoạn mong đợi còn lại đã đối chiếu text PDF bằng `pdftotext -layout`, mỗi đoạn
-xuất hiện đúng một lần trong tài liệu được gắn. Điều này không chứng minh đoạn
-nằm trọn trong một chunk sau OCR: baseline ghi nhận các lỗi đó, không sửa
-đoạn mong đợi để che lỗi parse/chunk.
+Trang dưới đây là **số trang in**; với Vàng và Giấy, trang PDF = trang in trừ 1. BCA có trang PDF trùng trang in. Ba câu BCA đã đối chiếu trực tiếp ảnh scan; 23 đoạn mong đợi còn lại đã đối chiếu text PDF bằng `pdftotext -layout`, mỗi đoạn xuất hiện đúng một lần trong tài liệu được gắn. Điều này không chứng minh đoạn nằm trọn trong một chunk sau OCR: baseline ghi nhận các lỗi đó, không sửa đoạn mong đợi để che lỗi parse/chunk.
 
 | ID | Đáp án để người dùng đối chiếu | Nguồn |
 | --- | --- | --- |
@@ -100,9 +74,7 @@ nằm trọn trong một chunk sau OCR: baseline ghi nhận các lỗi đó, kh�
 
 ## Kiểm tra bộ câu không gọi dịch vụ
 
-Chạy từ gốc Repo triển khai, cần Python 3 và `pdftotext` (Poppler). Lệnh dùng
-validator và cách chuẩn hoá của script E2E; không upload tài liệu, không gọi model,
-không thay bộ câu đang dùng. Nguồn scan phải đối chiếu ảnh như bảng trên.
+Chạy từ gốc Repo triển khai, cần Python 3 và `pdftotext` (Poppler). Lệnh dùng validator và cách chuẩn hoá của script E2E; không upload tài liệu, không gọi model, không thay bộ câu đang dùng. Nguồn scan phải đối chiếu ảnh như bảng trên.
 
 ```sh
 PYTHONPATH=scripts python3 - <<'PY'
@@ -140,11 +112,7 @@ PY
 
 ## Kết quả baseline đầy đủ (#4)
 
-`results/baseline.json`: chạy từ 11:22:44 đến 11:27:38 ngày 05/11/2026 (+07:00),
-exit code 0, trên stack baseline riêng. Runtime xác nhận Fork `fd7a2586fd58`,
-WeKnora 0.8.3, database version 133, tokenizer `chinese_lindera`, embedding
-`Qwen3-VL-Embedding-2B` 1024 chiều; LLM `qwen3.8-27b`.
-Cả ba tài liệu đều đạt `finalizing` (tìm kiếm được), và chạy đủ 30 câu × 3 chế độ.
+`results/baseline.json`: chạy từ 11:22:44 đến 11:27:38 ngày 05/11/2026 (+07:00), exit code 0, trên stack baseline riêng. Runtime xác nhận Fork `fd7a2586fd58`, WeKnora 0.8.3, database version 133, tokenizer `chinese_lindera`, embedding `Qwen3-VL-Embedding-2B` 1024 chiều; LLM `qwen3.8-27b`. Cả ba tài liệu đều đạt `finalizing` (tìm kiếm được), và chạy đủ 30 câu × 3 chế độ.
 
 | Chế độ | R@1 | R@3 | R@5 | R@10 | MRR |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -152,22 +120,13 @@ Cả ba tài liệu đều đạt `finalizing` (tìm kiếm được), và chạ
 | Vector | 0,6154 | 0,7308 | 0,7692 | 0,7692 | 0,6808 |
 | Hybrid | 0,5000 | 0,6923 | 0,7308 | 0,8077 | 0,6087 |
 
-Chunk checks: footnote **fail 6/6**, tiêu đề Điều **fail 1/27**, breadcrumb
-**fail 4/5**; NFC **pass 358/358**. Đây là lỗi được ghi nhận ở baseline chưa vá,
-không phải lý do loại câu khỏi bộ đã duyệt. Không đánh giá chất lượng câu trả lời LLM.
+Chunk checks: footnote **fail 6/6**, tiêu đề Điều **fail 1/27**, breadcrumb **fail 4/5**; NFC **pass 358/358**. Đây là lỗi được ghi nhận ở baseline chưa vá, không phải lý do loại câu khỏi bộ đã duyệt. Không đánh giá chất lượng câu trả lời LLM.
 
-Đã kiểm tra ID/câu hỏi/form/tags khớp nguyên bộ đã duyệt, đủ 90 kết quả tìm kiếm,
-tính lại recall/MRR từ hạng từng câu, và đối chiếu tổng chunk. Knowledge base E2E
-đã được xoá sau khi lưu kết quả. Stack triển khai ban đầu giữ nguyên ID container,
-image và trạng thái healthy; không thay dữ liệu hay checkout Fork của nó.
+Đã kiểm tra ID/câu hỏi/form/tags khớp nguyên bộ đã duyệt, đủ 90 kết quả tìm kiếm, tính lại recall/MRR từ hạng từng câu, và đối chiếu tổng chunk. Knowledge base E2E đã được xoá sau khi lưu kết quả. Stack triển khai ban đầu giữ nguyên ID container, image và trạng thái healthy; không thay dữ liệu hay checkout Fork của nó.
 
 ## Chạy lại baseline đầy đủ
 
-Dùng stack **riêng**, project `weknora-vi-baseline`, với volume mới, không hạ phiên
-bản stack đang có dữ liệu. Các image app/docreader/frontend chưa vá mang tag
-`fd7a2586fd58` phải có sẵn (nếu chưa có, build từ một checkout riêng của commit đó).
-Không dùng `scripts/compose.sh up` để dựng baseline: wrapper luôn chọn commit
-Fork hiện đang checkout, không phải commit baseline.
+Dùng stack **riêng**, project `weknora-vi-baseline`, với volume mới, không hạ phiên bản stack đang có dữ liệu. Các image app/docreader/frontend chưa vá mang tag `fd7a2586fd58` phải có sẵn (nếu chưa có, build từ một checkout riêng của commit đó). Không dùng `scripts/compose.sh up` để dựng baseline: wrapper luôn chọn commit Fork hiện đang checkout, không phải commit baseline.
 
 ```sh
 WEKNORA_FORK_COMMIT=fd7a2586fd58 APP_PORT=58082 FRONTEND_PORT=127.0.0.1:58083 \
@@ -178,16 +137,8 @@ WEKNORA_URL=http://127.0.0.1:58082 COMPOSE_PROJECT_NAME=weknora-vi-baseline \
   python3 scripts/e2e.py --out results/baseline.json
 ```
 
-Cả `WEKNORA_URL` và `COMPOSE_PROJECT_NAME` đều cần thiết: biến đầu chọn API,
-biến sau chọn đúng PostgreSQL khi script đọc tokenizer và breadcrumb. Xác nhận
-`fork.commit` trong kết quả là `fd7a2586fd58` và tokenizer là `chinese_lindera`.
+Cả `WEKNORA_URL` và `COMPOSE_PROJECT_NAME` đều cần thiết: biến đầu chọn API, biến sau chọn đúng PostgreSQL khi script đọc tokenizer và breadcrumb. Xác nhận `fork.commit` trong kết quả là `fd7a2586fd58` và tokenizer là `chinese_lindera`.
 
-Cố định model, số chiều, tài liệu, bộ câu và cấu hình chunking khi so sánh với
-bản vá/tokenizer khác. Lần chạy đầy đủ dùng cấu hình hiện tại của `setup.py`:
-`auto`, `languages: ["vi"]`, cha/con 4096/384, token limit 512. Đây không phải
-cấu hình legacy của baseline seed lịch sử. Kết quả `chunker-vi` và `chunker-legal`
-cũ chỉ đo 9 câu có đáp án, không được so trực tiếp điểm tổng hợp với bộ 30 câu.
-Baseline seed cũ vẫn có trong lịch sử Git tại commit `72f03bd`.
+Cố định model, số chiều, tài liệu, bộ câu và cấu hình chunking khi so sánh với bản vá/tokenizer khác. Lần chạy đầy đủ dùng cấu hình hiện tại của `setup.py`: `auto`, `languages: ["vi"]`, cha/con 4096/384, token limit 512. Đây không phải cấu hình legacy của baseline seed lịch sử. Kết quả `chunker-vi` và `chunker-legal` cũ chỉ đo 9 câu có đáp án, không được so trực tiếp điểm tổng hợp với bộ 30 câu. Baseline seed cũ vẫn có trong lịch sử Git tại commit `72f03bd`.
 
-Dừng stack baseline sau khi chạy để trả tài nguyên; không dùng `down -v` cho
-stack đang có dữ liệu. Để chạy lại độc lập, dùng tên project và cổng chưa sử dụng.
+Dừng stack baseline sau khi chạy để trả tài nguyên; không dùng `down -v` cho stack đang có dữ liệu. Để chạy lại độc lập, dùng tên project và cổng chưa sử dụng.
