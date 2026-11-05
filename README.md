@@ -109,15 +109,30 @@ Bằng chứng đỏ → xanh, kết quả E2E và lệnh chạy lại #9: [`doc
 
 ## Tokenizer BM25
 
-Thí nghiệm #11 (ADR 0002) chọn **`icu` không bỏ dấu**. Nó có R@10 keyword 0,8462 so với 0,8077 của `chinese_lindera`, hybrid ngang nhau, và không sinh token khoảng trắng hay dấu câu. Bảng so sánh, ví dụ token hoá và cách chạy lại: [`docs/validation/issue-11.md`](docs/validation/issue-11.md). Fork đưa `icu` vào bằng migration `000134_embeddings_bm25_icu` (#12). App chạy migration khi khởi động và dựng lại chỉ mục trên mọi chunk đã có, không cần nạp lại tài liệu. Down trả về `chinese_lindera`:
+Thí nghiệm #11 (ADR 0002) chọn **`icu` không bỏ dấu**. Nó có R@10 keyword 0,8462 so với 0,8077 của `chinese_lindera`, hybrid ngang nhau, và không sinh token khoảng trắng hay dấu câu. Bảng so sánh, ví dụ token hoá và cách chạy lại: [`docs/validation/issue-11.md`](docs/validation/issue-11.md). Fork đưa `icu` vào bằng migration `000137_embeddings_bm25_icu` (#12; trước khi đồng bộ upstream ở #14 là `000134`). App chạy migration khi khởi động và dựng lại chỉ mục trên mọi chunk đã có, không cần nạp lại tài liệu. Down trả về `chinese_lindera`:
 
 ```sh
 ./scripts/compose.sh exec app sh -c 'migrate -path /app/migrations/versioned -database "postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?sslmode=disable" down 1'
 ```
 
-App chỉ migrate khi khởi động, nên restart app sẽ nâng lên `icu` lại; muốn giữ `chinese_lindera` thì phải dùng image Fork không có `000134`. Kết quả nâng cấp, rollback và E2E chốt tokenizer: [`docs/validation/issue-12.md`](docs/validation/issue-12.md).
+App chỉ migrate khi khởi động, nên restart app sẽ nâng lên `icu` lại; muốn giữ `chinese_lindera` thì phải dùng image Fork không có `000137`. Kết quả nâng cấp, rollback và E2E chốt tokenizer: [`docs/validation/issue-12.md`](docs/validation/issue-12.md).
 
 `scripts/bm25_tokenizers.py apply <ứng viên>` dựng lại `embeddings_search_idx` bằng `eval/bm25-tokenizer.sql` trên dữ liệu đang có; `apply icu` trả về chỉ mục của Fork. Chỉ dùng để thí nghiệm: `schema_migrations` không ghi lại đổi này.
+
+## Đồng bộ Fork với upstream
+
+Fork merge `upstream/main` (không rebase, không force-push), rồi pin commit mới ở repo này. Lần gần nhất (#14) đưa Fork lên WeKnora 0.9.0; chi tiết, kết quả E2E và lệnh chạy lại: [`docs/validation/issue-14.md`](docs/validation/issue-14.md).
+
+```sh
+git -C references/WeKnora fetch upstream
+git -C references/WeKnora switch main
+git -C references/WeKnora merge --no-ff upstream/main
+ls references/WeKnora/migrations/versioned | cut -c1-6 | sort | uniq -c | awk '$1>2'   # phải rỗng
+```
+
+- golang-migrate từ chối hai migration cùng số. Migration của Fork trùng số với upstream thì đổi sang số sau migration mới nhất của upstream.
+- `schema_migrations` chỉ lưu một version. Nếu database đang chạy đã áp migration Fork ở số mà upstream vừa dùng, app sẽ **bỏ qua** migration upstream đó. Dừng app, sao lưu, hạ version xuống số trước đó rồi mới khởi động image mới (chỉ an toàn khi các migration được chạy lại là idempotent; kiểm tra file SQL trước).
+- Dựng lại cả `app`, `docreader`, `frontend` (`./scripts/compose.sh up -d --build --no-deps app docreader frontend`), đồng bộ `config/prompt_templates/` như mục Ngôn ngữ, rồi chạy E2E.
 
 ## Kiểm tra database
 
