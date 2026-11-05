@@ -109,9 +109,15 @@ Bằng chứng đỏ → xanh, kết quả E2E và lệnh chạy lại #9: [`doc
 
 ## Tokenizer BM25
 
-Thí nghiệm #11 (ADR 0002) chọn **`icu` không bỏ dấu**. Nó có R@10 keyword 0,8462 so với 0,8077 của `chinese_lindera`, hybrid ngang nhau, và không sinh token khoảng trắng hay dấu câu. Bảng so sánh, ví dụ token hoá và cách chạy lại: [`docs/validation/issue-11.md`](docs/validation/issue-11.md). Fork vẫn dùng `chinese_lindera` cho tới khi có migration của #12.
+Thí nghiệm #11 (ADR 0002) chọn **`icu` không bỏ dấu**. Nó có R@10 keyword 0,8462 so với 0,8077 của `chinese_lindera`, hybrid ngang nhau, và không sinh token khoảng trắng hay dấu câu. Bảng so sánh, ví dụ token hoá và cách chạy lại: [`docs/validation/issue-11.md`](docs/validation/issue-11.md). Fork đưa `icu` vào bằng migration `000134_embeddings_bm25_icu` (#12). App chạy migration khi khởi động và dựng lại chỉ mục trên mọi chunk đã có, không cần nạp lại tài liệu. Down trả về `chinese_lindera`:
 
-`scripts/bm25_tokenizers.py apply <ứng viên>` dựng lại `embeddings_search_idx` bằng `eval/bm25-tokenizer.sql` trên dữ liệu đang có; `apply chinese_lindera` trả về chỉ mục gốc. Chỉ dùng để thí nghiệm: app chưa biết tới đổi này, và migration sau này không đối chiếu với nó.
+```sh
+./scripts/compose.sh exec app sh -c 'migrate -path /app/migrations/versioned -database "postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?sslmode=disable" down 1'
+```
+
+App chỉ migrate khi khởi động, nên restart app sẽ nâng lên `icu` lại; muốn giữ `chinese_lindera` thì phải dùng image Fork không có `000134`. Kết quả nâng cấp, rollback và E2E chốt tokenizer: [`docs/validation/issue-12.md`](docs/validation/issue-12.md).
+
+`scripts/bm25_tokenizers.py apply <ứng viên>` dựng lại `embeddings_search_idx` bằng `eval/bm25-tokenizer.sql` trên dữ liệu đang có; `apply icu` trả về chỉ mục của Fork. Chỉ dùng để thí nghiệm: `schema_migrations` không ghi lại đổi này.
 
 ## Kiểm tra database
 

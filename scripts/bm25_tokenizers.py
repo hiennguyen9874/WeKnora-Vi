@@ -6,11 +6,11 @@ dựng lại bằng eval/bm25-tokenizer.sql trên đúng dữ liệu đã nạp.
 
     python3 scripts/bm25_tokenizers.py tokenize            # ví dụ token hoá + kiểm tra bộ lọc
     python3 scripts/bm25_tokenizers.py apply icu-fold      # dựng lại chỉ mục với một ứng viên
-    python3 scripts/bm25_tokenizers.py apply chinese_lindera   # trả về chỉ mục gốc
+    python3 scripts/bm25_tokenizers.py apply icu           # trả về chỉ mục của migration 000134
     python3 scripts/bm25_tokenizers.py sweep --reuse-kb results/<lần nạp --keep-kb>.json
 
 sweep: với từng ứng viên, dựng lại chỉ mục rồi chạy scripts/e2e.py --reuse-kb, ghi
-results/bm25-<ứng viên>.json; xong thì trả về chinese_lindera và ghi bảng tổng hợp
+results/bm25-<ứng viên>.json; xong thì trả về icu (chỉ mục của Fork) và ghi bảng tổng hợp
 results/bm25-tokenizers.json.
 """
 
@@ -35,7 +35,8 @@ CANDIDATES = {
     "whitespace": {"type": "whitespace", "lowercase": True},
     "whitespace-fold": {"type": "whitespace", "lowercase": True, "ascii_folding": True},
 }
-ORIGINAL = "chinese_lindera"
+# Chỉ mục Fork tạo ra (migration 000134, #12); sweep trả về đây khi xong.
+ORIGINAL = "icu"
 
 SAMPLES = [
     "Điều 11a khoản 1: điều kiện cấp Giấy phép sản xuất vàng miếng theo 117/2026/VBHN-NĐ-NHNN.",

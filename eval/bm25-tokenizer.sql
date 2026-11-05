@@ -4,7 +4,8 @@
 --
 --   psql -v tokenizer='{"type": "icu", "ascii_folding": true}' -f eval/bm25-tokenizer.sql
 --
--- Trả về chỉ mục gốc: tokenizer='{"type": "chinese_lindera"}'.
+-- Trả về chỉ mục của Fork (migration 000134, #12): tokenizer='{"type": "icu"}'.
+-- Chỉ mục 000002 trước #12: tokenizer='{"type": "chinese_lindera"}'.
 -- Dạng text_fields JSON không báo lỗi khi gặp khoá lạ, nên scripts/bm25_tokenizers.py
 -- kiểm tra từng bộ lọc bằng paradedb.tokenize trước khi dựng chỉ mục.
 \set ON_ERROR_STOP on
