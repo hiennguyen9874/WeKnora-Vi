@@ -1,0 +1,812 @@
+{
+  "fork_base": "5ce8e8c36d4e65f3c6c736557245e2c71e40a716",
+  "fork_changed_file_sha256": {
+    "internal/application/service/knowledge_create.go": "4b9acd80c5c3c68a3b89a755138a8746c8c22af16320c82f6d9e9f44760dfd2b",
+    "internal/application/service/knowledge_process.go": "9c05c03b5845414ee4ecedbacc1c0099ece3c4a2efdb333620fd2839c17035c4",
+    "internal/application/service/knowledge_source_locators_test.go": "eef1ff54f62e53dfcc38a03e735f0e7189957a9e7de3d87e05b64faec582dad5",
+    "internal/application/service/knowledgebase_search.go": "12b006de7c5ede1b1c877b4f481c19d362390a251de7fec613ec30a063e0e78c",
+    "internal/application/service/knowledgebase_search_fusion.go": "cee3cf3f1cacf1532bcb417f2bcd56f6e62430e28c0732df1e652deefd7b52a4",
+    "internal/application/service/knowledgebase_search_rerank.go": "ae61c3d82f71f94b3560c98d0f73742e5aa5922d7afcbe1c67e675c1d75ee6d5",
+    "internal/application/service/session_knowledge_qa.go": "6dd71302d8b3027bf9e42a99ac39c8246ee70d6032a83a726a192886dcef9179",
+    "internal/application/service/session_knowledge_qa_test.go": "384ff1602862a96a9749f527f8d55270a39b55b9e8a24b3fa61d30942519a99d",
+    "internal/sourceloc/remap.go": "8e9090a972de80491168ce841bdf69c73ac0d2da38dfc3969e029e5f68069d39"
+  },
+  "fork_diff_sha256": "78097237f5ce2cbc01b4ac0c02ee148f2c93bf0094ae310da04f59bad957ee0a",
+  "keyword_set_sha256": "cda62006e513fb8d892f11a576d5f21308a57ed56e63cf490e6d2644d4bfa2a9",
+  "tests": {
+    "chat_red_command": "go test ./internal/application/service -run '^TestKnowledgeQAByEventNormalizesQueryBeforePlugins$' -count=1",
+    "source_red_command": "go test ./internal/application/service -run '^TestBuildSourceIndexPreservesOriginalLocationsAfterNFC$' -count=1",
+    "final_command": "go test ./internal/application/service ./internal/application/service/chat_pipeline ./internal/sourceloc ./internal/infrastructure/chunker -skip '^TestUpdateMCPService_AppliesNonScalarUpdateWithoutName$' -count=1",
+    "unfiltered_result": "FAIL: only TestUpdateMCPService_AppliesNonScalarUpdateWithoutName, DNS resolution of example.com. The same test failed using a Go overlay of all modified files from the unmodified Fork HEAD; no workspace files were reverted.",
+    "logs": {
+      "chat_red": "INFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: Điều 5 Khoản 2 quy định gì?\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [query_understand]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"query_understand\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: Điều 5 Khoản 2 quy định gì?\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [chunk_search]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"chunk_search\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: Điều 5 Khoản 2 quy định gì?\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [query_understand]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"query_understand\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: Điều 5 Khoản 2 quy định gì?\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [chunk_search]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"chunk_search\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: plain ASCII\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [query_understand]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"query_understand\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: plain ASCII\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [chunk_search]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"chunk_search\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: plain ASCII\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [query_understand]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"query_understand\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: plain ASCII\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [chunk_search]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"chunk_search\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: \nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [query_understand]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"query_understand\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: \nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [chunk_search]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"chunk_search\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: \nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [query_understand]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"query_understand\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:678[KnowledgeQAByEvent] | Start processing knowledge base question answering through events\nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:679[KnowledgeQAByEvent] | Knowledge base question answering parameters, session ID: , query: \nINFO [2026-11-05 14:09:24.172] [] session_knowledge_qa.go:686[KnowledgeQAByEvent] | Trigger event list: [chunk_search]\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=stage_complete duration_ms=0 event=\"chunk_search\"\nINFO [2026-11-05 14:09:24.172] []                      | [PIPELINE] stage=Pipeline action=all_stages_complete session_id=\"\" total_duration_ms=0 total_stages=1\n--- FAIL: TestKnowledgeQAByEventNormalizesQueryBeforePlugins (0.00s)\n    session_knowledge_qa_test.go:35: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:35\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:62\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:75\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa.go:734\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:52\n        \tError:      \tNot equal: \n        \t            \texpected: \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \tactual  : \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1 +1 @@\n        \t            \t-Điều 5 Khoản 2 quy định gì?\n        \t            \t+Điều 5 Khoản 2 quy định gì?\n        \tTest:       \tTestKnowledgeQAByEventNormalizesQueryBeforePlugins\n    session_knowledge_qa_test.go:36: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:36\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:62\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:75\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa.go:734\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:52\n        \tError:      \tNot equal: \n        \t            \texpected: \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \tactual  : \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1 +1 @@\n        \t            \t-Điều 5 Khoản 2 quy định gì?\n        \t            \t+Điều 5 Khoản 2 quy định gì?\n        \tTest:       \tTestKnowledgeQAByEventNormalizesQueryBeforePlugins\n    session_knowledge_qa_test.go:35: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:35\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:62\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:75\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa.go:734\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:52\n        \tError:      \tNot equal: \n        \t            \texpected: \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \tactual  : \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1 +1 @@\n        \t            \t-Điều 5 Khoản 2 quy định gì?\n        \t            \t+Điều 5 Khoản 2 quy định gì?\n        \tTest:       \tTestKnowledgeQAByEventNormalizesQueryBeforePlugins\n    session_knowledge_qa_test.go:36: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:36\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:62\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/chat_pipeline/chat_pipeline.go:75\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa.go:734\n        \t            \t\t\t\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/session_knowledge_qa_test.go:52\n        \tError:      \tNot equal: \n        \t            \texpected: \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \tactual  : \"Điều 5 Khoản 2 quy định gì?\"\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1 +1 @@\n        \t            \t-Điều 5 Khoản 2 quy định gì?\n        \t            \t+Điều 5 Khoản 2 quy định gì?\n        \tTest:       \tTestKnowledgeQAByEventNormalizesQueryBeforePlugins\nFAIL\nFAIL\tgithub.com/Tencent/WeKnora/internal/application/service\t0.305s\nFAIL\n",
+      "chat_green": "ok  \tgithub.com/Tencent/WeKnora/internal/application/service\t0.331s\n",
+      "source_red": "--- FAIL: TestBuildSourceIndexPreservesOriginalLocationsAfterNFC (0.00s)\n    knowledge_source_locators_test.go:70: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/knowledge_source_locators_test.go:70\n        \tError:      \tExpected value not to be nil.\n        \tTest:       \tTestBuildSourceIndexPreservesOriginalLocationsAfterNFC\nFAIL\nFAIL\tgithub.com/Tencent/WeKnora/internal/application/service\t0.336s\nFAIL\n",
+      "query_source_green": "ok  \tgithub.com/Tencent/WeKnora/internal/application/service\t0.351s\n",
+      "go_tests_final": "ok  \tgithub.com/Tencent/WeKnora/internal/application/service\t39.026s\nok  \tgithub.com/Tencent/WeKnora/internal/application/service/chat_pipeline\t0.476s\nok  \tgithub.com/Tencent/WeKnora/internal/sourceloc\t0.385s\nok  \tgithub.com/Tencent/WeKnora/internal/infrastructure/chunker\t0.417s\n",
+      "unrelated_mcp_failure": "--- FAIL: TestUpdateMCPService_AppliesNonScalarUpdateWithoutName (0.00s)\n    mcp_service_test.go:305: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/mcp_service_test.go:305\n        \tError:      \tReceived unexpected error:\n        \t            \tMCP service URL failed SSRF validation: SSRF validation failed: DNS resolution failed for hostname example.com: cannot verify if it resolves to safe IP\n        \tTest:       \tTestUpdateMCPService_AppliesNonScalarUpdateWithoutName\nFAIL\nFAIL\tgithub.com/Tencent/WeKnora/internal/application/service\t0.386s\nFAIL\n",
+      "unmodified_fork_mcp_failure": "--- FAIL: TestUpdateMCPService_AppliesNonScalarUpdateWithoutName (0.00s)\n    mcp_service_test.go:305: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/mcp_service_test.go:305\n        \tError:      \tReceived unexpected error:\n        \t            \tMCP service URL failed SSRF validation: SSRF validation failed: DNS resolution failed for hostname example.com: cannot verify if it resolves to safe IP\n        \tTest:       \tTestUpdateMCPService_AppliesNonScalarUpdateWithoutName\nFAIL\nFAIL\tgithub.com/Tencent/WeKnora/internal/application/service\t0.349s\nFAIL\n",
+      "query_source_final_green": "ok  \tgithub.com/Tencent/WeKnora/internal/application/service\t0.337s\n"
+    }
+  },
+  "build": {
+    "image": "weknora-vi/app:5ce8e8c36d4e-dirty",
+    "image_id": "sha256:e0555906189fe2c5c1e8a3a2fef12158e30014ee7dfb6cbdfadd4a1c6735d072",
+    "workaround": "Default build stalled on rsproxy.cn for pinned anydoc 0.2.4. Restarted using a temporary Dockerfile/Compose override outside the checkout to fetch the same crate from the script's existing static.crates.io fallback. WITH_ANYDOC stayed 1. No repository build files, dependencies, Compose or deployment configuration changed.",
+    "builder_only_command": "sed -i 's@https://rsproxy.cn/api/v1/crates/anydoc/.*/download@https://static.crates.io/crates/anydoc/anydoc-$anydoc_version.crate@' ./scripts/build-anydoc-lib.sh"
+  },
+  "citation_red": {
+    "e2e_run": {
+      "started_at": "2026-11-05T14:29:04+07:00",
+      "finished_at": "2026-11-05T14:34:01+07:00",
+      "kb_id": "1ef44ca0-25ec-425a-af51-14626c188293",
+      "kb_name": "e2e-20261105-142904",
+      "kb_kept": true
+    },
+    "fixture_chunks": [
+      {
+        "id": "c8046a86-1bec-4a68-8e56-00cd2b7fd3fb",
+        "seq_id": 100004346,
+        "tenant_id": 10000,
+        "knowledge_id": "cc9d5789-1965-4fb0-bc02-67cc16a2bc94",
+        "knowledge_base_id": "1ef44ca0-25ec-425a-af51-14626c188293",
+        "tag_id": "",
+        "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 0,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 0,
+        "end_at": 590,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "parent_text",
+        "parent_chunk_id": "",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:29:09.959189+07:00",
+        "updated_at": "2026-11-05T14:29:09.959189+07:00",
+        "deleted_at": null,
+        "source_locators": [
+          {
+            "type": "text",
+            "mapping": "exact",
+            "partial": true,
+            "source_hash": "9123888db490e8de775a95ee595b6839",
+            "start": 210,
+            "end": 748,
+            "quote": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền. 3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+          }
+        ]
+      },
+      {
+        "id": "121cdc98-f04a-44c5-bb67-0d1da2e1790c",
+        "seq_id": 100004347,
+        "tenant_id": 10000,
+        "knowledge_id": "cc9d5789-1965-4fb0-bc02-67cc16a2bc94",
+        "knowledge_base_id": "1ef44ca0-25ec-425a-af51-14626c188293",
+        "tag_id": "",
+        "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 0,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 0,
+        "end_at": 161,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "text",
+        "parent_chunk_id": "c8046a86-1bec-4a68-8e56-00cd2b7fd3fb",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:29:09.959208+07:00",
+        "updated_at": "2026-11-05T14:29:09.959208+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": "eb4ed523-c0cd-42dd-a54a-de248b238822",
+        "seq_id": 100004348,
+        "tenant_id": 10000,
+        "knowledge_id": "cc9d5789-1965-4fb0-bc02-67cc16a2bc94",
+        "knowledge_base_id": "1ef44ca0-25ec-425a-af51-14626c188293",
+        "tag_id": "",
+        "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 1,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 161,
+        "end_at": 447,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "text",
+        "parent_chunk_id": "c8046a86-1bec-4a68-8e56-00cd2b7fd3fb",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:29:09.959208+07:00",
+        "updated_at": "2026-11-05T14:29:09.959208+07:00",
+        "deleted_at": null,
+        "source_locators": [
+          {
+            "type": "text",
+            "mapping": "exact",
+            "source_hash": "9123888db490e8de775a95ee595b6839",
+            "start": 210,
+            "end": 569,
+            "quote": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền."
+          }
+        ]
+      },
+      {
+        "id": "fea2d739-433d-4b70-bf2e-83d58ed4a262",
+        "seq_id": 100004349,
+        "tenant_id": 10000,
+        "knowledge_id": "cc9d5789-1965-4fb0-bc02-67cc16a2bc94",
+        "knowledge_base_id": "1ef44ca0-25ec-425a-af51-14626c188293",
+        "tag_id": "",
+        "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 2,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 447,
+        "end_at": 590,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "text",
+        "parent_chunk_id": "c8046a86-1bec-4a68-8e56-00cd2b7fd3fb",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:29:09.959209+07:00",
+        "updated_at": "2026-11-05T14:29:09.959209+07:00",
+        "deleted_at": null,
+        "source_locators": [
+          {
+            "type": "text",
+            "mapping": "exact",
+            "source_hash": "9123888db490e8de775a95ee595b6839",
+            "start": 570,
+            "end": 748,
+            "quote": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+          }
+        ]
+      }
+    ],
+    "missing_locator_chunk_ids": [
+      "121cdc98-f04a-44c5-bb67-0d1da2e1790c"
+    ],
+    "numbered_source_test_log": "--- FAIL: TestBuildSourceIndexPreservesOriginalLocationsAfterNFC (0.00s)\n    knowledge_source_locators_test.go:70: \n        \tError Trace:\t/home/hiennx/Documents/WeKnora-Vi/references/WeKnora/internal/application/service/knowledge_source_locators_test.go:70\n        \tError:      \tExpected value not to be nil.\n        \tTest:       \tTestBuildSourceIndexPreservesOriginalLocationsAfterNFC\nFAIL\nFAIL\tgithub.com/Tencent/WeKnora/internal/application/service\t0.324s\nFAIL\n"
+  },
+  "fixture_final_probe": {
+    "kb_id": "d5bd59c6-18ba-46bf-9b39-5c974fb7acd9",
+    "chunks": [
+      {
+        "id": "34cbf9ab-c5d0-46ff-a9e9-e079108c87d5",
+        "seq_id": 100004760,
+        "tenant_id": 10000,
+        "knowledge_id": "dcb6fc66-216a-43ad-9bee-56ed80d61cb2",
+        "knowledge_base_id": "d5bd59c6-18ba-46bf-9b39-5c974fb7acd9",
+        "tag_id": "",
+        "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 0,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 0,
+        "end_at": 590,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "parent_text",
+        "parent_chunk_id": "",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:41:09.017102+07:00",
+        "updated_at": "2026-11-05T14:41:09.017102+07:00",
+        "deleted_at": null,
+        "source_locators": [
+          {
+            "type": "text",
+            "mapping": "exact",
+            "source_hash": "9123888db490e8de775a95ee595b6839",
+            "end": 748,
+            "quote": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ. 2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền. 3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+          }
+        ]
+      },
+      {
+        "id": "57c61a4e-2367-4bec-83db-4c55ff487ab7",
+        "seq_id": 100004761,
+        "tenant_id": 10000,
+        "knowledge_id": "dcb6fc66-216a-43ad-9bee-56ed80d61cb2",
+        "knowledge_base_id": "d5bd59c6-18ba-46bf-9b39-5c974fb7acd9",
+        "tag_id": "",
+        "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 0,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 0,
+        "end_at": 161,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "text",
+        "parent_chunk_id": "34cbf9ab-c5d0-46ff-a9e9-e079108c87d5",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:41:09.017115+07:00",
+        "updated_at": "2026-11-05T14:41:09.017115+07:00",
+        "deleted_at": null,
+        "source_locators": [
+          {
+            "type": "text",
+            "mapping": "exact",
+            "source_hash": "9123888db490e8de775a95ee595b6839",
+            "end": 209,
+            "quote": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+          }
+        ]
+      },
+      {
+        "id": "9049eae8-a198-4eb3-9732-1fee856359a2",
+        "seq_id": 100004762,
+        "tenant_id": 10000,
+        "knowledge_id": "dcb6fc66-216a-43ad-9bee-56ed80d61cb2",
+        "knowledge_base_id": "d5bd59c6-18ba-46bf-9b39-5c974fb7acd9",
+        "tag_id": "",
+        "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 1,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 161,
+        "end_at": 447,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "text",
+        "parent_chunk_id": "34cbf9ab-c5d0-46ff-a9e9-e079108c87d5",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:41:09.017116+07:00",
+        "updated_at": "2026-11-05T14:41:09.017116+07:00",
+        "deleted_at": null,
+        "source_locators": [
+          {
+            "type": "text",
+            "mapping": "exact",
+            "source_hash": "9123888db490e8de775a95ee595b6839",
+            "start": 210,
+            "end": 569,
+            "quote": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền."
+          }
+        ]
+      },
+      {
+        "id": "8bd1cc5a-58b5-4801-948b-1c49d155f75d",
+        "seq_id": 100004763,
+        "tenant_id": 10000,
+        "knowledge_id": "dcb6fc66-216a-43ad-9bee-56ed80d61cb2",
+        "knowledge_base_id": "d5bd59c6-18ba-46bf-9b39-5c974fb7acd9",
+        "tag_id": "",
+        "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+        "content_revision": 0,
+        "index_status": "ready",
+        "last_editor_id": "",
+        "chunk_index": 2,
+        "is_enabled": true,
+        "flags": 1,
+        "status": 0,
+        "start_at": 447,
+        "end_at": 590,
+        "pre_chunk_id": "",
+        "next_chunk_id": "",
+        "chunk_type": "text",
+        "parent_chunk_id": "34cbf9ab-c5d0-46ff-a9e9-e079108c87d5",
+        "relation_chunks": null,
+        "indirect_relation_chunks": null,
+        "metadata": null,
+        "content_hash": "",
+        "image_info": "",
+        "created_at": "2026-11-05T14:41:09.017116+07:00",
+        "updated_at": "2026-11-05T14:41:09.017116+07:00",
+        "deleted_at": null,
+        "source_locators": [
+          {
+            "type": "text",
+            "mapping": "exact",
+            "source_hash": "9123888db490e8de775a95ee595b6839",
+            "start": 570,
+            "end": 748,
+            "quote": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+          }
+        ]
+      }
+    ],
+    "original_locator_checks": 4,
+    "questions": [
+      {
+        "id": "fixture-probe",
+        "query": "Nhà nước thực hiện nguyên tắc tổ chức nào?",
+        "form": "nfc",
+        "answerable": true,
+        "tags": [],
+        "modes": {
+          "keyword": {
+            "unicode_equivalence": {
+              "pass": true,
+              "nfc_ids": [
+                "57c61a4e-2367-4bec-83db-4c55ff487ab7",
+                "9049eae8-a198-4eb3-9732-1fee856359a2",
+                "8bd1cc5a-58b5-4801-948b-1c49d155f75d"
+              ],
+              "nfd_ids": [
+                "57c61a4e-2367-4bec-83db-4c55ff487ab7",
+                "9049eae8-a198-4eb3-9732-1fee856359a2",
+                "8bd1cc5a-58b5-4801-948b-1c49d155f75d"
+              ]
+            },
+            "rank": 1,
+            "top_score": 1,
+            "top": [
+              {
+                "score": 1,
+                "match_type": 1,
+                "content": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+              },
+              {
+                "score": 0.38762757014363824,
+                "match_type": 1,
+                "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu"
+              },
+              {
+                "score": 0.3259113470735183,
+                "match_type": 1,
+                "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+              }
+            ]
+          },
+          "vector": {
+            "unicode_equivalence": {
+              "pass": true,
+              "nfc_ids": [
+                "57c61a4e-2367-4bec-83db-4c55ff487ab7",
+                "8bd1cc5a-58b5-4801-948b-1c49d155f75d",
+                "9049eae8-a198-4eb3-9732-1fee856359a2"
+              ],
+              "nfd_ids": [
+                "57c61a4e-2367-4bec-83db-4c55ff487ab7",
+                "8bd1cc5a-58b5-4801-948b-1c49d155f75d",
+                "9049eae8-a198-4eb3-9732-1fee856359a2"
+              ]
+            },
+            "rank": 1,
+            "top_score": 0.7243124405283892,
+            "top": [
+              {
+                "score": 0.7243124405283892,
+                "match_type": 0,
+                "content": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+              },
+              {
+                "score": 0.5946800755581809,
+                "match_type": 0,
+                "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+              },
+              {
+                "score": 0.5676307646113471,
+                "match_type": 0,
+                "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu"
+              }
+            ]
+          },
+          "hybrid": {
+            "unicode_equivalence": {
+              "pass": true,
+              "nfc_ids": [
+                "57c61a4e-2367-4bec-83db-4c55ff487ab7",
+                "8bd1cc5a-58b5-4801-948b-1c49d155f75d",
+                "9049eae8-a198-4eb3-9732-1fee856359a2"
+              ],
+              "nfd_ids": [
+                "57c61a4e-2367-4bec-83db-4c55ff487ab7",
+                "8bd1cc5a-58b5-4801-948b-1c49d155f75d",
+                "9049eae8-a198-4eb3-9732-1fee856359a2"
+              ]
+            },
+            "rank": 1,
+            "top_score": 0.9999999999999998,
+            "top": [
+              {
+                "score": 0.9999999999999998,
+                "match_type": 0,
+                "content": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+              },
+              {
+                "score": 0.9791858678955452,
+                "match_type": 0,
+                "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+              },
+              {
+                "score": 0.9729390681003585,
+                "match_type": 0,
+                "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "pass": true
+  },
+  "deployment_file_sha256": {
+    "scripts/e2e.py": "5a05c0a5de527f7dd8c8502a7f65b9bdf2babc8af4ad8f8020e42b0784a16bd8",
+    "eval/documents.json": "7d741fe34bb11543aa2166ffb16361e5245a6987f56fa2ae9164df8f2e308b99",
+    "eval/keyword-set.json": "cda62006e513fb8d892f11a576d5f21308a57ed56e63cf490e6d2644d4bfa2a9",
+    "fixtures/legal/hien-phap-2013-dieu-8-nfd.txt": "018d90df3034411af14c01069e44ce8e9d55638bd2ef7f9b4ef1a6cc95074732"
+  },
+  "fixture_chunks": [
+    {
+      "id": "dcd5c5f9-59b3-4b2e-9956-d957d425b311",
+      "seq_id": 100004764,
+      "tenant_id": 10000,
+      "knowledge_id": "cb96b840-3974-4923-823e-4058ed9850e9",
+      "knowledge_base_id": "eb7e08fa-0e6f-48dc-b91d-ade20986eff3",
+      "tag_id": "",
+      "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 0,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 0,
+      "end_at": 590,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "parent_text",
+      "parent_chunk_id": "",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:41:29.079785+07:00",
+      "updated_at": "2026-11-05T14:41:29.079785+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "end": 748,
+          "quote": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ. 2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền. 3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+        }
+      ]
+    },
+    {
+      "id": "040327ea-4a35-40b1-b93c-5d19948ed915",
+      "seq_id": 100004765,
+      "tenant_id": 10000,
+      "knowledge_id": "cb96b840-3974-4923-823e-4058ed9850e9",
+      "knowledge_base_id": "eb7e08fa-0e6f-48dc-b91d-ade20986eff3",
+      "tag_id": "",
+      "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 0,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 0,
+      "end_at": 161,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "text",
+      "parent_chunk_id": "dcd5c5f9-59b3-4b2e-9956-d957d425b311",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:41:29.079797+07:00",
+      "updated_at": "2026-11-05T14:41:29.079797+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "end": 209,
+          "quote": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+        }
+      ]
+    },
+    {
+      "id": "c00cc478-ecd1-4081-b0f3-d1d5402e82be",
+      "seq_id": 100004766,
+      "tenant_id": 10000,
+      "knowledge_id": "cb96b840-3974-4923-823e-4058ed9850e9",
+      "knowledge_base_id": "eb7e08fa-0e6f-48dc-b91d-ade20986eff3",
+      "tag_id": "",
+      "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 1,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 161,
+      "end_at": 447,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "text",
+      "parent_chunk_id": "dcd5c5f9-59b3-4b2e-9956-d957d425b311",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:41:29.079798+07:00",
+      "updated_at": "2026-11-05T14:41:29.079798+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "start": 210,
+          "end": 569,
+          "quote": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền."
+        }
+      ]
+    },
+    {
+      "id": "99941b10-b948-479e-895e-d043ceacdb85",
+      "seq_id": 100004767,
+      "tenant_id": 10000,
+      "knowledge_id": "cb96b840-3974-4923-823e-4058ed9850e9",
+      "knowledge_base_id": "eb7e08fa-0e6f-48dc-b91d-ade20986eff3",
+      "tag_id": "",
+      "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 2,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 447,
+      "end_at": 590,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "text",
+      "parent_chunk_id": "dcd5c5f9-59b3-4b2e-9956-d957d425b311",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:41:29.079798+07:00",
+      "updated_at": "2026-11-05T14:41:29.079798+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "start": 570,
+          "end": 748,
+          "quote": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+        }
+      ]
+    }
+  ],
+  "fixture_original_locator_checks": 4,
+  "order_probes_after_fix": [
+    {
+      "id": "q17",
+      "identical_nfc_query_ids": [
+        [
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "1fd5fc92-6b39-464e-a2ac-cae132a88546",
+          "ce653ad6-4d2d-46c2-88a8-50af0c44d5ca",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "49466929-deae-4205-82b4-010cdd1d55e2",
+          "5707d008-8e6c-4c6c-a9c0-cfe01fa707a2",
+          "2f41d1d2-303e-4ff3-aa0b-58d95a74ecf8",
+          "b6352399-debd-4732-9700-6505a8bdc7e4"
+        ],
+        [
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "1fd5fc92-6b39-464e-a2ac-cae132a88546",
+          "ce653ad6-4d2d-46c2-88a8-50af0c44d5ca",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "49466929-deae-4205-82b4-010cdd1d55e2",
+          "5707d008-8e6c-4c6c-a9c0-cfe01fa707a2",
+          "2f41d1d2-303e-4ff3-aa0b-58d95a74ecf8",
+          "b6352399-debd-4732-9700-6505a8bdc7e4"
+        ],
+        [
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "1fd5fc92-6b39-464e-a2ac-cae132a88546",
+          "ce653ad6-4d2d-46c2-88a8-50af0c44d5ca",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "49466929-deae-4205-82b4-010cdd1d55e2",
+          "5707d008-8e6c-4c6c-a9c0-cfe01fa707a2",
+          "2f41d1d2-303e-4ff3-aa0b-58d95a74ecf8",
+          "b6352399-debd-4732-9700-6505a8bdc7e4"
+        ],
+        [
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "1fd5fc92-6b39-464e-a2ac-cae132a88546",
+          "ce653ad6-4d2d-46c2-88a8-50af0c44d5ca",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "49466929-deae-4205-82b4-010cdd1d55e2",
+          "5707d008-8e6c-4c6c-a9c0-cfe01fa707a2",
+          "2f41d1d2-303e-4ff3-aa0b-58d95a74ecf8",
+          "b6352399-debd-4732-9700-6505a8bdc7e4"
+        ],
+        [
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "1fd5fc92-6b39-464e-a2ac-cae132a88546",
+          "ce653ad6-4d2d-46c2-88a8-50af0c44d5ca",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "49466929-deae-4205-82b4-010cdd1d55e2",
+          "5707d008-8e6c-4c6c-a9c0-cfe01fa707a2",
+          "2f41d1d2-303e-4ff3-aa0b-58d95a74ecf8",
+          "b6352399-debd-4732-9700-6505a8bdc7e4"
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "id": "q18",
+      "identical_nfc_query_ids": [
+        [
+          "b411f76e-7eb1-4f5b-bb05-25215a97478c",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "5a494d07-9c99-4d96-9ea5-5397dc95143f",
+          "db8cb99a-1564-45de-8111-41a844ecedff",
+          "356a55c3-9380-4171-8025-fed28f9ad330",
+          "414653f4-1cf4-4883-b039-f5d04de0bc13",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "4f8cb955-b9dc-4a0a-b188-fb2ce65cede8"
+        ],
+        [
+          "b411f76e-7eb1-4f5b-bb05-25215a97478c",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "5a494d07-9c99-4d96-9ea5-5397dc95143f",
+          "db8cb99a-1564-45de-8111-41a844ecedff",
+          "356a55c3-9380-4171-8025-fed28f9ad330",
+          "414653f4-1cf4-4883-b039-f5d04de0bc13",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "4f8cb955-b9dc-4a0a-b188-fb2ce65cede8"
+        ],
+        [
+          "b411f76e-7eb1-4f5b-bb05-25215a97478c",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "5a494d07-9c99-4d96-9ea5-5397dc95143f",
+          "db8cb99a-1564-45de-8111-41a844ecedff",
+          "356a55c3-9380-4171-8025-fed28f9ad330",
+          "414653f4-1cf4-4883-b039-f5d04de0bc13",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "4f8cb955-b9dc-4a0a-b188-fb2ce65cede8"
+        ],
+        [
+          "b411f76e-7eb1-4f5b-bb05-25215a97478c",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "5a494d07-9c99-4d96-9ea5-5397dc95143f",
+          "db8cb99a-1564-45de-8111-41a844ecedff",
+          "356a55c3-9380-4171-8025-fed28f9ad330",
+          "414653f4-1cf4-4883-b039-f5d04de0bc13",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "4f8cb955-b9dc-4a0a-b188-fb2ce65cede8"
+        ],
+        [
+          "b411f76e-7eb1-4f5b-bb05-25215a97478c",
+          "8a8fdd13-75cb-4dcb-b20a-2258772023a2",
+          "96ca993d-73f1-4284-967a-91a82920a9a8",
+          "5a494d07-9c99-4d96-9ea5-5397dc95143f",
+          "db8cb99a-1564-45de-8111-41a844ecedff",
+          "356a55c3-9380-4171-8025-fed28f9ad330",
+          "414653f4-1cf4-4883-b039-f5d04de0bc13",
+          "7f88e833-9aab-4e73-a1cf-84b8cfc6d696",
+          "bd426c6c-43d0-49fa-9388-70e6b5106666",
+          "4f8cb955-b9dc-4a0a-b188-fb2ce65cede8"
+        ]
+      ],
+      "pass": true
+    }
+  ],
+  "cleanup": [
+    {
+      "kb_id": "eb7e08fa-0e6f-48dc-b91d-ade20986eff3",
+      "deleted_at": "2026-11-05T14:48:02+07:00",
+      "get_after_delete_status": 404
+    },
+    {
+      "kb_id": "37f94154-7f2a-41d6-9acc-374d20be96d0",
+      "deleted_at": "2026-11-05T14:48:02+07:00",
+      "get_after_delete_status": 404
+    },
+    {
+      "kb_id": "1ef44ca0-25ec-425a-af51-14626c188293",
+      "deleted_at": "2026-11-05T14:48:02+07:00",
+      "get_after_delete_status": 404
+    },
+    {
+      "kb_id": "d5bd59c6-18ba-46bf-9b39-5c974fb7acd9",
+      "previously_deleted": true,
+      "get_after_delete_status": 404
+    },
+    {
+      "kb_id": "b3bedf0a-2d47-407a-9ed5-15dd0728f00b",
+      "previously_deleted": true,
+      "get_after_delete_status": 404
+    }
+  ],
+  "final_e2e_log": "Đăng nhập admin@example.com, tenant 10000\nTạo knowledge base 'e2e-20261105-144128': eb7e08fa-0e6f-48dc-b91d-ade20986eff3\nUpload fixtures/legal/32-2024-tt-bca.pdf\nUpload fixtures/legal/117-2026-vbhn-nd-nhnn.pdf\nUpload fixtures/legal/136-2026-vbhn-tt-bct.pdf\nUpload fixtures/legal/hien-phap-2013-dieu-8-nfd.txt\nParse fixtures/legal/32-2024-tt-bca.pdf: finalizing\nParse fixtures/legal/117-2026-vbhn-nd-nhnn.pdf: finalizing\nParse fixtures/legal/136-2026-vbhn-tt-bct.pdf: finalizing\nParse fixtures/legal/hien-phap-2013-dieu-8-nfd.txt: finalizing\nKiểm tra chunk footnotes: PASS (0/6 lỗi)\nKiểm tra chunk dieu_headings: PASS (0/28 lỗi)\nKiểm tra chunk breadcrumbs: PASS (0/5 lỗi)\nKiểm tra chunk nfc: PASS (0/404 lỗi)\nNFC/NFD cùng danh sách kết quả: PASS (0/90 lỗi)\nkeyword  R@1=0.50 R@3=0.69 R@5=0.73 R@10=0.77 MRR=0.60 trượt=6\nvector   R@1=0.73 R@3=0.85 R@5=0.85 R@10=0.92 MRR=0.78 trượt=2\nhybrid   R@1=0.69 R@3=0.85 R@5=0.88 R@10=0.92 MRR=0.76 trượt=2\nKết quả: docs/validation/issue-9-e2e.json\n",
+  "source_fingerprints_verified_after_e2e": true
+}

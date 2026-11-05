@@ -1,0 +1,336 @@
+{
+  "system": {
+    "version": "0.8.3",
+    "edition": "standard",
+    "commit_id": "45787b40fb17-dirty",
+    "build_time": "unknown",
+    "go_version": "unknown",
+    "keyword_index_engine": "postgres",
+    "vector_store_engine": "postgres",
+    "graph_database_engine": "Neo4j",
+    "db_version": "133",
+    "db_migration_failed": false,
+    "started_at": "2026-11-05T05:21:11Z",
+    "uptime_seconds": 6637
+  },
+  "kb_id": "b3bedf0a-2d47-407a-9ed5-15dd0728f00b",
+  "knowledge_id": "c57f0120-d550-47a4-afe9-249f49a25c91",
+  "chunk_checks": {
+    "footnotes": {
+      "pass": true,
+      "checked": 0,
+      "failed": []
+    },
+    "dieu_headings": {
+      "pass": true,
+      "checked": 1,
+      "failed": []
+    },
+    "breadcrumbs": {
+      "pass": true,
+      "checked": 0,
+      "failed": []
+    },
+    "nfc": {
+      "pass": false,
+      "checked": 4,
+      "failed": [
+        {
+          "doc": "hien-phap-2013-dieu-8-nfd",
+          "chunk_type": "parent_text",
+          "chunk_index": 0
+        },
+        {
+          "doc": "hien-phap-2013-dieu-8-nfd",
+          "chunk_type": "text",
+          "chunk_index": 0
+        },
+        {
+          "doc": "hien-phap-2013-dieu-8-nfd",
+          "chunk_type": "text",
+          "chunk_index": 1
+        },
+        {
+          "doc": "hien-phap-2013-dieu-8-nfd",
+          "chunk_type": "text",
+          "chunk_index": 2
+        }
+      ]
+    }
+  },
+  "questions": [
+    {
+      "id": "fixture-probe",
+      "query": "Nhà nước thực hiện nguyên tắc tổ chức nào?",
+      "form": "nfc",
+      "answerable": true,
+      "tags": [],
+      "modes": {
+        "keyword": {
+          "unicode_equivalence": {
+            "pass": false,
+            "nfc_ids": [
+              "eec1ea0f-034d-4be6-8f76-f63e21cedcc1",
+              "bd50966f-73df-4e68-924b-b081173aa68b",
+              "c94594ce-7900-4f3f-85ce-309eeaf2f3dd"
+            ],
+            "nfd_ids": [
+              "bd50966f-73df-4e68-924b-b081173aa68b",
+              "eec1ea0f-034d-4be6-8f76-f63e21cedcc1",
+              "c94594ce-7900-4f3f-85ce-309eeaf2f3dd"
+            ]
+          },
+          "rank": 2,
+          "top_score": 1,
+          "top": [
+            {
+              "score": 1,
+              "match_type": 1,
+              "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu"
+            },
+            {
+              "score": 0.9949111210644661,
+              "match_type": 1,
+              "content": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+            },
+            {
+              "score": 0.992575852859252,
+              "match_type": 1,
+              "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+            }
+          ]
+        },
+        "vector": {
+          "unicode_equivalence": {
+            "pass": false,
+            "nfc_ids": [
+              "bd50966f-73df-4e68-924b-b081173aa68b",
+              "eec1ea0f-034d-4be6-8f76-f63e21cedcc1",
+              "c94594ce-7900-4f3f-85ce-309eeaf2f3dd"
+            ],
+            "nfd_ids": [
+              "bd50966f-73df-4e68-924b-b081173aa68b",
+              "c94594ce-7900-4f3f-85ce-309eeaf2f3dd",
+              "eec1ea0f-034d-4be6-8f76-f63e21cedcc1"
+            ]
+          },
+          "rank": 1,
+          "top_score": 0.5888741277200619,
+          "top": [
+            {
+              "score": 0.5888741277200619,
+              "match_type": 0,
+              "content": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+            },
+            {
+              "score": 0.5713176546433301,
+              "match_type": 0,
+              "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu"
+            },
+            {
+              "score": 0.5634909187464042,
+              "match_type": 0,
+              "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+            }
+          ]
+        },
+        "hybrid": {
+          "unicode_equivalence": {
+            "pass": false,
+            "nfc_ids": [
+              "bd50966f-73df-4e68-924b-b081173aa68b",
+              "eec1ea0f-034d-4be6-8f76-f63e21cedcc1",
+              "c94594ce-7900-4f3f-85ce-309eeaf2f3dd"
+            ],
+            "nfd_ids": [
+              "bd50966f-73df-4e68-924b-b081173aa68b",
+              "c94594ce-7900-4f3f-85ce-309eeaf2f3dd",
+              "eec1ea0f-034d-4be6-8f76-f63e21cedcc1"
+            ]
+          },
+          "rank": 1,
+          "top_score": 0.9951612903225807,
+          "top": [
+            {
+              "score": 0.9951612903225807,
+              "match_type": 0,
+              "content": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+            },
+            {
+              "score": 0.9887096774193547,
+              "match_type": 0,
+              "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu"
+            },
+            {
+              "score": 0.9682539682539681,
+              "match_type": 0,
+              "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "chunks": [
+    {
+      "id": "d6fee0f1-cd25-486b-8b1b-3dc49f90ace4",
+      "seq_id": 100003926,
+      "tenant_id": 10000,
+      "knowledge_id": "c57f0120-d550-47a4-afe9-249f49a25c91",
+      "knowledge_base_id": "b3bedf0a-2d47-407a-9ed5-15dd0728f00b",
+      "tag_id": "",
+      "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 0,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 0,
+      "end_at": 748,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "parent_text",
+      "parent_chunk_id": "",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:11:43.231768+07:00",
+      "updated_at": "2026-11-05T14:11:43.231768+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "end": 748,
+          "quote": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ. 2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền. 3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+        }
+      ]
+    },
+    {
+      "id": "bd50966f-73df-4e68-924b-b081173aa68b",
+      "seq_id": 100003927,
+      "tenant_id": 10000,
+      "knowledge_id": "c57f0120-d550-47a4-afe9-249f49a25c91",
+      "knowledge_base_id": "b3bedf0a-2d47-407a-9ed5-15dd0728f00b",
+      "tag_id": "",
+      "content": "Điều 8.\n\n1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ.\n\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 0,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 0,
+      "end_at": 210,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "text",
+      "parent_chunk_id": "d6fee0f1-cd25-486b-8b1b-3dc49f90ace4",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:11:43.231784+07:00",
+      "updated_at": "2026-11-05T14:11:43.231784+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "end": 209,
+          "quote": "Điều 8. 1. Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật, quản lý xã hội bằng Hiến pháp và pháp luật, thực hiện nguyên tắc tập trung dân chủ."
+        }
+      ]
+    },
+    {
+      "id": "eec1ea0f-034d-4be6-8f76-f63e21cedcc1",
+      "seq_id": 100003928,
+      "tenant_id": 10000,
+      "knowledge_id": "c57f0120-d550-47a4-afe9-249f49a25c91",
+      "knowledge_base_id": "b3bedf0a-2d47-407a-9ed5-15dd0728f00b",
+      "tag_id": "",
+      "content": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền.\n\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 1,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 210,
+      "end_at": 570,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "text",
+      "parent_chunk_id": "d6fee0f1-cd25-486b-8b1b-3dc49f90ace4",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:11:43.231785+07:00",
+      "updated_at": "2026-11-05T14:11:43.231785+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "start": 210,
+          "end": 569,
+          "quote": "2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền."
+        }
+      ]
+    },
+    {
+      "id": "c94594ce-7900-4f3f-85ce-309eeaf2f3dd",
+      "seq_id": 100003929,
+      "tenant_id": 10000,
+      "knowledge_id": "c57f0120-d550-47a4-afe9-249f49a25c91",
+      "knowledge_base_id": "b3bedf0a-2d47-407a-9ed5-15dd0728f00b",
+      "tag_id": "",
+      "content": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng.\n",
+      "content_revision": 0,
+      "index_status": "ready",
+      "last_editor_id": "",
+      "chunk_index": 2,
+      "is_enabled": true,
+      "flags": 1,
+      "status": 0,
+      "start_at": 570,
+      "end_at": 748,
+      "pre_chunk_id": "",
+      "next_chunk_id": "",
+      "chunk_type": "text",
+      "parent_chunk_id": "d6fee0f1-cd25-486b-8b1b-3dc49f90ace4",
+      "relation_chunks": null,
+      "indirect_relation_chunks": null,
+      "metadata": null,
+      "content_hash": "",
+      "image_info": "",
+      "created_at": "2026-11-05T14:11:43.231786+07:00",
+      "updated_at": "2026-11-05T14:11:43.231786+07:00",
+      "deleted_at": null,
+      "source_locators": [
+        {
+          "type": "text",
+          "mapping": "exact",
+          "source_hash": "9123888db490e8de775a95ee595b6839",
+          "start": 570,
+          "end": 748,
+          "quote": "3. Cơ quan, tổ chức, cá nhân phải nghiêm chỉnh chấp hành Hiến pháp và pháp luật; thực hành tiết kiệm, chống lãng phí, phòng, chống tham nhũng."
+        }
+      ]
+    }
+  ],
+  "seconds_to_searchable": 5,
+  "cleanup": "temporary knowledge base deleted"
+}

@@ -114,6 +114,18 @@
       ],
       "headings": [],
       "breadcrumbs": []
+    },
+    {
+      "id": "hien-phap-2013-dieu-8-nfd",
+      "file": "fixtures/legal/hien-phap-2013-dieu-8-nfd.txt",
+      "title": "Hiến pháp năm 2013 — Điều 8 (fixture Unicode NFD)",
+      "kind": ["text", "nfd"],
+      "unicode_form": "NFD",
+      "source": "Trích Điều 8 Hiến pháp năm 2013, Quốc hội thông qua ngày 28/11/2013; chuyển sang Unicode NFD để kiểm tra #9, không phải bản văn pháp luật đầy đủ.",
+      "sha256": "018d90df3034411af14c01069e44ce8e9d55638bd2ef7f9b4ef1a6cc95074732",
+      "footnotes": [],
+      "headings": ["Điều 8."],
+      "breadcrumbs": []
     }
   ]
 }

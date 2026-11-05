@@ -6,10 +6,11 @@
 3. Kiểm tra chunk: footnote còn, tiêu đề Điều không bị cắt ngang, breadcrumb
    của chunk con có Chương/Điều, mọi chunk NFC.
 4. Chạy Bộ kiểm tra keyword (eval/keyword-set.json) qua hybrid-search ở 3 chế
-   độ: keyword (disable_vector_match), vector (disable_keywords_match), hybrid.
+   độ: keyword (disable_vector_match), vector (disable_keywords_match), hybrid;
+   so sánh cả danh sách kết quả (kể cả thứ tự) giữa câu NFC và NFD.
 5. Ghi recall@k, MRR, câu trượt và metadata vào results/<thời điểm>-<commit>.json.
 
-Kiểm tra chunk fail không làm script thoát lỗi (Fork chưa vá fail là baseline).
+Kiểm tra chunk/NFC-NFD fail không làm script thoát lỗi (Fork chưa vá fail là baseline).
 Script thoát mã 1 khi tài liệu parse lỗi hoặc API lỗi. Ngoài HTTP API, script đọc
 tokenizer BM25 và breadcrumb của chunk bằng psql, vì API không trả hai thông tin này.
     python3 scripts/e2e.py [--keep-kb] [--out results/baseline.json]
@@ -57,6 +58,11 @@ def load_inputs():
     docs = json.loads(DOCUMENTS.read_text(encoding="utf-8"))["documents"]
     questions = json.loads(KEYWORD_SET.read_text(encoding="utf-8"))["questions"]
     doc_ids = {d["id"] for d in docs}
+    for doc in docs:
+        if doc.get("unicode_form") == "NFD":
+            text = (ROOT / doc["file"]).read_text(encoding="utf-8")
+            if not unicodedata.is_normalized("NFD", text) or unicodedata.is_normalized("NFC", text):
+                sys.exit(f"{doc['file']}: fixture phải là NFD, không đồng thời là NFC")
     seen = set()
     for q in questions:
         problems = []
@@ -119,6 +125,8 @@ def check_chunks(docs, chunks_by_doc, headers):
     footnotes_missing, headings_missing, breadcrumbs_wrong, non_nfc = [], [], [], []
     for doc in docs:
         chunks = chunks_by_doc.get(doc["id"], [])
+        if not chunks:
+            non_nfc.append({"doc": doc["id"], "error": "không có chunk để kiểm tra"})
         # Chunk con (text) là thứ được tìm kiếm; chunk cha chỉ dùng để trả lời.
         texts = [norm(c["content"]) for c in chunks if c["chunk_type"] == "text"]
         for snippet in doc.get("footnotes", []):
@@ -174,7 +182,14 @@ def run_questions(client, kb_id, questions):
                  "answerable": q["answerable"], "tags": q.get("tags", []), "modes": {}}
         for mode in MODES:
             results = search(client, kb_id, query, mode)
+            other_form = "NFC" if q.get("form") == "nfd" else "NFD"
+            paired = search(client, kb_id, unicodedata.normalize(other_form, q["query"]), mode)
+            ids = [r["id"] for r in results]
+            paired_ids = [r["id"] for r in paired]
+            nfc_ids, nfd_ids = (paired_ids, ids) if other_form == "NFC" else (ids, paired_ids)
             entry["modes"][mode] = {
+                "unicode_equivalence": {"pass": nfc_ids == nfd_ids,
+                                        "nfc_ids": nfc_ids, "nfd_ids": nfd_ids},
                 "rank": first_hit(results, q["expected"]) if q["answerable"] else None,
                 "top_score": results[0]["score"] if results else None,
                 "top": [{"score": r["score"], "match_type": r.get("match_type"),
@@ -295,6 +310,13 @@ def main():
 
         per_question = run_questions(client, kb_id, questions)
         search_scores = score(per_question)
+        unicode_failed = [{"id": q["id"], "mode": mode}
+                          for q in per_question for mode in MODES
+                          if not q["modes"][mode]["unicode_equivalence"]["pass"]]
+        unicode_check = {"pass": not unicode_failed, "checked": len(per_question) * len(MODES),
+                         "failed": unicode_failed}
+        print(f"NFC/NFD cùng danh sách kết quả: {'PASS' if unicode_check['pass'] else 'FAIL'} "
+              f"({len(unicode_failed)}/{unicode_check['checked']} lỗi)")
         for mode, s in search_scores["modes"].items():
             recalls = " ".join(f"R@{k}={s[f'recall@{k}']:.2f}" for k in KS)
             print(f"{mode:8} {recalls} MRR={s['mrr']:.2f} trượt={len(s['failed'])}")
@@ -311,6 +333,7 @@ def main():
             "documents": doc_results,
             "chunk_checks": chunk_checks,
             "search": search_scores,
+            "unicode_equivalence": unicode_check,
             "questions": per_question,
         }
         out = args.out or RESULTS / f"{started:%Y%m%d-%H%M%S}-{system.get('commit_id')}.json"

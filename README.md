@@ -12,7 +12,7 @@ Repo triển khai WeKnora để hỏi đáp trên tài liệu tiếng Việt. Ng
 | `scripts/setup.py` | Cấu hình sau khi dựng: endpoint PaddleOCR-VL, knowledge base mẫu |
 | `scripts/check-db.sh` | In `lc_ctype`, chỉ mục và EXPLAIN truy vấn vector |
 | `scripts/e2e.py` | Script E2E: nạp tài liệu mẫu, kiểm tra chunk, đo recall@k và MRR |
-| `eval/documents.json` | Tài liệu mẫu (nguồn, sha256) và các kiểm tra chunk của từng tài liệu |
+| `eval/documents.json` | Tài liệu mẫu (ba PDF và một TXT dạng NFD, nguồn, sha256) và các kiểm tra chunk |
 | `eval/keyword-set.json` | Bộ kiểm tra keyword đã duyệt: 30 câu (26 có đáp án, 4 không có đáp án) |
 | `eval/keyword-set-review.md` | Xác nhận duyệt, đáp án, vị trí nguồn và cách chạy baseline riêng |
 | `fixtures/legal/` | Tài liệu mẫu: văn bản pháp luật công khai |
@@ -98,6 +98,14 @@ Kết quả kiểm chứng #5 và cách chạy lại: [`docs/validation/issue-5.
 
 Fork không còn bỏ nhãn `footnote` trong request PaddleOCR-VL; header, footer, số trang và aside vẫn nằm trong danh sách bỏ qua. Go test đã chạy đỏ → xanh. Sau khi gateway nhận dạng được Footnote ở chế độ `two-stage`, nghiệm thu #6 trên stack **pass**: giữ 6/6 đoạn chú thích, ba câu footnote `q07`, `q25`, `q26` được tìm thấy bằng hybrid ở hạng 6/1/1; các mẫu header/số trang được dò không xuất hiện trong 400 chunk. Gateway phải có bản sửa nhận dạng Footnote (gateway #19); đổi danh sách nhãn phía Fork không thể khôi phục text từ gateway cũ. Xem [kết quả E2E, giới hạn kiểm chứng và cách chạy lại](docs/validation/issue-6.md).
 
+## Chuẩn hoá Unicode NFC
+
+Fork chuẩn hoá nội dung của mọi parser về NFC trước khi chunk (kể cả chunk cha/con), và chuẩn hoá câu hỏi ở cửa vào hybrid-search (cả nhánh rerank) và chat pipeline trước khi viết lại, mở rộng hay tìm kiếm. Văn bản nhập tay/passages cũng được chuẩn hoá; vị trí trích dẫn vẫn trỏ về bản gốc, không dùng offset NFC để mở file NFD. Tài liệu đã nạp phải nạp lại để áp dụng, không có migration chuyển đổi dữ liệu cũ.
+
+`fixtures/legal/hien-phap-2013-dieu-8-nfd.txt` là trích Điều 8 Hiến pháp năm 2013, lưu thật ở dạng Unicode NFD và nạp bằng parser văn bản, không qua OCR. Script E2E từ chối fixture đã bị editor tự chuyển thành NFC. Bộ kiểm tra keyword 30 câu đã duyệt giữ nguyên, gồm ba câu `form: "nfd"`; mỗi câu nay được gửi ở cả hai dạng NFC/NFD trong cả ba chế độ, so sánh toàn bộ danh sách ID top 10 **theo thứ tự**, không chỉ đáp án trúng đầu tiên.
+
+Bằng chứng đỏ → xanh, kết quả E2E và lệnh chạy lại #9: [`docs/validation/issue-9.md`](docs/validation/issue-9.md). Corpus nay có thêm fixture TXT, nên không quy thay đổi điểm so với baseline ba PDF cho riêng NFC.
+
 ## Kiểm tra database
 
 Sau khi upload ít nhất một tài liệu:
@@ -132,16 +140,16 @@ python3 scripts/e2e.py --keep-kb                  # giữ knowledge base để x
 Mỗi lần chạy:
 
 1. Tạo knowledge base `e2e-<thời điểm>` bằng đúng cấu hình của `scripts/setup.py`.
-2. Upload mọi tài liệu trong `eval/documents.json`, chờ tới khi tìm kiếm được (`finalizing`, tức là tóm tắt và knowledge graph có thể vẫn chạy nền). Ba tài liệu mẫu mất khoảng 5 phút qua gateway OCR.
+2. Upload mọi tài liệu trong `eval/documents.json`, chờ tới khi tìm kiếm được (`finalizing`, tức là tóm tắt và knowledge graph có thể vẫn chạy nền). Ba PDF mất khoảng 5 phút qua gateway OCR; fixture TXT NFD dùng parser văn bản.
 3. Kiểm tra chunk con (`text`), mỗi kiểm tra báo PASS/FAIL riêng:
    - `footnotes`: mỗi đoạn trong `footnotes` của tài liệu nằm trọn trong một chunk;
    - `dieu_headings`: mỗi tiêu đề trong `headings` (ví dụ `Điều 4. Hiệu lực thi hành`) nằm trọn trong một chunk, tức là không bị cắt ngang;
    - `breadcrumbs`: với mỗi mục trong `breadcrumbs` của tài liệu, một chunk con chứa `text` có breadcrumb (`context_header`) chứa mọi chuỗi trong `header`, ví dụ `Chương III` và `Điều 11. ...`. API không trả breadcrumb nên script đọc nó bằng `psql`;
    - `nfc`: mọi chunk (cả chunk cha) ở dạng Unicode NFC.
-4. Gửi từng câu của Bộ kiểm tra keyword tới `hybrid-search` với `match_count` 10, `skip_context_enrichment` và ngưỡng 0, ở 3 chế độ: `keyword` (`disable_vector_match`), `vector` (`disable_keywords_match`), `hybrid`.
+4. Gửi từng câu của Bộ kiểm tra keyword tới `hybrid-search` với `match_count` 10, `skip_context_enrichment` và ngưỡng 0, ở 3 chế độ: `keyword` (`disable_vector_match`), `vector` (`disable_keywords_match`), `hybrid`. Chạy thêm dạng Unicode còn lại của từng câu để kiểm tra NFC/NFD cho cùng danh sách kết quả (90 cặp). Điểm recall/MRR vẫn tính trên dạng `form` đã duyệt.
 5. Xoá knowledge base, trừ khi có `--keep-kb`.
 
-Kiểm tra chunk fail không làm script thoát lỗi: trên Fork chưa vá, kết quả fail là baseline. Script thoát mã 1 khi tài liệu parse lỗi hoặc API lỗi.
+Kiểm tra chunk hoặc NFC/NFD fail không làm script thoát lỗi: trên Fork chưa vá, kết quả fail là baseline. Script thoát mã 1 khi tài liệu parse lỗi hoặc API lỗi.
 
 ### Bộ kiểm tra keyword
 
@@ -175,7 +183,8 @@ Script in tóm tắt, rồi ghi file JSON:
 - `documents`: trạng thái parse, số giây tới khi tìm kiếm được, số chunk con và chunk cha.
 - `chunk_checks.<tên>`: `pass`, số mục đã kiểm tra và danh sách mục fail.
 - `search.modes.<chế độ>`: `recall@k` (k = 1, 3, 5, 10) là tỉ lệ câu có đáp án mà kết quả trúng đầu tiên nằm trong top k. `mrr` là trung bình 1/hạng của kết quả trúng đầu tiên, câu không trúng trong top 10 tính 0. `failed` là danh sách câu trượt.
-- `questions`: từng câu, với hạng trúng (`rank`, `null` là trượt), điểm cao nhất và 3 kết quả đầu ở mỗi chế độ.
+- `unicode_equivalence`: `pass`, số cặp đã kiểm tra và các cặp NFC/NFD có danh sách khác nhau. Phải đọc trường này và `chunk_checks.nfc` để nghiệm thu #9; script vẫn thoát 0 khi các kiểm tra này fail để ghi baseline.
+- `questions`: từng câu, với hạng trúng (`rank`, `null` là trượt), điểm cao nhất và 3 kết quả đầu ở mỗi chế độ; `modes.<chế độ>.unicode_equivalence` lưu cả `nfc_ids` và `nfd_ids` để kiểm tra đầy đủ top 10.
 
 `results/` bị gitignore, trừ `results/baseline.json` (Fork chưa vá), `results/chunker-vi.json` (sau vá chunker), `results/chunker-legal.json` (sau vá tiêu đề văn bản pháp lý) và `results/chars-per-token.json`.
 
