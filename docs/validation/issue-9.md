@@ -79,6 +79,22 @@ Script vẫn thoát 0 khi chunk hoặc phép so NFC/NFD fail để ghi được 
 
 Lần build kiểm chứng bị kẹt khi tải crate `anydoc 0.2.4` từ mirror `rsproxy.cn`. Đã dừng build đó và dùng Dockerfile/Compose override tạm **ngoài checkout**, đổi riêng URL tải sang fallback `static.crates.io` đã có trong script. Vẫn cùng crate được pin, `WITH_ANYDOC=1`; không đổi file build, dependency hay cấu hình deployment trong repo. Lệnh builder tạm và image ID cuối được ghi trong `issue-9-checks.json`.
 
+## Sửa sau review — kiểm chứng bằng Go test, chưa chạy lại stack
+
+Hai lỗi được tái hiện đỏ trước khi sửa:
+
+- Attachment của session chưa đi qua NFC. Đã chuẩn hoá sau xử lý bảng HTML, trước nhận diện ngôn ngữ/chunking và lưu nội dung. Test chạy toàn bộ `temporaryDocumentService.Process` tới dữ liệu được ghi, gồm NFC, NFD nhiều chunk và dấu tổ hợp giải mã từ entity HTML.
+- Khi NFD đi cùng đổi CRLF → LF, phép chiếu văn bản nối số Điều với số khoản khiến bộ bảo vệ số từ chối locator. Alignment nay kiểm tra ranh giới dòng trong Markdown gốc; vẫn từ chối khớp một phần giá trị số. Dấu tổ hợp giải mã từ entity được giữ và compose cùng offset nguồn, không nối dấu rời qua khoảng trắng/markup. Test kiểm tra offset file NFD gốc với LF/CRLF, locator bảng HTML và trường hợp sai dấu không được khớp.
+
+Chạy lại các regression:
+
+```sh
+(cd references/WeKnora && go test ./internal/application/service ./internal/sourceloc \
+  -run '^Test(TemporaryDocumentProcessNormalizesBeforeChunking|BuildSourceIndexPreservesOriginalLocationsAfterNFC|RemapBlocksPreservesEntityEncodedAccents|AlignRejectsPartialNumericValues)$' -count=1)
+```
+
+Các regression pass. Bốn package service/chat_pipeline/sourceloc/chunker cũng pass khi loại đúng test MCP bị lỗi DNS `example.com` đã nêu bên dưới; lần chạy không loại test vẫn chỉ fail ở test đó. Không sửa test MCP hoặc SSRF validation. Chưa build lại image hoặc chạy E2E trên stack cho phần sửa sau review; các artifact JSON phía trên vẫn là bằng chứng của lần nghiệm thu trước, không phải của bản sửa này.
+
 ## Các kiểm tra khác và giới hạn
 
 - `go test ./internal/application/service ./internal/application/service/chat_pipeline ./internal/sourceloc ./internal/infrastructure/chunker -count=1` thất bại ở test có sẵn `TestUpdateMCPService_AppliesNonScalarUpdateWithoutName`: không resolve được `example.com` cho SSRF validation. Đã chạy lại riêng test, và dùng Go overlay của các file Fork chưa sửa; cả hai cùng thất bại vì DNS. Không sửa test hoặc tắt SSRF để làm xanh.
