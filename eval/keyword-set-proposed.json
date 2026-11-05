@@ -1,0 +1,12 @@
+{
+  "questions": [
+    {
+      "id": "q12",
+      "query": "Theo Điều 11 khoản 1 của Nghị định về quản lý hoạt động kinh doanh vàng (117/2026/VBHN-NHNN), doanh nghiệp muốn được cấp Giấy phép kinh doanh mua, bán vàng miếng phải có vốn điều lệ tối thiểu bao nhiêu?",
+      "answerable": true,
+      "expected": ["Có vốn điều lệ từ 100 tỷ đồng trở lên"],
+      "doc": "vbhn-117-2026-nd-nhnn",
+      "tags": ["dieu-khoan", "so-tien"]
+    }
+  ]
+}

@@ -139,6 +139,8 @@ Kiểm tra chunk fail không làm script thoát lỗi: trên Fork chưa vá, k�
 - `form`: `nfc` (mặc định) hoặc `nfd`; script đổi câu hỏi sang dạng này trước khi gửi. Câu không dấu thì viết thẳng không dấu trong `query`.
 - `doc` (id trong `eval/documents.json`) và `tags` chỉ để đọc kết quả.
 
+`eval/keyword-set-proposed.json` chứa câu `q12` dạng “Điều 11 khoản 1” và đoạn đáp án lấy từ điểm b khoản 1 Điều 11 của `117/2026/VBHN-NHNN` (trang in 6). Đây là đề xuất chờ người dùng duyệt theo spec #1, **chưa được script E2E dùng để tính điểm**. Sau khi duyệt, chuyển câu vào `eval/keyword-set.json`, rồi chạy cùng bộ câu trên baseline và bản vá; không so sánh điểm tổng hợp của hai bộ câu khác nhau.
+
 ### Đọc kết quả
 
 Script in tóm tắt, rồi ghi file JSON:
@@ -201,12 +203,13 @@ Bộ kiểm tra keyword hiện chỉ có 9 câu có đáp án, nên mỗi câu �
 
 Bản vá chunker của Fork cho văn bản pháp lý tiếng Việt (`internal/infrastructure/chunker`):
 
-- Dòng `Phần`/`Chương`/`Mục` kèm số La Mã hoặc Ả Rập, và `Điều N.` (cả `Điều 11a.`), là tiêu đề, dù OCR trả về dạng `## ...` hay dòng thường. Cấp của chúng theo cấu trúc luật: Phần > Chương > Mục > Điều, còn Điều trong ngoặc kép (`“Điều 4. ...`, nội dung được sửa đổi) nằm dưới Điều sửa đổi nó. Dòng nhắc tới Điều trong câu (`Điều 37 của Thông tư ...`) không phải tiêu đề.
+- Dòng `Phần`/`Chương`/`Mục` kèm số La Mã hoặc Ả Rập, và `Điều N.` (số La Mã hoặc Ả Rập, cả `Điều 11a.`), là tiêu đề, dù OCR trả về dạng `## ...` hay dòng thường. Cấp của chúng theo cấu trúc luật: Phần > Chương > Mục > Điều, còn Điều trong ngoặc kép (`“Điều 4. ...`, nội dung được sửa đổi) nằm dưới Điều sửa đổi nó. Dòng nhắc tới Điều trong câu (`Điều 37 của Thông tư ...`) không phải tiêu đề.
 - Khoản (`1.`, `2.`) không phải tiêu đề với `languages: ["vi"]`; các ngôn ngữ khác giữ mẫu `1. Title` như cũ.
 - Dòng tiêu đề Chương/Mục/Điều không bị cắt, kể cả khi dài hơn chunk con (Điều 1 của Thông tư 32/2024 dài khoảng 520 ký tự). Trước đây separator `. ` tách `Điều 1.` khỏi tên Điều.
 - Section quá lớn được cắt ở tiêu đề con trước (Chương dài cắt ở từng Điều), chỉ phần còn quá lớn mới cắt theo separator.
 - Breadcrumb của chunk con là đường tiêu đề tại đầu chunk con đó, ví dụ `## Chương III ... > #### Điều 11. ...`, kể cả khi chunk cha gộp vài Điều ngắn.
-- Tiêu đề viết hoa nhận chữ hoa có dấu tiếng Việt (`NHỮNG QUY ĐỊNH CHUNG`), chân trang nhận `Trang N` và `Trang N/M`. Hai mẫu này chỉ dùng ở tầng heuristic, cho tài liệu không có tiêu đề Markdown.
+- Tiêu đề viết hoa có dấu tiếng Việt (`NHỮNG QUY ĐỊNH CHUNG`) được đưa vào breadcrumb ngay cả khi không có dấu `#`. Tiêu đề hoa nằm sau dòng chỉ có Phần/Chương/Mục và số được ghép vào tên cấp đó, không làm mất ngữ cảnh khi sang Điều. Breadcrumb chunk con được lấy theo vị trí trong toàn văn, kể cả khi tầng heuristic cắt chunk cha ở giữa Điều.
+- Chân trang nhận `Trang N` và `Trang N/M` ở tầng heuristic, cho tài liệu không có tiêu đề Markdown.
 
 Mọi điều trên chỉ chạy khi chunking strategy là `auto` (hoặc `heading`/`heuristic`). `scripts/setup.py` đặt `auto`.
 
@@ -218,7 +221,9 @@ E2E (`results/chunker-legal.json`, Fork `456b05ec45f9-dirty`, 4096 / 384):
 | `chunker-vi` (legacy, vá ngôn ngữ) | 1/27 fail | 0,44 / 0,50 | 0,56 / 0,60 | 0,44 / 0,52 |
 | **`chunker-legal` (auto, vá tiêu đề)** | pass | 0,56 / 0,56 | 0,78 / 0,78 | 0,78 / 0,78 |
 
-Kiểm tra `breadcrumbs` pass 5/5. R@10 không đổi ở cả ba chế độ: câu đúng chỉ lên hạng 1 (q01, q05, q06, q08). Không câu nào tụt hạng ở chế độ nào. Bộ câu hỏi hiện chưa có câu dạng "Điều X Khoản Y", nên chưa đo được loại câu này. q07 (footnote) và q09 (bảng) vẫn trượt.
+Kiểm tra `breadcrumbs` pass 5/5. R@10 không đổi ở cả ba chế độ: câu đúng chỉ lên hạng 1 (q01, q05, q06, q08). Không câu nào tụt hạng ở chế độ nào. Bộ câu hỏi đã chạy chưa có câu dạng "Điều X Khoản Y", nên chưa đo được loại câu này; câu `q12` đang chờ duyệt trong `eval/keyword-set-proposed.json`. q07 (footnote) và q09 (bảng) vẫn trượt.
+
+Các sửa lỗi sau review (Điều số La Mã, tiêu đề hoa trong breadcrumb và ngữ cảnh xuyên chunk cha) đã qua Go test, nhưng chưa build/deploy hay chạy lại E2E. Bảng trên là kết quả lịch sử, không phải nghiệm thu các sửa lỗi này.
 
 ## Nâng commit Fork
 
