@@ -55,6 +55,7 @@ services:
       - data-files:/data/files
       - docreader-tmp:/tmp/docreader:ro
       - ./config/builtin_models.yaml:/app/config/builtin_models.yaml:ro
+      - ./config/prompt_templates:/app/config/prompt_templates:ro
     env_file:
       - .env
     environment:

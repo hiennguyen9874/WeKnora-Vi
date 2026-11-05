@@ -8,6 +8,7 @@ Repo triển khai WeKnora để hỏi đáp trên tài liệu tiếng Việt. Ng
 | `scripts/compose.sh` | Gọi `docker compose`, tag image theo commit Fork |
 | `.env.example` | Mẫu `.env`, có ghi chú cho từng biến |
 | `config/builtin_models.yaml` | LLM, VLM, embedding, rerank khai báo sẵn, đọc biến từ `.env` |
+| `config/prompt_templates/` | Overlay toàn bộ prompt templates; chỉ ví dụ của rewrite mặc định đổi sang tiếng Việt |
 | `scripts/setup.py` | Cấu hình sau khi dựng: endpoint PaddleOCR-VL, knowledge base mẫu |
 | `scripts/check-db.sh` | In `lc_ctype`, chỉ mục và EXPLAIN truy vấn vector |
 | `scripts/e2e.py` | Script E2E: nạp tài liệu mẫu, kiểm tra chunk, đo recall@k và MRR |
@@ -76,6 +77,22 @@ Mở Web UI ở `http://<máy>:${FRONTEND_PORT}` và đăng nhập bằng tài k
 | `builtin-rerank` | Rerank | `Qwen3-VL-Reranker-2B`, `score_scale: probability`, chỉ text |
 
 Dùng tài khoản **system admin** mở từng model và chạy "Test connection" trong Settings → Models. Tài khoản do setup đăng ký chỉ là workspace owner cho tới khi hoàn tất bootstrap ở trên.
+
+## Prompt và Ngôn ngữ xử lý
+
+Fork ánh xạ `vi` và `vi-VN` thành `Vietnamese` khi đưa Ngôn ngữ xử lý vào prompt, không thêm locale cho UI. Giữ `WEKNORA_LANGUAGE=vi-VN`, `DEFAULT_LOCALE=en-US` và `VITE_DEFAULT_LOCALE=en-US` trong `.env`.
+
+Compose mount read-only **cả thư mục** `config/prompt_templates/` vào `/app/config/prompt_templates`. Overlay là bản sao từ Fork, chỉ thay ví dụ tiếng Trung trong `content` của `default_rewrite` bằng ví dụ tiếng Việt (kể cả ví dụ nằm trong hướng dẫn phân loại intent). Các template khác và nhãn i18n giữ nguyên. Khi nâng Fork, đồng bộ lại toàn bộ thư mục rồi áp lại phần ví dụ tiếng Việt; mount thư mục sẽ che các template mới trong image nếu không đồng bộ.
+
+Sau khi sửa overlay, recreate app để nạp lại (không cần build nếu chỉ sửa YAML):
+
+```sh
+./scripts/compose.sh up -d --no-deps --force-recreate app
+# Sau khi sửa code ánh xạ trong Fork, build app trước:
+# ./scripts/compose.sh build app
+```
+
+Kết quả kiểm chứng #5 và cách chạy lại: [`docs/validation/issue-5.md`](docs/validation/issue-5.md). Đã kiểm tra summary, rewrite, caption và câu hỏi gợi ý qua API với `Accept-Language: en-US`, cùng tên agent/template hiển thị tiếng Anh trong Chrome. Câu hỏi gợi ý từ chunk chỉ có khi bật `question_generation_config.enabled` cho knowledge base trước khi nạp; setup mặc định không bật và bản vá này không đổi mặc định đó.
 
 ## Kiểm tra database
 

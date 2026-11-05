@@ -1,0 +1,312 @@
+{
+  "tested_at": "2026-11-05T04:50:10.240300+00:00",
+  "fork_base": "821c91d96dd790916b15cd427ba578d687b2cbea",
+  "fork_worktree": "dirty: context_helpers.go and context_helpers_test.go",
+  "fork_patch_commit": "45787b40fb1701ec2c91f55924198abdac6a1b89",
+  "app_image": "weknora-vi/app:821c91d96dd7-dirty",
+  "app_image_id": "sha256:90f91c2de250b6e66d9c8156a33a44389713059521e85dcc0aeabe7391872a1e",
+  "processing_language": "vi-VN",
+  "frontend_default_locale": "en-US",
+  "request_accept_language": "en-US",
+  "source_document": "fixtures/legal/32-2024-tt-bca.pdf",
+  "overlay_loaded": true,
+  "builtin_agents": [
+    {
+      "id": "builtin-quick-answer",
+      "name": "Quick Answer"
+    },
+    {
+      "id": "builtin-smart-reasoning",
+      "name": "Smart Reasoning"
+    },
+    {
+      "id": "builtin-wiki-researcher",
+      "name": "Wiki Questioner"
+    },
+    {
+      "id": "builtin-data-analyst",
+      "name": "Data Analyst"
+    }
+  ],
+  "template_names": {
+    "system_prompt": [
+      {
+        "id": "default_kb",
+        "name": "Knowledge Base Q&A"
+      },
+      {
+        "id": "expert_assistant",
+        "name": "Domain Expert"
+      },
+      {
+        "id": "customer_service",
+        "name": "Customer Service"
+      },
+      {
+        "id": "technical_support",
+        "name": "Technical Support"
+      },
+      {
+        "id": "pure_chat",
+        "name": "General Chat"
+      },
+      {
+        "id": "web_search_assistant",
+        "name": "Web Search Assistant"
+      }
+    ],
+    "context_template": [
+      {
+        "id": "default_context",
+        "name": "Standard Template"
+      },
+      {
+        "id": "detailed_context",
+        "name": "Detailed Template"
+      },
+      {
+        "id": "simple_context",
+        "name": "Simple Template"
+      },
+      {
+        "id": "qa_context",
+        "name": "Q&A Template"
+      }
+    ],
+    "rewrite": [
+      {
+        "id": "default_rewrite",
+        "name": "Standard Rewrite (with Intent Classification)"
+      },
+      {
+        "id": "standard_rewrite",
+        "name": "Standard Rewrite"
+      },
+      {
+        "id": "strict_rewrite",
+        "name": "Strict Rewrite"
+      }
+    ],
+    "fallback": [
+      {
+        "id": "default_fallback",
+        "name": "Standard Fallback"
+      },
+      {
+        "id": "polite_fallback",
+        "name": "Polite Fallback"
+      },
+      {
+        "id": "brief_fallback",
+        "name": "Brief Fallback"
+      },
+      {
+        "id": "model_fallback",
+        "name": "Model Fallback"
+      },
+      {
+        "id": "default_fallback_prompt",
+        "name": "Standard Fallback Prompt"
+      }
+    ],
+    "generate_session_title": [
+      {
+        "id": "default_session_title",
+        "name": "Standard Title"
+      }
+    ],
+    "generate_summary": [
+      {
+        "id": "default_summary",
+        "name": "Document Profile"
+      }
+    ],
+    "generate_kb_description": [
+      {
+        "id": "default_kb_description",
+        "name": "Knowledge Base Description"
+      }
+    ],
+    "keywords_extraction": [
+      {
+        "id": "default_keywords_extraction",
+        "name": "Standard Keywords Extraction"
+      }
+    ],
+    "agent_system_prompt": [
+      {
+        "id": "pure_agent",
+        "name": "Pure Agent"
+      },
+      {
+        "id": "progressive_rag_agent",
+        "name": "Progressive RAG Agent"
+      },
+      {
+        "id": "data_analyst",
+        "name": "Data Analyst"
+      },
+      {
+        "id": "wiki_researcher",
+        "name": "Wiki Researcher"
+      },
+      {
+        "id": "wiki_fixer",
+        "name": "Wiki Fixer System Prompt"
+      },
+      {
+        "id": "weknora_assistant",
+        "name": "WeKnora Assistant System Prompt"
+      },
+      {
+        "id": "hybrid_rag_wiki_agent",
+        "name": "Hybrid RAG + Wiki Agent"
+      },
+      {
+        "id": "skill_installer",
+        "name": "Skill Installer System Prompt"
+      }
+    ],
+    "intent_prompts": [
+      {
+        "id": "greeting",
+        "name": "Greeting Response"
+      },
+      {
+        "id": "chitchat",
+        "name": "Chitchat Response"
+      },
+      {
+        "id": "follow_up",
+        "name": "Follow-up Response"
+      },
+      {
+        "id": "image_only",
+        "name": "Image Analysis Response"
+      },
+      {
+        "id": "summarize",
+        "name": "Summarize Response"
+      },
+      {
+        "id": "web_search",
+        "name": "Web Search Unavailable Response"
+      },
+      {
+        "id": "doc_only",
+        "name": "Document Analysis Response"
+      }
+    ]
+  },
+  "document": {
+    "parse_status": "finalizing",
+    "summary_status": "completed",
+    "description": "Văn bản là Thông tư của Bộ trưởng Bộ Công an, sửa đổi và bổ sung một số điều của Thông tư số 149/2020/TT-BCA và Thông tư số 08/2018/TT-BCA. Nội dung tập trung vào việc cập nhật hồ sơ quản lý, theo dõi hoạt động phòng cháy, chữa cháy (PCCC) và quy định thẩm quyền phê duyệt phương án chữa cháy cho các cơ sở, khu dân cư và phương tiện giao thông. Thông tư có hiệu lực từ ngày 24 tháng 8 năm 2024, nhằm đồng bộ với các nghị định mới của Chính phủ về PCCC và cứu nạn, cứu hộ.",
+    "profile": {
+      "gist": "Thông tư sửa đổi quy định về hồ sơ quản lý và thẩm quyền phê duyệt phương án chữa cháy.",
+      "topics": [
+        "Phòng cháy chữa cháy",
+        "Hồ sơ quản lý PCCC",
+        "Phương án chữa cháy",
+        "Thẩm quyền phê duyệt",
+        "Cứu nạn cứu hộ"
+      ],
+      "doc_type": "Thông tư",
+      "typical_question": "Thông tư của Bộ Công an quy định như thế nào về hồ sơ quản lý hoạt động phòng cháy, chữa cháy và thẩm quyền phê duyệt phương án chữa cháy?"
+    },
+    "error_message": ""
+  },
+  "rewrites": [
+    {
+      "input": "Thông tư 32/2024/TT-BCA có hiệu lực từ ngày nào?",
+      "rewrite_query": "Thông tư 32/2024/TT-BCA có hiệu lực từ ngày nào?",
+      "intent": "kb_search",
+      "log": "INFO [2026-11-05 11:44:33.377] [d8c34a31-2191-42a3-91f2-b3d2ef7c3a86]                      | [PIPELINE] stage=QueryUnderstand action=output has_image_desc=false has_prompt_override=false intent=kb_search original_output=\"{\\\\n\\\"rewrite_query\\\": \\\"Thông tư 32/2024/TT-BCA có hiệu lực từ ngày nào?\\\",\\\\n\\\"intent\\\": \\\"kb_search\\\",\\\\n\\\"image_description\\\": \\\"\\\"\\\\n}\" rewrite_query=\"Thông tư 32/2024/TT-BCA có hiệu lực từ ngày nào?\" session_id=\"cd7d86ef-a0ae-469b-aca0-03130a2b5456\""
+    },
+    {
+      "input": "Nó sửa đổi những thông tư nào?",
+      "rewrite_query": "Thông tư 32/2024/TT-BCA sửa đổi những thông tư nào?",
+      "intent": "kb_search",
+      "log": "INFO [2026-11-05 11:46:21.893] [2e29b3f3-bf6c-4206-92e0-4b2290220af0]                      | [PIPELINE] stage=QueryUnderstand action=output has_image_desc=false has_prompt_override=false intent=kb_search original_output=\"{\\\\n  \\\"rewrite_query\\\": \\\"Thông tư 32/2024/TT-BCA sửa đổi những thông tư nào?\\\",\\\\n  \\\"intent\\\": \\\"kb_search\\\",\\\\n  \\\"image_description\\\": \\\"\\\"\\\\n}\" rewrite_query=\"Thông tư 32/2024/TT-BCA sửa đổi những thông tư nào?\" session_id=\"cd7d86ef-a0ae-469b-aca0-03130a2b5456\""
+    },
+    {
+      "input": "Giải thích thêm ý thứ nhất trong câu trả lời vừa rồi.",
+      "rewrite_query": "Giải thích chi tiết nội dung sửa đổi, bổ sung của Thông tư 32/2024/TT-BCA đối với Thông tư số 149/2020/TT-BCA",
+      "intent": "follow_up",
+      "log": "INFO [2026-11-05 11:46:42.148] [536a1cd6-73e3-4ebd-82b9-75be90761196]                      | [PIPELINE] stage=QueryUnderstand action=output has_image_desc=false has_prompt_override=true intent=follow_up original_output=\"{\\\\n  \\\"rewrite_query\\\": \\\"Giải thích chi tiết nội dung sửa đổi, bổ sung của Thông tư 32/2024/TT-BCA đối với Thông tư số 149/2020/TT-BCA\\\",\\\\n  \\\"intent\\\": \\\"follow_up\\\",\\\\n  \\\"image_description\\\": \\\"\\\"\\\\n}\" rewrite_query=\"Giải thích chi tiết nội dung sửa đổi, bổ sung của Thông tư 32/2024/TT-BCA đối với Thông tư số 149/2020/TT-BCA\" session_id=\"cd7d86ef-a0ae-469b-aca0-03130a2b5456\""
+    },
+    {
+      "input": "Mô tả ảnh này.",
+      "rewrite_query": "Mô tả ảnh này",
+      "intent": "image_only",
+      "log": "INFO [2026-11-05 11:46:57.005] [26e99a6f-9107-4f21-9e46-889544fa39a8]                      | [PIPELINE] stage=QueryUnderstand action=output has_image_desc=true has_prompt_override=true intent=image_only original_output=\"{\\\\n  \\\"rewrite_query\\\": \\\"Mô tả ảnh này\\\",\\\\n  \\\"intent\\\": \\\"image_only\\\",\\\\n  \\\"image_description\\\": \\\"Ảnh chụp màn hình một trang tài liệu văn bản tiếng Việt, có tiêu đề 'BỘ CÔNG AN' và 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'. Nội dung chính là 'THÔNG TƯ' số 32/2024/TT-BCA, ngày 15 tháng 8 năm 2024, quy định về v...\" rewrite_query=\"Mô tả ảnh này\" session_id=\"cd7d86ef-a0ae-469b-aca0-03130a2b5456\""
+    }
+  ],
+  "first_answer": "Thông tư 32/2024/TT-BCA có hiệu lực thi hành kể từ ngày **24 tháng 8 năm 2024**<kb doc=\"32-2024-tt-bca.pdf\" chunk_id=\"6123205b-a404-48a9-9e1e-2a6090a4d6ac\" kb_id=\"685f3d28-2add-4f3c-a4a7-dd072778ff37\" /><kb doc=\"32-2024-tt-bca.pdf\" chunk_id=\"b057cc06-dd4d-483d-a61e-a95237260985\" kb_id=\"685f3d28-2add-4f3c-a4a7-dd072778ff37\" />.",
+  "image_caption": "Ảnh chụp màn hình một trang tài liệu văn bản tiếng Việt, có tiêu đề 'BỘ CÔNG AN' và 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'. Nội dung chính là 'THÔNG TƯ' số 32/2024/TT-BCA, ngày 15 tháng 8 năm 2024, quy định về việc sửa đổi, bổ sung một số điều của Thông tư số 149/2020/TT-BCA và Thông tư số 08/2018/TT-BCA. Văn bản nêu rõ căn cứ pháp lý, mục đích, và các điều khoản cụ thể được sửa đổi, bổ sung liên quan đến công tác phòng cháy, chữa cháy và cứu nạn, cứu hộ. Phía dưới có chữ ký của Bộ trưởng Bộ Công an.",
+  "questions_without_generation_enabled": [],
+  "questions_with_generation_enabled": {
+    "accept_language": "en-US",
+    "kb_id": "39fdd14d-ba3c-4782-a15e-7df3e5cb1052",
+    "source_excerpt": "Điều 2. Sửa đổi, bổ sung một số điều của Thông tư số 08/2018/TT-BCA ngày 05 tháng 3 năm 2018 của Bộ trưởng Bộ Công an quy định chi tiết một số điều của Nghị định số 83/2017/NĐ-CP ngày 18 tháng 7 năm 2017 của Chính phủ quy định về công tác cứu nạn, cứu hộ của lực lượng phòng cháy và chữa cháy (sau đây viết gọn là Thông tư số 08/2018/TT-BCA)\n\n1. Sửa đổi, bổ sung Điều 6 như sau:\n\n“Điều 6. Kiểm tra điều kiện bảo đảm an toàn về cứu nạn, cứu hộ của cơ quan Công an\n\n1. Cơ quan Công an thực hiện việc kiểm tra điều kiện bảo đảm an toàn về cứu nạn, cứu hộ theo quy định tại khoản 3 Điều 2 Nghị định số 50/2024/NĐ-CP.\n\n2. Việc kiểm tra điều kiện bảo đảm an toàn về cứu nạn, cứu hộ đối với cơ sở được kết hợp với kiểm tra về phòng cháy và chữa cháy.”.\n\n2. Sửa đổi, bổ sung điểm d khoản 1 Điều 10 như sau:\n\n“d) Thống kê về số vụ cứu nạn, cứu hộ, công tác cứu nạn, cứu hộ và những nội dung khác liên quan đến hoạt động cứu nạn, cứu hộ;”.\n\nĐiều 3. Sửa đổi, bổ sung cụm từ, bãi bỏ một số khoản thuộc các điều trong Thông tư số 149/2020/TT-BCA và Thông tư số 08/2018/TT-BCA\n\n1. Thay thế cụm từ “Phụ lục III ban hành kèm theo Nghị định số 136/2020/NĐ-CP” tại Điều 7 Thông tư số 149/2020/TT-BCA bằng cụm từ “Phụ lục III ban hành kèm theo Nghị định số 50/2024/NĐ-CP”.\n\n2. Bãi bỏ khoản 1 Điều 4, khoản 4 Điều 7, điểm d khoản 1 Điều 9, khoản 2 Điều 14 Thông tư số 08/2018/TT-BCA.\n\n## Điều 4. Hiệu lực thi hành\n\nThông tư này có hiệu lực thi hành kể từ ngày 24 tháng 8 năm 2024.\n\n## Điều 5. Trách nhiệm thi hành\n\n1. Cục trưởng Cục Cảnh sát phòng cháy, chữa cháy và cứu nạn, cứu hộ có trách nhiệm chỉ đạo, kiểm tra, đôn đốc việc thực hiện Thông tư này.\n\n2. Thủ trưởng các đơn vị thuộc cơ quan Bộ, Giám đốc Công an tỉnh, thành phố trực thuộc trung ương và các tổ chức, cá nhân có liên quan chịu trách nhiệm thi hành Thông tư này.\n\nTrong quá trình thực hiện Thông tư này, nếu có khó khăn, vướng mắc, Công an các đơn vị, địa phương, cơ quan, tổ chức, cá nhân báo cáo về Bộ Công an (qua Cục Cảnh sát phòng cháy, chữa cháy và cứu nạn, cứu hộ) để kịp thời hướng dẫn./.\n\n<div style=\"text-align: center;\"><img src=\"resource://QJYoa14LqZy3EZXjDjEH9g\" alt=\"Image\" width=\"5%\" /></div>\n\nNơi nhận:\n\n- Các bộ, cơ quan ngang bộ, cơ quan thuộc Chính phủ;\n\n- Các đồng chí Thứ trưởng Bộ Công an;\n\n- UBND các tỉnh, thành phố trực thuộc trung ương;\n\n- Các đơn vị thuộc cơ quan Bộ;\n\n- Công an tỉnh, thành phố trực thuộc trung ương;\n\n- Cục Kiểm tra văn bản QPPL - Bộ Tư pháp;\n\n- Công báo;\n\n- Công thông tin điện tử: Chính phủ, Bộ Công an;\n\n- Luru: VT, V03, C07.",
+    "source_document": "fixtures/legal/32-2024-tt-bca.pdf",
+    "question_generation_config": {
+      "enabled": true,
+      "question_count": 2
+    },
+    "knowledge_id": "1b48a474-e3fa-4615-b699-c7c56f60ea02",
+    "parse_status": "completed",
+    "error_message": "",
+    "suggestions": {
+      "data": {
+        "questions": [
+          {
+            "question": "Thông tư số 149/2024/TT-BCA có hiệu lực thi hành từ ngày nào?",
+            "source": "document",
+            "knowledge_base_id": "39fdd14d-ba3c-4782-a15e-7df3e5cb1052",
+            "knowledge_id": "1b48a474-e3fa-4615-b699-c7c56f60ea02"
+          },
+          {
+            "question": "Cơ quan Công an thực hiện kiểm tra điều kiện bảo đảm an toàn về cứu nạn, cứu hộ theo quy định nào trong Nghị định số 50/2024/NĐ-CP?",
+            "source": "document",
+            "knowledge_base_id": "39fdd14d-ba3c-4782-a15e-7df3e5cb1052",
+            "knowledge_id": "1b48a474-e3fa-4615-b699-c7c56f60ea02"
+          },
+          {
+            "question": "Cục trưởng Cục Cảnh sát phòng cháy, chữa cháy và cứu nạn, cứu hộ có trách nhiệm gì trong việc thực hiện Thông tư?",
+            "source": "document",
+            "knowledge_base_id": "39fdd14d-ba3c-4782-a15e-7df3e5cb1052",
+            "knowledge_id": "1b48a474-e3fa-4615-b699-c7c56f60ea02"
+          }
+        ]
+      },
+      "success": true
+    },
+    "cleanup_completed": true
+  },
+  "cleanup": {
+    "session_agent_and_first_kb_deleted": true,
+    "question_kb_deleted": true
+  },
+  "limits": [
+    "Browser verified English agent names and system-prompt template picker. Generated-content flows exercised through HTTP API with Accept-Language: en-US, not repeated through browser.",
+    "Checks establish output language, not factual quality. First generated suggestion used an incorrect circular number; image outputs also contained inaccurate details.",
+    "Full retrieval E2E not run: this issue changes language mapping and rewrite examples, not retrieval.",
+    "Built-in tool status labels may still be Chinese, explicitly outside spec #1 scope."
+  ],
+  "browser": {
+    "engine": "Google Chrome headless",
+    "automation": "Chrome DevTools Protocol via native Node WebSocket; no dependencies added",
+    "path": "/platform/agents",
+    "actions": [
+      "Open Agents",
+      "Dismiss product tour",
+      "Open Create Agent",
+      "Select Prompts",
+      "Open Use Template; do not save agent"
+    ],
+    "agents_dom": "New Chat\nKnowledge Base\nArtifacts\nAgents\nAutomations\nToolbox\nShared Spaces\nNo conversations yet\nA\nadmin\nadmin@example.com\nAgents\nSort · Recently updated\nCreate Agent\n\nConfigure and manage your agents to customize conversation behavior and capabilities\n\nAll\n4\nStarred\n0\nRecent\n0\nWorkspace\n4\nBuilt-in\n4\nQuick Answer\nKnowledge base RAG Q&A for fast and accurate answers\nSmart Reasoning\nReAct reasoning framework with multi-step thinking and tool calling\nWiki Questioner\nSpecialized agent for answering questions based on Wiki knowledge bases\nData Analyst\nProfessional data analysis agent with SQL query and statistical analysis for CSV/Excel files\n\n1 / 7\n\nWelcome to WeKnora\n\nA few quick steps to get you familiar with knowledge bases, chat and agents. Click \"Next\" to begin.\n\nSkip\nNext",
+    "template_picker_dom": "New Chat\nKnowledge Base\nArtifacts\nAgents\nAutomations\nToolbox\nShared Spaces\nNo conversations yet\nA\nadmin\nadmin@example.com\nAgents\nSort · Recently updated\nCreate Agent\n\nConfigure and manage your agents to customize conversation behavior and capabilities\n\nAll\n4\nStarred\n0\nRecent\n0\nWorkspace\n4\nBuilt-in\n4\nQuick Answer\nKnowledge base RAG Q&A for fast and accurate answers\nSmart Reasoning\nReAct reasoning framework with multi-step thinking and tool calling\nWiki Questioner\nSpecialized agent for answering questions based on Wiki knowledge bases\nData Analyst\nProfessional data analysis agent with SQL query and statistical analysis for CSV/Excel files\nCreate Agent\nBasics\nBasic Info\nPrompts\nModel Config\nConversation\nQuestion suggestions\nKnowledge & Retrieval\nKnowledge Base\nWeb Search\nExtensions\nAttachment Upload\nTools\nMCP Services\nSkills\nPrompts\n\nConfigure system, context, intent, rewrite, and fallback prompts\n\nSystem Prompt *\n\nCustom system prompt to define the agent behavior and role\n\nUnchanged template text follows template updates; edited text is saved as a custom prompt. In agent mode, this field defines the role and workflow; tool permissions and per-turn source selections are controlled separately.\n\nAvailable variables:\n{{knowledge_bases}}\n{{web_search_status}}\n{{current_time}}\n{{language}}\n(click to insert, or type {{ to show list)\nReset Default\nUse Template\nCancel\nCreate Agent\nSelect Template\nPure Agent\n\nSystem prompt for Pure Agent mode (no Knowledge Bases)\n\nProgressive RAG Agent\nDefault\n\nSystem prompt for Progressive Agentic RAG mode with Knowledge Bases\n\nData Analyst\n\nSystem prompt for Data Analyst agent with DuckDB SQL analysis\n\nWiki Researcher\n\nSystem prompt for Wiki Researcher agent with knowledge graph traversal\n\nWiki Fixer System Prompt\n\nSystem prompt for repairing and optimizing Wiki pages based on linter issues\n\nWeKnora Assistant System Prompt\n\nSystem prompt for the built-in assistant that inspects and manages WeKnora for the signed-in user\n\nHybrid RAG + Wiki Agent\n\nSystem prompt for agents working on KBs where BOTH Wiki and chunk (vector/keyword) indexes are enabled.\n\nSkill Installer System Prompt\n\nSystem prompt for installing an uploaded skill and its dependencies into the sandbox image",
+    "temporary_profile_and_token_deleted": true
+  }
+}
