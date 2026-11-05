@@ -8,17 +8,23 @@
 4. Chạy Bộ kiểm tra keyword (eval/keyword-set.json) qua hybrid-search ở 3 chế
    độ: keyword (disable_vector_match), vector (disable_keywords_match), hybrid;
    so sánh cả danh sách kết quả (kể cả thứ tự) giữa câu NFC và NFD.
-5. Ghi recall@k, MRR, câu trượt và metadata vào results/<thời điểm>-<commit>.json.
+5. Ghi recall@k, MRR, độ trễ, câu trượt và metadata vào results/<thời điểm>-<commit>.json.
+
+--reuse-kb <file kết quả>: bỏ bước 1-2, dùng lại knowledge base đã giữ (--keep-kb) của
+lần chạy đó, để so sánh nhiều cấu hình (ví dụ tokenizer BM25) trên cùng chunk.
 
 Kiểm tra chunk/NFC-NFD fail không làm script thoát lỗi (Fork chưa vá fail là baseline).
 Script thoát mã 1 khi tài liệu parse lỗi hoặc API lỗi. Ngoài HTTP API, script đọc
 tokenizer BM25 và breadcrumb của chunk bằng psql, vì API không trả hai thông tin này.
     python3 scripts/e2e.py [--keep-kb] [--out results/baseline.json]
+    python3 scripts/e2e.py --reuse-kb results/<lần nạp>.json --out results/<tên>.json
 """
 
 import argparse
 import json
+import math
 import re
+import statistics
 import subprocess
 import sys
 import time
@@ -159,9 +165,12 @@ def check_chunks(docs, chunks_by_doc, headers):
 
 
 def search(client, kb_id, query, mode):
+    """Trả về (kết quả, số mili giây của request HTTP)."""
     body = {"query_text": query, "match_count": MATCH_COUNT, "vector_threshold": 0,
             "keyword_threshold": 0, "skip_context_enrichment": True, **MODES[mode]}
-    return client.request("POST", f"/api/v1/knowledge-bases/{kb_id}/hybrid-search", body)["data"] or []
+    start = time.perf_counter()
+    data = client.request("POST", f"/api/v1/knowledge-bases/{kb_id}/hybrid-search", body)["data"]
+    return data or [], round((time.perf_counter() - start) * 1000, 1)
 
 
 def first_hit(results, expected):
@@ -181,9 +190,9 @@ def run_questions(client, kb_id, questions):
         entry = {"id": q["id"], "query": q["query"], "form": q.get("form", "nfc"),
                  "answerable": q["answerable"], "tags": q.get("tags", []), "modes": {}}
         for mode in MODES:
-            results = search(client, kb_id, query, mode)
+            results, latency_ms = search(client, kb_id, query, mode)
             other_form = "NFC" if q.get("form") == "nfd" else "NFD"
-            paired = search(client, kb_id, unicodedata.normalize(other_form, q["query"]), mode)
+            paired, _ = search(client, kb_id, unicodedata.normalize(other_form, q["query"]), mode)
             ids = [r["id"] for r in results]
             paired_ids = [r["id"] for r in paired]
             nfc_ids, nfd_ids = (paired_ids, ids) if other_form == "NFC" else (ids, paired_ids)
@@ -191,6 +200,7 @@ def run_questions(client, kb_id, questions):
                 "unicode_equivalence": {"pass": nfc_ids == nfd_ids,
                                         "nfc_ids": nfc_ids, "nfd_ids": nfd_ids},
                 "rank": first_hit(results, q["expected"]) if q["answerable"] else None,
+                "latency_ms": latency_ms,
                 "top_score": results[0]["score"] if results else None,
                 "top": [{"score": r["score"], "match_type": r.get("match_type"),
                          "content": norm(r["content"])[:160]} for r in results[:3]],
@@ -205,9 +215,14 @@ def score(per_question):
     for mode in MODES:
         ranks = [q["modes"][mode]["rank"] for q in answerable]
         n = len(ranks) or 1
+        # Độ trễ là thời gian request HTTP của câu ở dạng `form`, tính trên mọi câu.
+        latencies = sorted(q["modes"][mode]["latency_ms"] for q in per_question)
         modes[mode] = {
             **{f"recall@{k}": round(sum(1 for r in ranks if r and r <= k) / n, 4) for k in KS},
             "mrr": round(sum(1 / r for r in ranks if r) / n, 4),
+            "latency_ms": {"p50": round(statistics.median(latencies), 1),
+                           "p95": latencies[math.ceil(0.95 * len(latencies)) - 1],
+                           "mean": round(statistics.fmean(latencies), 1)},
             "failed": [{"id": q["id"], "query": q["query"]}
                        for q in answerable if q["modes"][mode]["rank"] is None],
         }
@@ -245,8 +260,14 @@ def bm25_tokenizer():
     except (OSError, subprocess.SubprocessError) as err:
         print(f"Không đọc được tokenizer BM25: {err}", file=sys.stderr)
         return {"name": "unknown", "indexdef": None}
-    names = re.findall(r'"tokenizer"\s*:\s*\{\s*"type"\s*:\s*"([^"]+)"', out)
-    return {"name": ",".join(sorted(set(names))) or "unknown", "indexdef": out.strip()}
+    # Chỉ mục dạng text_fields JSON (000002_embeddings, eval/bm25-tokenizer.sql).
+    match = re.search(r"text_fields='(.*?)'\)", out, re.S)
+    try:
+        config = json.loads(match.group(1))["content"]["tokenizer"] if match else None
+    except (ValueError, KeyError, TypeError):
+        config = None
+    name = config.get("type", "unknown") if isinstance(config, dict) else "unknown"
+    return {"name": name, "config": config, "indexdef": out.strip()}
 
 
 def model_info(client, kb):
@@ -266,6 +287,8 @@ def main():
     parser.add_argument("--keep-kb", action="store_true", help="giữ knowledge base sau khi chạy")
     parser.add_argument("--out", type=Path, help="file kết quả (mặc định results/<thời điểm>-<commit>.json)")
     parser.add_argument("--parse-timeout", type=int, default=3600, help="giây chờ parse mọi tài liệu")
+    parser.add_argument("--reuse-kb", type=Path, metavar="RESULT",
+                        help="dùng lại knowledge base đã giữ của file kết quả này, không upload, không xoá")
     args = parser.parse_args()
 
     docs, questions = load_inputs()
@@ -273,18 +296,31 @@ def main():
     started = datetime.now().astimezone()
     client = connect(env)
     system = client.request("GET", "/api/v1/system/info")["data"]
-    kb_name = f"e2e-{started:%Y%m%d-%H%M%S}"
-    kb_id = create_knowledge_base(client, kb_name)
+    if args.reuse_kb:
+        loaded = json.loads(args.reuse_kb.read_text(encoding="utf-8"))
+        kb_id, kb_name = loaded["run"]["kb_id"], loaded["run"]["kb_name"]
+        prior = {d["id"]: d for d in loaded["documents"]}
+        if set(prior) != {d["id"] for d in docs}:
+            sys.exit(f"{args.reuse_kb}: tài liệu khác {DOCUMENTS.name}")
+        args.keep_kb = True
+    else:
+        kb_name = f"e2e-{started:%Y%m%d-%H%M%S}"
+        kb_id = create_knowledge_base(client, kb_name)
     kb = client.request("GET", f"/api/v1/knowledge-bases/{kb_id}")["data"]
 
     ok = True
     doc_results, chunks_by_doc = [], {}
     try:
-        uploaded = []
-        for doc in docs:
-            uploaded.append((doc, upload(client, kb_id, ROOT / doc["file"])))
-            print(f"Upload {doc['file']}")
-        parsed = wait_parsed(client, [kid for _, kid in uploaded], args.parse_timeout)
+        if args.reuse_kb:
+            uploaded = [(doc, prior[doc["id"]]["knowledge_id"]) for doc in docs]
+            parsed = {kid: (client.request("GET", f"/api/v1/knowledge/{kid}")["data"],
+                            prior[doc["id"]]["seconds_to_searchable"]) for doc, kid in uploaded}
+        else:
+            uploaded = []
+            for doc in docs:
+                uploaded.append((doc, upload(client, kb_id, ROOT / doc["file"])))
+                print(f"Upload {doc['file']}")
+            parsed = wait_parsed(client, [kid for _, kid in uploaded], args.parse_timeout)
         for doc, knowledge_id in uploaded:
             k, seconds = parsed[knowledge_id]
             status = k["parse_status"]
@@ -319,12 +355,14 @@ def main():
               f"({len(unicode_failed)}/{unicode_check['checked']} lỗi)")
         for mode, s in search_scores["modes"].items():
             recalls = " ".join(f"R@{k}={s[f'recall@{k}']:.2f}" for k in KS)
-            print(f"{mode:8} {recalls} MRR={s['mrr']:.2f} trượt={len(s['failed'])}")
+            print(f"{mode:8} {recalls} MRR={s['mrr']:.2f} trượt={len(s['failed'])} "
+                  f"p50={s['latency_ms']['p50']}ms")
 
         result = {
             "run": {"started_at": started.isoformat(timespec="seconds"),
                     "finished_at": datetime.now().astimezone().isoformat(timespec="seconds"),
-                    "kb_id": kb_id, "kb_name": kb_name, "kb_kept": args.keep_kb},
+                    "kb_id": kb_id, "kb_name": kb_name, "kb_kept": args.keep_kb,
+                    "reused_from": str(args.reuse_kb) if args.reuse_kb else None},
             "fork": {"commit": system.get("commit_id"), "version": system.get("version"),
                      "db_version": system.get("db_version")},
             "tokenizer": bm25_tokenizer(),

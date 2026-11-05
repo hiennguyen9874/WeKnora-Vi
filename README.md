@@ -11,7 +11,8 @@ Repo triển khai WeKnora để hỏi đáp trên tài liệu tiếng Việt. Ng
 | `config/prompt_templates/` | Overlay toàn bộ prompt templates; chỉ ví dụ của rewrite mặc định đổi sang tiếng Việt |
 | `scripts/setup.py` | Cấu hình sau khi dựng: endpoint PaddleOCR-VL, knowledge base mẫu |
 | `scripts/check-db.sh` | In `lc_ctype`, chỉ mục và EXPLAIN truy vấn vector |
-| `scripts/e2e.py` | Script E2E: nạp tài liệu mẫu, kiểm tra chunk, đo recall@k và MRR |
+| `scripts/e2e.py` | Script E2E: nạp tài liệu mẫu, kiểm tra chunk, đo recall@k, MRR và độ trễ |
+| `scripts/bm25_tokenizers.py`, `eval/bm25-tokenizer.sql` | Thí nghiệm tokenizer BM25 (#11): dựng lại chỉ mục theo ứng viên và đo trên cùng dữ liệu |
 | `eval/documents.json` | Tài liệu mẫu (ba PDF và một TXT dạng NFD, nguồn, sha256) và các kiểm tra chunk |
 | `eval/keyword-set.json` | Bộ kiểm tra keyword đã duyệt: 30 câu (26 có đáp án, 4 không có đáp án) |
 | `eval/keyword-set-review.md` | Xác nhận duyệt, đáp án, vị trí nguồn và cách chạy baseline riêng |
@@ -106,6 +107,12 @@ Fork chuẩn hoá nội dung của mọi parser về NFC trước khi chunk (k�
 
 Bằng chứng đỏ → xanh, kết quả E2E và lệnh chạy lại #9: [`docs/validation/issue-9.md`](docs/validation/issue-9.md). Corpus nay có thêm fixture TXT, nên không quy thay đổi điểm so với baseline ba PDF cho riêng NFC.
 
+## Tokenizer BM25
+
+Thí nghiệm #11 (ADR 0002) chọn **`icu` không bỏ dấu**. Nó có R@10 keyword 0,8462 so với 0,8077 của `chinese_lindera`, hybrid ngang nhau, và không sinh token khoảng trắng hay dấu câu. Bảng so sánh, ví dụ token hoá và cách chạy lại: [`docs/validation/issue-11.md`](docs/validation/issue-11.md). Fork vẫn dùng `chinese_lindera` cho tới khi có migration của #12.
+
+`scripts/bm25_tokenizers.py apply <ứng viên>` dựng lại `embeddings_search_idx` bằng `eval/bm25-tokenizer.sql` trên dữ liệu đang có; `apply chinese_lindera` trả về chỉ mục gốc. Chỉ dùng để thí nghiệm: app chưa biết tới đổi này, và migration sau này không đối chiếu với nó.
+
 ## Kiểm tra database
 
 Sau khi upload ít nhất một tài liệu:
@@ -135,7 +142,10 @@ Chạy trên stack đã dựng và đã chạy `scripts/setup.py`. Script chỉ 
 python3 scripts/e2e.py                            # ghi results/<thời điểm>-<commit Fork>.json
 # Chốt lại baseline: dùng stack Fork chưa vá riêng theo eval/keyword-set-review.md
 python3 scripts/e2e.py --keep-kb                  # giữ knowledge base để xem chunk trên UI
+python3 scripts/e2e.py --reuse-kb results/<lần --keep-kb>.json --out results/<tên>.json
 ```
+
+`--reuse-kb` bỏ bước tạo và upload, chạy kiểm tra chunk và Bộ kiểm tra keyword trên knowledge base đã giữ của lần chạy đó, và không xoá nó. Dùng khi so sánh cấu hình tìm kiếm (ví dụ tokenizer BM25) trên cùng chunk, vì OCR có thể chia chunk khác nhau giữa các lần nạp. Chờ tóm tắt chạy nền xong trước khi so sánh, vì nó thêm chunk summary vào chỉ mục.
 
 Mỗi lần chạy:
 
@@ -182,7 +192,7 @@ Script in tóm tắt, rồi ghi file JSON:
 - `fork`, `tokenizer`, `models.embedding` (tên, số chiều), `chunking`: cấu hình đã đo. So sánh hai lần chạy chỉ có nghĩa khi biết phần nào đã đổi.
 - `documents`: trạng thái parse, số giây tới khi tìm kiếm được, số chunk con và chunk cha.
 - `chunk_checks.<tên>`: `pass`, số mục đã kiểm tra và danh sách mục fail.
-- `search.modes.<chế độ>`: `recall@k` (k = 1, 3, 5, 10) là tỉ lệ câu có đáp án mà kết quả trúng đầu tiên nằm trong top k. `mrr` là trung bình 1/hạng của kết quả trúng đầu tiên, câu không trúng trong top 10 tính 0. `failed` là danh sách câu trượt.
+- `search.modes.<chế độ>`: `recall@k` (k = 1, 3, 5, 10) là tỉ lệ câu có đáp án mà kết quả trúng đầu tiên nằm trong top k. `mrr` là trung bình 1/hạng của kết quả trúng đầu tiên, câu không trúng trong top 10 tính 0. `latency_ms` (p50, p95, trung bình) là thời gian request HTTP `hybrid-search` của mọi câu ở dạng `form`. `failed` là danh sách câu trượt.
 - `unicode_equivalence`: `pass`, số cặp đã kiểm tra và các cặp NFC/NFD có danh sách khác nhau. Phải đọc trường này và `chunk_checks.nfc` để nghiệm thu #9; script vẫn thoát 0 khi các kiểm tra này fail để ghi baseline.
 - `questions`: từng câu, với hạng trúng (`rank`, `null` là trượt), điểm cao nhất và 3 kết quả đầu ở mỗi chế độ; `modes.<chế độ>.unicode_equivalence` lưu cả `nfc_ids` và `nfd_ids` để kiểm tra đầy đủ top 10.
 

@@ -1,0 +1,411 @@
+{
+  "pg_search": "0.25.11",
+  "tokenizers": [
+    "default",
+    "keyword",
+    "keyword_deprecated",
+    "raw",
+    "literal_normalized",
+    "white_space",
+    "regex_tokenizer",
+    "chinese_compatible",
+    "source_code",
+    "ngram",
+    "edge_ngram",
+    "chinese_lindera_deprecated",
+    "chinese_lindera",
+    "japanese_lindera_deprecated",
+    "japanese_lindera",
+    "korean_lindera_deprecated",
+    "korean_lindera",
+    "icu",
+    "jieba",
+    "lindera_deprecated",
+    "lindera",
+    "unicode_words_deprecated",
+    "unicode_words"
+  ],
+  "candidates": {
+    "chinese_lindera": {
+      "config": {
+        "type": "chinese_lindera"
+      },
+      "filters": {
+        "tokens": [
+          "điều",
+          " ",
+          "bhxh"
+        ],
+        "ok": true,
+        "observed": {
+          "lowercase": true,
+          "ascii_folding": false
+        },
+        "wanted": {
+          "lowercase": true,
+          "ascii_folding": false
+        }
+      },
+      "samples": {
+        "Điều 11a khoản 1: điều kiện cấp Giấy phép sản xuất vàng miếng theo 117/2026/VBHN-NĐ-NHNN.": [
+          "điều",
+          " ",
+          "11",
+          "a",
+          " ",
+          "khoản",
+          " ",
+          "1",
+          ":",
+          " ",
+          "điều",
+          " ",
+          "kiện",
+          " ",
+          "cấp",
+          " ",
+          "giấy",
+          " ",
+          "phép",
+          " ",
+          "sản",
+          " ",
+          "xuất",
+          " ",
+          "vàng",
+          " ",
+          "miếng",
+          " ",
+          "theo",
+          " ",
+          "117",
+          "/",
+          "2026",
+          "/",
+          "vbhn",
+          "-",
+          "nđ",
+          "-",
+          "nhnn",
+          "."
+        ],
+        "dieu kien cap giay phep san xuat vang mieng": [
+          "dieu",
+          " ",
+          "kien",
+          " ",
+          "cap",
+          " ",
+          "giay",
+          " ",
+          "phep",
+          " ",
+          "san",
+          " ",
+          "xuat",
+          " ",
+          "vang",
+          " ",
+          "mieng"
+        ]
+      }
+    },
+    "chinese_lindera-fold": {
+      "config": {
+        "type": "chinese_lindera",
+        "ascii_folding": true
+      },
+      "filters": {
+        "tokens": [
+          "dieu",
+          " ",
+          "bhxh"
+        ],
+        "ok": true,
+        "observed": {
+          "lowercase": true,
+          "ascii_folding": true
+        },
+        "wanted": {
+          "lowercase": true,
+          "ascii_folding": true
+        }
+      },
+      "samples": {
+        "Điều 11a khoản 1: điều kiện cấp Giấy phép sản xuất vàng miếng theo 117/2026/VBHN-NĐ-NHNN.": [
+          "dieu",
+          " ",
+          "11",
+          "a",
+          " ",
+          "khoan",
+          " ",
+          "1",
+          ":",
+          " ",
+          "dieu",
+          " ",
+          "kien",
+          " ",
+          "cap",
+          " ",
+          "giay",
+          " ",
+          "phep",
+          " ",
+          "san",
+          " ",
+          "xuat",
+          " ",
+          "vang",
+          " ",
+          "mieng",
+          " ",
+          "theo",
+          " ",
+          "117",
+          "/",
+          "2026",
+          "/",
+          "vbhn",
+          "-",
+          "nd",
+          "-",
+          "nhnn",
+          "."
+        ],
+        "dieu kien cap giay phep san xuat vang mieng": [
+          "dieu",
+          " ",
+          "kien",
+          " ",
+          "cap",
+          " ",
+          "giay",
+          " ",
+          "phep",
+          " ",
+          "san",
+          " ",
+          "xuat",
+          " ",
+          "vang",
+          " ",
+          "mieng"
+        ]
+      }
+    },
+    "icu": {
+      "config": {
+        "type": "icu"
+      },
+      "filters": {
+        "tokens": [
+          "điều",
+          "bhxh"
+        ],
+        "ok": true,
+        "observed": {
+          "lowercase": true,
+          "ascii_folding": false
+        },
+        "wanted": {
+          "lowercase": true,
+          "ascii_folding": false
+        }
+      },
+      "samples": {
+        "Điều 11a khoản 1: điều kiện cấp Giấy phép sản xuất vàng miếng theo 117/2026/VBHN-NĐ-NHNN.": [
+          "điều",
+          "11a",
+          "khoản",
+          "1",
+          "điều",
+          "kiện",
+          "cấp",
+          "giấy",
+          "phép",
+          "sản",
+          "xuất",
+          "vàng",
+          "miếng",
+          "theo",
+          "117",
+          "2026",
+          "vbhn",
+          "nđ",
+          "nhnn"
+        ],
+        "dieu kien cap giay phep san xuat vang mieng": [
+          "dieu",
+          "kien",
+          "cap",
+          "giay",
+          "phep",
+          "san",
+          "xuat",
+          "vang",
+          "mieng"
+        ]
+      }
+    },
+    "icu-fold": {
+      "config": {
+        "type": "icu",
+        "ascii_folding": true
+      },
+      "filters": {
+        "tokens": [
+          "dieu",
+          "bhxh"
+        ],
+        "ok": true,
+        "observed": {
+          "lowercase": true,
+          "ascii_folding": true
+        },
+        "wanted": {
+          "lowercase": true,
+          "ascii_folding": true
+        }
+      },
+      "samples": {
+        "Điều 11a khoản 1: điều kiện cấp Giấy phép sản xuất vàng miếng theo 117/2026/VBHN-NĐ-NHNN.": [
+          "dieu",
+          "11a",
+          "khoan",
+          "1",
+          "dieu",
+          "kien",
+          "cap",
+          "giay",
+          "phep",
+          "san",
+          "xuat",
+          "vang",
+          "mieng",
+          "theo",
+          "117",
+          "2026",
+          "vbhn",
+          "nd",
+          "nhnn"
+        ],
+        "dieu kien cap giay phep san xuat vang mieng": [
+          "dieu",
+          "kien",
+          "cap",
+          "giay",
+          "phep",
+          "san",
+          "xuat",
+          "vang",
+          "mieng"
+        ]
+      }
+    },
+    "whitespace": {
+      "config": {
+        "type": "whitespace",
+        "lowercase": true
+      },
+      "filters": {
+        "tokens": [
+          "điều",
+          "bhxh"
+        ],
+        "ok": true,
+        "observed": {
+          "lowercase": true,
+          "ascii_folding": false
+        },
+        "wanted": {
+          "lowercase": true,
+          "ascii_folding": false
+        }
+      },
+      "samples": {
+        "Điều 11a khoản 1: điều kiện cấp Giấy phép sản xuất vàng miếng theo 117/2026/VBHN-NĐ-NHNN.": [
+          "điều",
+          "11a",
+          "khoản",
+          "1:",
+          "điều",
+          "kiện",
+          "cấp",
+          "giấy",
+          "phép",
+          "sản",
+          "xuất",
+          "vàng",
+          "miếng",
+          "theo",
+          "117/2026/vbhn-nđ-nhnn."
+        ],
+        "dieu kien cap giay phep san xuat vang mieng": [
+          "dieu",
+          "kien",
+          "cap",
+          "giay",
+          "phep",
+          "san",
+          "xuat",
+          "vang",
+          "mieng"
+        ]
+      }
+    },
+    "whitespace-fold": {
+      "config": {
+        "type": "whitespace",
+        "lowercase": true,
+        "ascii_folding": true
+      },
+      "filters": {
+        "tokens": [
+          "dieu",
+          "bhxh"
+        ],
+        "ok": true,
+        "observed": {
+          "lowercase": true,
+          "ascii_folding": true
+        },
+        "wanted": {
+          "lowercase": true,
+          "ascii_folding": true
+        }
+      },
+      "samples": {
+        "Điều 11a khoản 1: điều kiện cấp Giấy phép sản xuất vàng miếng theo 117/2026/VBHN-NĐ-NHNN.": [
+          "dieu",
+          "11a",
+          "khoan",
+          "1:",
+          "dieu",
+          "kien",
+          "cap",
+          "giay",
+          "phep",
+          "san",
+          "xuat",
+          "vang",
+          "mieng",
+          "theo",
+          "117/2026/vbhn-nd-nhnn."
+        ],
+        "dieu kien cap giay phep san xuat vang mieng": [
+          "dieu",
+          "kien",
+          "cap",
+          "giay",
+          "phep",
+          "san",
+          "xuat",
+          "vang",
+          "mieng"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,456 @@
+{
+  "reuse_kb": "results/bm25-load.json",
+  "candidates": {
+    "chinese_lindera": {
+      "config": {
+        "type": "chinese_lindera"
+      },
+      "index": {
+        "rows": 693,
+        "indexed": 693,
+        "term_probes": {
+          "điều": 393,
+          "dieu": 3,
+          "bhxh": 0,
+          "vàng": 208,
+          "vang": 0,
+          " ": 687,
+          "117/2026/vbhn-nđ-nhnn": 0
+        }
+      },
+      "result": "bm25-chinese_lindera.json",
+      "modes": {
+        "keyword": {
+          "recall@1": 0.5,
+          "recall@3": 0.6538,
+          "recall@5": 0.7308,
+          "recall@10": 0.8077,
+          "mrr": 0.5984,
+          "latency_ms": {
+            "p50": 7.0,
+            "p95": 11.1,
+            "mean": 7.4
+          },
+          "failed": [
+            "q06",
+            "q14",
+            "q15",
+            "q21",
+            "q30"
+          ]
+        },
+        "vector": {
+          "recall@1": 0.7308,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.8846,
+          "mrr": 0.7804,
+          "latency_ms": {
+            "p50": 43.8,
+            "p95": 57.1,
+            "mean": 44.9
+          },
+          "failed": [
+            "q09",
+            "q17",
+            "q21"
+          ]
+        },
+        "hybrid": {
+          "recall@1": 0.6923,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.9231,
+          "mrr": 0.7628,
+          "latency_ms": {
+            "p50": 46.4,
+            "p95": 55.3,
+            "mean": 46.9
+          },
+          "failed": [
+            "q09",
+            "q17"
+          ]
+        }
+      },
+      "unicode_equivalence": true
+    },
+    "chinese_lindera-fold": {
+      "config": {
+        "type": "chinese_lindera",
+        "ascii_folding": true
+      },
+      "index": {
+        "rows": 693,
+        "indexed": 693,
+        "term_probes": {
+          "điều": 0,
+          "dieu": 393,
+          "bhxh": 0,
+          "vàng": 0,
+          "vang": 208,
+          " ": 687,
+          "117/2026/vbhn-nđ-nhnn": 0
+        }
+      },
+      "result": "bm25-chinese_lindera-fold.json",
+      "modes": {
+        "keyword": {
+          "recall@1": 0.5769,
+          "recall@3": 0.6923,
+          "recall@5": 0.7692,
+          "recall@10": 0.7692,
+          "mrr": 0.6519,
+          "latency_ms": {
+            "p50": 7.1,
+            "p95": 8.5,
+            "mean": 6.9
+          },
+          "failed": [
+            "q09",
+            "q14",
+            "q15",
+            "q17",
+            "q21",
+            "q30"
+          ]
+        },
+        "vector": {
+          "recall@1": 0.7308,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.8846,
+          "mrr": 0.7804,
+          "latency_ms": {
+            "p50": 44.3,
+            "p95": 52.4,
+            "mean": 44.7
+          },
+          "failed": [
+            "q09",
+            "q17",
+            "q21"
+          ]
+        },
+        "hybrid": {
+          "recall@1": 0.6923,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.9231,
+          "mrr": 0.7676,
+          "latency_ms": {
+            "p50": 45.9,
+            "p95": 54.5,
+            "mean": 46.4
+          },
+          "failed": [
+            "q09",
+            "q17"
+          ]
+        }
+      },
+      "unicode_equivalence": true
+    },
+    "icu": {
+      "config": {
+        "type": "icu"
+      },
+      "index": {
+        "rows": 693,
+        "indexed": 693,
+        "term_probes": {
+          "điều": 393,
+          "dieu": 3,
+          "bhxh": 0,
+          "vàng": 208,
+          "vang": 0,
+          " ": 0,
+          "117/2026/vbhn-nđ-nhnn": 0
+        }
+      },
+      "result": "bm25-icu.json",
+      "modes": {
+        "keyword": {
+          "recall@1": 0.5385,
+          "recall@3": 0.6154,
+          "recall@5": 0.6923,
+          "recall@10": 0.8462,
+          "mrr": 0.6167,
+          "latency_ms": {
+            "p50": 6.3,
+            "p95": 8.5,
+            "mean": 6.3
+          },
+          "failed": [
+            "q06",
+            "q14",
+            "q15",
+            "q30"
+          ]
+        },
+        "vector": {
+          "recall@1": 0.7308,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.8846,
+          "mrr": 0.7804,
+          "latency_ms": {
+            "p50": 41.5,
+            "p95": 45.4,
+            "mean": 42.4
+          },
+          "failed": [
+            "q09",
+            "q17",
+            "q21"
+          ]
+        },
+        "hybrid": {
+          "recall@1": 0.6923,
+          "recall@3": 0.8462,
+          "recall@5": 0.8846,
+          "recall@10": 0.9231,
+          "mrr": 0.7632,
+          "latency_ms": {
+            "p50": 44.7,
+            "p95": 53.7,
+            "mean": 44.3
+          },
+          "failed": [
+            "q09",
+            "q17"
+          ]
+        }
+      },
+      "unicode_equivalence": true
+    },
+    "icu-fold": {
+      "config": {
+        "type": "icu",
+        "ascii_folding": true
+      },
+      "index": {
+        "rows": 693,
+        "indexed": 693,
+        "term_probes": {
+          "điều": 0,
+          "dieu": 393,
+          "bhxh": 0,
+          "vàng": 0,
+          "vang": 208,
+          " ": 0,
+          "117/2026/vbhn-nđ-nhnn": 0
+        }
+      },
+      "result": "bm25-icu-fold.json",
+      "modes": {
+        "keyword": {
+          "recall@1": 0.5769,
+          "recall@3": 0.6923,
+          "recall@5": 0.7692,
+          "recall@10": 0.7692,
+          "mrr": 0.6455,
+          "latency_ms": {
+            "p50": 6.2,
+            "p95": 7.5,
+            "mean": 6.3
+          },
+          "failed": [
+            "q09",
+            "q14",
+            "q15",
+            "q17",
+            "q21",
+            "q30"
+          ]
+        },
+        "vector": {
+          "recall@1": 0.7308,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.8846,
+          "mrr": 0.7804,
+          "latency_ms": {
+            "p50": 42.5,
+            "p95": 49.1,
+            "mean": 42.7
+          },
+          "failed": [
+            "q09",
+            "q17",
+            "q21"
+          ]
+        },
+        "hybrid": {
+          "recall@1": 0.6923,
+          "recall@3": 0.8462,
+          "recall@5": 0.8846,
+          "recall@10": 0.9231,
+          "mrr": 0.7696,
+          "latency_ms": {
+            "p50": 43.5,
+            "p95": 47.8,
+            "mean": 43.7
+          },
+          "failed": [
+            "q09",
+            "q17"
+          ]
+        }
+      },
+      "unicode_equivalence": true
+    },
+    "whitespace": {
+      "config": {
+        "type": "whitespace",
+        "lowercase": true
+      },
+      "index": {
+        "rows": 693,
+        "indexed": 693,
+        "term_probes": {
+          "điều": 392,
+          "dieu": 0,
+          "bhxh": 0,
+          "vàng": 208,
+          "vang": 0,
+          " ": 0,
+          "117/2026/vbhn-nđ-nhnn": 3
+        }
+      },
+      "result": "bm25-whitespace.json",
+      "modes": {
+        "keyword": {
+          "recall@1": 0.5385,
+          "recall@3": 0.6538,
+          "recall@5": 0.6923,
+          "recall@10": 0.8077,
+          "mrr": 0.616,
+          "latency_ms": {
+            "p50": 5.8,
+            "p95": 7.6,
+            "mean": 6.0
+          },
+          "failed": [
+            "q06",
+            "q14",
+            "q15",
+            "q21",
+            "q30"
+          ]
+        },
+        "vector": {
+          "recall@1": 0.7308,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.8846,
+          "mrr": 0.7804,
+          "latency_ms": {
+            "p50": 42.7,
+            "p95": 54.8,
+            "mean": 43.2
+          },
+          "failed": [
+            "q09",
+            "q17",
+            "q21"
+          ]
+        },
+        "hybrid": {
+          "recall@1": 0.6923,
+          "recall@3": 0.8846,
+          "recall@5": 0.8846,
+          "recall@10": 0.9231,
+          "mrr": 0.7676,
+          "latency_ms": {
+            "p50": 43.0,
+            "p95": 51.9,
+            "mean": 48.0
+          },
+          "failed": [
+            "q09",
+            "q17"
+          ]
+        }
+      },
+      "unicode_equivalence": true
+    },
+    "whitespace-fold": {
+      "config": {
+        "type": "whitespace",
+        "lowercase": true,
+        "ascii_folding": true
+      },
+      "index": {
+        "rows": 693,
+        "indexed": 693,
+        "term_probes": {
+          "điều": 0,
+          "dieu": 392,
+          "bhxh": 0,
+          "vàng": 0,
+          "vang": 208,
+          " ": 0,
+          "117/2026/vbhn-nđ-nhnn": 0
+        }
+      },
+      "result": "bm25-whitespace-fold.json",
+      "modes": {
+        "keyword": {
+          "recall@1": 0.5385,
+          "recall@3": 0.6154,
+          "recall@5": 0.7308,
+          "recall@10": 0.7692,
+          "mrr": 0.6103,
+          "latency_ms": {
+            "p50": 5.7,
+            "p95": 7.3,
+            "mean": 5.9
+          },
+          "failed": [
+            "q09",
+            "q14",
+            "q15",
+            "q17",
+            "q21",
+            "q30"
+          ]
+        },
+        "vector": {
+          "recall@1": 0.7308,
+          "recall@3": 0.8462,
+          "recall@5": 0.8462,
+          "recall@10": 0.8846,
+          "mrr": 0.7804,
+          "latency_ms": {
+            "p50": 43.0,
+            "p95": 47.8,
+            "mean": 42.3
+          },
+          "failed": [
+            "q09",
+            "q17",
+            "q21"
+          ]
+        },
+        "hybrid": {
+          "recall@1": 0.6923,
+          "recall@3": 0.8462,
+          "recall@5": 0.8846,
+          "recall@10": 0.9231,
+          "mrr": 0.7684,
+          "latency_ms": {
+            "p50": 43.2,
+            "p95": 47.6,
+            "mean": 42.8
+          },
+          "failed": [
+            "q09",
+            "q17"
+          ]
+        }
+      },
+      "unicode_equivalence": true
+    }
+  }
+}
