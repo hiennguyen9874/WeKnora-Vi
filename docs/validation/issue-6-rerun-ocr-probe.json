@@ -1,0 +1,443 @@
+{
+  "logId": "5a45885b-5ac8-4a94-ab01-5d1649bf5c2a",
+  "errorCode": 0,
+  "errorMsg": "Success",
+  "result": {
+    "layoutParsingResults": [
+      {
+        "prunedResult": {
+          "page_count": 1,
+          "width": 1654,
+          "height": 2339,
+          "model_settings": {
+            "use_doc_preprocessor": false,
+            "use_layout_detection": true,
+            "use_chart_recognition": false,
+            "use_seal_recognition": false,
+            "use_ocr_for_image_block": false,
+            "format_block_content": false,
+            "merge_layout_blocks": false,
+            "restructure_pages": false,
+            "markdown_ignore_labels": [
+              "header",
+              "header_image",
+              "footer",
+              "footer_image",
+              "number",
+              "aside_text"
+            ],
+            "parsing_mode": "two-stage"
+          },
+          "parsing_res_list": [
+            {
+              "block_label": "header",
+              "monkey_label": "Page-header",
+              "block_content": "CÔNG BÁO/Số 576-VBHN/Ngày 29-10-2026",
+              "block_bbox": [
+                496,
+                58,
+                1236,
+                110
+              ],
+              "block_id": 0,
+              "block_order": 1
+            },
+            {
+              "block_label": "header",
+              "monkey_label": "Page-header",
+              "block_content": "2",
+              "block_bbox": [
+                1474,
+                68,
+                1495,
+                101
+              ],
+              "block_id": 1,
+              "block_order": 2
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "VĂN BẢN HỢP NHẤT",
+              "block_bbox": [
+                291,
+                203,
+                658,
+                250
+              ],
+              "block_id": 2,
+              "block_order": 3
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Số: 117/2026/VBHN-NĐ-NHNN",
+              "block_bbox": [
+                250,
+                285,
+                701,
+                325
+              ],
+              "block_id": 3,
+              "block_order": 4
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập – Tự do – Hạnh phúc",
+              "block_bbox": [
+                733,
+                159,
+                1490,
+                248
+              ],
+              "block_id": 4,
+              "block_order": 5
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Hà Nội, ngày 28 tháng 10 năm 2026",
+              "block_bbox": [
+                849,
+                288,
+                1379,
+                330
+              ],
+              "block_id": 5,
+              "block_order": 6
+            },
+            {
+              "block_label": "paragraph_title",
+              "monkey_label": "Section-header",
+              "block_content": "NGHỊ ĐỊNH\nVề quản lý hoạt động kinh doanh vàng",
+              "block_bbox": [
+                541,
+                428,
+                1189,
+                517
+              ],
+              "block_id": 6,
+              "block_order": 7
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng, có hiệu lực kể từ ngày 25 tháng 5 năm 2012, được sửa đổi, bổ sung bởi:",
+              "block_bbox": [
+                233,
+                582,
+                1499,
+                723
+              ],
+              "block_id": 7,
+              "block_order": 8
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "1. Nghị định số 232/2025/NĐ-CP ngày 26 tháng 8 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng, có hiệu lực kể từ ngày 10 tháng 10 năm 2025.",
+              "block_bbox": [
+                233,
+                725,
+                1499,
+                910
+              ],
+              "block_id": 8,
+              "block_order": 9
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "2. Nghị định số 390/2026/NĐ-CP ngày 16 tháng 10 năm 2026 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng được sửa đổi, bổ sung bởi Nghị định số 232/2025/NĐ-CP, có hiệu lực kể từ ngày",
+              "block_bbox": [
+                233,
+                915,
+                1499,
+                1097
+              ],
+              "block_id": 9,
+              "block_order": 10
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Căn cứ Luật Tổ chức Chính phủ ngày 25 tháng 12 năm 2001;",
+              "block_bbox": [
+                334,
+                1099,
+                1295,
+                1151
+              ],
+              "block_id": 10,
+              "block_order": 11
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Căn cứ Luật thương mại số 36/2005/QH11 ngày 14 tháng 6 năm 2005;",
+              "block_bbox": [
+                334,
+                1153,
+                1444,
+                1205
+              ],
+              "block_id": 11,
+              "block_order": 12
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Căn cứ Luật doanh nghiệp ngày 29 tháng 11 năm 2005;",
+              "block_bbox": [
+                334,
+                1212,
+                1207,
+                1258
+              ],
+              "block_id": 12,
+              "block_order": 13
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Căn cứ Luật Ngân hàng Nhà nước Việt Nam số 46/2010/QH12 ngày 16 tháng 6 năm 2010;",
+              "block_bbox": [
+                233,
+                1261,
+                1495,
+                1354
+              ],
+              "block_id": 13,
+              "block_order": 14
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Căn cứ Luật các tổ chức tín dụng số 47/2010/QH12 ngày 16 tháng 6 năm 2010;",
+              "block_bbox": [
+                334,
+                1359,
+                1495,
+                1408
+              ],
+              "block_id": 14,
+              "block_order": 15
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Theo đề nghị của Thống đốc Ngân hàng Nhà nước Việt Nam;",
+              "block_bbox": [
+                334,
+                1410,
+                1292,
+                1462
+              ],
+              "block_id": 15,
+              "block_order": 16
+            },
+            {
+              "block_label": "text",
+              "monkey_label": "Text",
+              "block_content": "Chính phủ ban hành Nghị định về quản lý hoạt động kinh doanh vàng¹.",
+              "block_bbox": [
+                334,
+                1464,
+                1444,
+                1516
+              ],
+              "block_id": 16,
+              "block_order": 17
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "¹ Nghị định số 232/2025/NĐ-CP có căn cứ ban hành như sau:",
+              "block_bbox": [
+                334,
+                1565,
+                1164,
+                1609
+              ],
+              "block_id": 17,
+              "block_order": 18
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "“Căn cứ Luật Tổ chức Chính phủ số 63/2025/QH15;",
+              "block_bbox": [
+                334,
+                1607,
+                1042,
+                1647
+              ],
+              "block_id": 18,
+              "block_order": 19
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Căn cứ Luật Ngân hàng Nhà nước Việt Nam số 46/2010/QH12;",
+              "block_bbox": [
+                334,
+                1644,
+                1184,
+                1686
+              ],
+              "block_id": 19,
+              "block_order": 20
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Căn cứ Luật Các tổ chức tín dụng số 32/2024/QH15;",
+              "block_bbox": [
+                334,
+                1684,
+                1045,
+                1724
+              ],
+              "block_id": 20,
+              "block_order": 21
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Căn cứ Luật Quản lý ngoại thương số 05/2017/QH14;",
+              "block_bbox": [
+                334,
+                1722,
+                1062,
+                1764
+              ],
+              "block_id": 21,
+              "block_order": 22
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Căn cứ Luật Thương mại số 36/2005/QH11;",
+              "block_bbox": [
+                334,
+                1761,
+                928,
+                1801
+              ],
+              "block_id": 22,
+              "block_order": 23
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Căn cứ Luật Doanh nghiệp số 59/2020/QH14 được sửa đổi, bổ sung bởi Luật số 76/2025/QH15;",
+              "block_bbox": [
+                233,
+                1796,
+                1499,
+                1876
+              ],
+              "block_id": 23,
+              "block_order": 24
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Căn cứ Luật Đầu tư số 61/2020/QH14 được sửa đổi, bổ sung bởi các Luật số 57/2024/QH15 và Luật số 90/2025/QH15;",
+              "block_bbox": [
+                233,
+                1871,
+                1499,
+                1953
+              ],
+              "block_id": 24,
+              "block_order": 25
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Theo đề nghị của Thống đốc Ngân hàng Nhà nước Việt Nam;",
+              "block_bbox": [
+                334,
+                1951,
+                1151,
+                1993
+              ],
+              "block_id": 25,
+              "block_order": 26
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Chính phủ ban hành Nghị định sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng.”",
+              "block_bbox": [
+                283,
+                1988,
+                1499,
+                2070
+              ],
+              "block_id": 26,
+              "block_order": 27
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Nghị định số 390/2026/NĐ-CP có căn cứ ban hành như sau:",
+              "block_bbox": [
+                283,
+                2065,
+                1093,
+                2107
+              ],
+              "block_id": 27,
+              "block_order": 28
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "“Căn cứ Luật Tổ chức Chính phủ số 63/2025/QH15;",
+              "block_bbox": [
+                283,
+                2105,
+                991,
+                2147
+              ],
+              "block_id": 28,
+              "block_order": 29
+            },
+            {
+              "block_label": "footnote",
+              "monkey_label": "Footnote",
+              "block_content": "Căn cứ Luật Ngân hàng Nhà nước Việt Nam số 46/2010/QH12;",
+              "block_bbox": [
+                283,
+                2143,
+                1135,
+                2185
+              ],
+              "block_id": 29,
+              "block_order": 30
+            }
+          ]
+        },
+        "markdown": {
+          "text": "VĂN BẢN HỢP NHẤT\n\nSố: 117/2026/VBHN-NĐ-NHNN\n\nCỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập – Tự do – Hạnh phúc\n\nHà Nội, ngày 28 tháng 10 năm 2026\n\n## NGHỊ ĐỊNH Về quản lý hoạt động kinh doanh vàng\n\nNghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng, có hiệu lực kể từ ngày 25 tháng 5 năm 2012, được sửa đổi, bổ sung bởi:\n\n1. Nghị định số 232/2025/NĐ-CP ngày 26 tháng 8 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng, có hiệu lực kể từ ngày 10 tháng 10 năm 2025.\n\n2. Nghị định số 390/2026/NĐ-CP ngày 16 tháng 10 năm 2026 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng được sửa đổi, bổ sung bởi Nghị định số 232/2025/NĐ-CP, có hiệu lực kể từ ngày\n\nCăn cứ Luật Tổ chức Chính phủ ngày 25 tháng 12 năm 2001;\n\nCăn cứ Luật thương mại số 36/2005/QH11 ngày 14 tháng 6 năm 2005;\n\nCăn cứ Luật doanh nghiệp ngày 29 tháng 11 năm 2005;\n\nCăn cứ Luật Ngân hàng Nhà nước Việt Nam số 46/2010/QH12 ngày 16 tháng 6 năm 2010;\n\nCăn cứ Luật các tổ chức tín dụng số 47/2010/QH12 ngày 16 tháng 6 năm 2010;\n\nTheo đề nghị của Thống đốc Ngân hàng Nhà nước Việt Nam;\n\nChính phủ ban hành Nghị định về quản lý hoạt động kinh doanh vàng¹.\n\n¹ Nghị định số 232/2025/NĐ-CP có căn cứ ban hành như sau:\n\n“Căn cứ Luật Tổ chức Chính phủ số 63/2025/QH15;\n\nCăn cứ Luật Ngân hàng Nhà nước Việt Nam số 46/2010/QH12;\n\nCăn cứ Luật Các tổ chức tín dụng số 32/2024/QH15;\n\nCăn cứ Luật Quản lý ngoại thương số 05/2017/QH14;\n\nCăn cứ Luật Thương mại số 36/2005/QH11;\n\nCăn cứ Luật Doanh nghiệp số 59/2020/QH14 được sửa đổi, bổ sung bởi Luật số 76/2025/QH15;\n\nCăn cứ Luật Đầu tư số 61/2020/QH14 được sửa đổi, bổ sung bởi các Luật số 57/2024/QH15 và Luật số 90/2025/QH15;\n\nTheo đề nghị của Thống đốc Ngân hàng Nhà nước Việt Nam;\n\nChính phủ ban hành Nghị định sửa đổi, bổ sung một số điều của Nghị định số 24/2012/NĐ-CP ngày 03 tháng 4 năm 2012 của Chính phủ về quản lý hoạt động kinh doanh vàng.”\n\nNghị định số 390/2026/NĐ-CP có căn cứ ban hành như sau:\n\n“Căn cứ Luật Tổ chức Chính phủ số 63/2025/QH15;\n\nCăn cứ Luật Ngân hàng Nhà nước Việt Nam số 46/2010/QH12;",
+          "images": {}
+        },
+        "outputImages": null,
+        "inputImage": null
+      }
+    ],
+    "dataInfo": {
+      "type": "pdf",
+      "numPages": 1,
+      "pages": [
+        {
+          "width": 1654,
+          "height": 2339
+        }
+      ]
+    }
+  }
+}

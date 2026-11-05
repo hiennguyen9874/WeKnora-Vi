@@ -96,7 +96,7 @@ Kết quả kiểm chứng #5 và cách chạy lại: [`docs/validation/issue-5.
 
 ## Footnote khi OCR
 
-Fork không còn bỏ nhãn `footnote` trong request PaddleOCR-VL; header, footer, số trang và aside vẫn nằm trong danh sách bỏ qua. Go test đã chạy đỏ → xanh, nhưng nghiệm thu #6 trên stack **còn bị chặn**: gateway OCR ở chế độ `two-stage` trả nội dung rỗng cho block Footnote. Cả sáu kiểm tra footnote và ba câu hỏi footnote hybrid vẫn fail. Cần sửa nhận dạng Footnote trong gateway rồi nạp lại tài liệu; không thể khôi phục text chỉ bằng đổi danh sách nhãn. Xem [kết quả E2E và probe gateway](docs/validation/issue-6.md).
+Fork không còn bỏ nhãn `footnote` trong request PaddleOCR-VL; header, footer, số trang và aside vẫn nằm trong danh sách bỏ qua. Go test đã chạy đỏ → xanh. Sau khi gateway nhận dạng được Footnote ở chế độ `two-stage`, nghiệm thu #6 trên stack **pass**: giữ 6/6 đoạn chú thích, ba câu footnote `q07`, `q25`, `q26` được tìm thấy bằng hybrid ở hạng 6/1/1; các mẫu header/số trang được dò không xuất hiện trong 400 chunk. Gateway phải có bản sửa nhận dạng Footnote (gateway #19); đổi danh sách nhãn phía Fork không thể khôi phục text từ gateway cũ. Xem [kết quả E2E, giới hạn kiểm chứng và cách chạy lại](docs/validation/issue-6.md).
 
 ## Kiểm tra database
 

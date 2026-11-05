@@ -1,6 +1,41 @@
 # #6 — Giữ footnote trong request PaddleOCR-VL
 
-## Trạng thái: đã vá Fork, nghiệm thu trên stack còn bị chặn
+## Trạng thái: đạt nghiệm thu #6 trên stack
+
+Lần chạy lại ngày 2026-11-05, sau khi gateway đã có khả năng nhận dạng Footnote, đạt mọi tiêu chí nghiệm thu #6. Không sửa thêm code Fork, gateway, parsing mode, cấu hình chunk hoặc Bộ kiểm tra keyword. Phần bên dưới giữ nguyên bằng chứng lần chạy ban đầu bị chặn để đối chiếu.
+
+## Nghiệm thu sau khi gateway nhận dạng Footnote
+
+- [x] Go test fake server đã đỏ → xanh ở lần vá ban đầu; chạy lại `go test ./internal/infrastructure/docparser -count=1` pass toàn bộ package (3,738 giây).
+- [x] Probe trực tiếp trang 1: **13/13** block `footnote` có text trong chế độ `two-stage`; Markdown chứa chú thích mong đợi, không có các mẫu header/số trang được dò.
+- [x] Nạp mới ba tài liệu: footnote **6/6**, tiêu đề Điều **27/27**, breadcrumb **5/5**, NFC **400/400** pass. Không thấy mẫu header Công báo/chữ ký hoặc dòng số trang độc lập trong 400 chunk cha/con.
+- [x] Ba câu footnote đều tìm thấy trong hybrid top 10: `q07` hạng **6**, `q25` hạng **1**, `q26` hạng **1**.
+- [x] Lưu [E2E đầy đủ](issue-6-rerun-e2e.json), [response probe](issue-6-rerun-ocr-probe.json) và [metadata, log, phép dò nhiễu, cleanup](issue-6-rerun.json). Không ghi đè baseline hoặc artifact lần chạy thất bại.
+
+Lần chạy **13:54:47–14:00:02 (+07:00)** dùng tokenizer `chinese_lindera`, embedding `Qwen3-VL-Embedding-2B` 1024 chiều và chunk cha/con 4096/384, strategy `auto` như trước.
+
+| Chế độ | Recall@1 | Recall@10 | MRR |
+| --- | --- | --- | --- |
+| Keyword | 0,4615 | 0,7308 | 0,5487 |
+| Vector | 0,7308 | 0,9231 | 0,7843 |
+| Hybrid | 0,7308 | 0,9231 | 0,7897 |
+
+Hybrid vẫn trượt `q09` (bảng) và `q17` (dấu hợp quy); không thuộc ba câu footnote của #6. Không nới đáp án hoặc kiểm tra. Các phép dò nhiễu chỉ phủ mẫu cụ thể của tài liệu mẫu; Go test kiểm tra footer/aside vẫn nằm trong danh sách bỏ qua.
+
+App không rebuild: image vẫn là `weknora-vi/app:45787b40fb17-dirty`, cùng image ID của lần kiểm chứng ban đầu. SHA-256 hai file bản vá khớp artifact cũ và checkout Fork `5ce8e8c36d4e65f3c6c736557245e2c71e40a716`; không đổi metadata runtime thành hash mới. Checkout gateway đang ở `46464bc750443f541524261b14e568a32e061204`, nhưng **chưa xác minh SHA của tiến trình gateway từ xa**. Kết luận về khả năng nhận dạng dựa trên response thật, không suy ra phiên bản deploy từ checkout.
+
+### Chạy lại nghiệm thu
+
+Chạy probe theo hướng dẫn cuối trang, rồi:
+
+```sh
+(cd references/WeKnora && go test ./internal/infrastructure/docparser -count=1)
+python3 scripts/e2e.py --out results/issue-6-rerun-e2e.json
+```
+
+Đọc `chunk_checks.footnotes` (phải pass 6/6), các chunk check còn lại và `questions` → `modes.hybrid.rank` của `q07`, `q25`, `q26` (không null, ≤ 10). Script không thoát lỗi vì chunk check fail, nên không dùng exit code làm bằng chứng nghiệm thu. Lệnh trên tự xoá knowledge base tạm; lần chạy lưu artifact dùng `--keep-kb` để dò nhiễu trước, rồi đã xoá qua API và xác minh GET trả **404** lúc 14:00:12. Không xoá tài nguyên có sẵn.
+
+## Lần chạy ban đầu: đã vá Fork, gateway còn chặn nghiệm thu
 
 Bản vá của [#6](https://github.com/hiennguyen9874/WeKnora-Vi/issues/6), thuộc spec #1, chỉ bỏ `footnote` khỏi `markdownIgnoreLabels`. `header`, `header_image`, `footer`, `footer_image`, `number`, `aside_text` và mọi tham số khác giữ nguyên. Hàm tạo tham số dùng chung cho reader self-hosted và cloud nên cả hai cùng giữ footnote; lần kiểm chứng này chỉ gọi self-hosted `/layout-parsing`.
 
@@ -24,7 +59,7 @@ go test ./internal/infrastructure/docparser -count=1
 
 Test gọi `PaddleOCRVLReader.Read` qua HTTP fake server, không gọi trực tiếp hàm tạo map tham số. Bản vá production chỉ thay một dòng danh sách nhãn.
 
-## E2E trên stack
+## E2E trên stack — lần chạy ban đầu
 
 ```sh
 ./scripts/compose.sh build app
@@ -55,7 +90,7 @@ Không quy mức tăng so với `results/baseline.json` cho bản vá footnote: 
 
 Knowledge base tạm được giữ để đọc chunk, rồi đã xoá qua API; GET sau xoá trả 404. `run.kb_kept: true` trong kết quả gốc mô tả thời điểm script kết thúc; thời điểm dọn sau đó nằm trong `issue-6.json.cleanup`. Không xoá knowledge base có sẵn.
 
-## Blocker: gateway không nhận dạng nội dung Footnote ở chế độ two-stage
+## Blocker lịch sử: gateway không nhận dạng nội dung Footnote ở chế độ two-stage
 
 Đã tạo issue [MonkeyOCRv2-B-Parsing-Gateway #19](https://github.com/hiennguyen9874/MonkeyOCRv2-B-Parsing-Gateway/issues/19), liên kết ngược tới WeKnora-Vi #6, để xử lý nhận dạng Footnote và chốt ràng buộc tương đương Upstream.
 
@@ -92,4 +127,4 @@ with urllib.request.urlopen(req, timeout=300) as response:
 PY
 ```
 
-Cần bật nhận dạng Footnote trong gateway OCR, deploy bản sửa đó rồi nạp lại tài liệu và chạy lại E2E. Chỉ sửa Markdown filtering trong Fork không thể khôi phục text mà gateway chưa nhận dạng. #6 **chưa đạt nghiệm thu đầy đủ**; không đổi câu hỏi/đáp án, không nới kiểm tra để biến kết quả đỏ thành xanh.
+Ở thời điểm lần chạy ban đầu, cần bật nhận dạng Footnote trong gateway OCR, deploy bản sửa đó rồi nạp lại tài liệu và chạy lại E2E. Chỉ sửa Markdown filtering trong Fork không thể khôi phục text mà gateway chưa nhận dạng. Blocker này đã được giải quyết về hành vi trên stack trong lần nghiệm thu đầu trang; artifact cũ vẫn giữ kết quả thất bại thực tế.
