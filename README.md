@@ -94,6 +94,10 @@ Sau khi sửa overlay, recreate app để nạp lại (không cần build nếu 
 
 Kết quả kiểm chứng #5 và cách chạy lại: [`docs/validation/issue-5.md`](docs/validation/issue-5.md). Đã kiểm tra summary, rewrite, caption và câu hỏi gợi ý qua API với `Accept-Language: en-US`, cùng tên agent/template hiển thị tiếng Anh trong Chrome. Câu hỏi gợi ý từ chunk chỉ có khi bật `question_generation_config.enabled` cho knowledge base trước khi nạp; setup mặc định không bật và bản vá này không đổi mặc định đó.
 
+## Footnote khi OCR
+
+Fork không còn bỏ nhãn `footnote` trong request PaddleOCR-VL; header, footer, số trang và aside vẫn nằm trong danh sách bỏ qua. Go test đã chạy đỏ → xanh, nhưng nghiệm thu #6 trên stack **còn bị chặn**: gateway OCR ở chế độ `two-stage` trả nội dung rỗng cho block Footnote. Cả sáu kiểm tra footnote và ba câu hỏi footnote hybrid vẫn fail. Cần sửa nhận dạng Footnote trong gateway rồi nạp lại tài liệu; không thể khôi phục text chỉ bằng đổi danh sách nhãn. Xem [kết quả E2E và probe gateway](docs/validation/issue-6.md).
+
 ## Kiểm tra database
 
 Sau khi upload ít nhất một tài liệu:

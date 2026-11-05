@@ -1,0 +1,115 @@
+{
+  "issue": 6,
+  "status": "fork_patch_implemented_live_acceptance_blocked",
+  "fork_base": "45787b40fb1701ec2c91f55924198abdac6a1b89",
+  "fork_patch_commit": "5ce8e8c36d4e65f3c6c736557245e2c71e40a716",
+  "fork_patch_sha256": {
+    "internal/infrastructure/docparser/paddleocr_vl_converter.go": "4a848cad1bf8d3e775b582cc2787ece2840986e746427de4eb3c270f4db6cbe0",
+    "internal/infrastructure/docparser/paddleocr_vl_converter_test.go": "1e29f5ff676d76f8ee4b586f0182a95349cd45224bf659c3c5523f9373fd9f91"
+  },
+  "app": {
+    "image": "weknora-vi/app:45787b40fb17-dirty",
+    "image_id": "sha256:529f35cb31ab95b32d4135d3e60d870e312ab4662b03992ba693020f6effea5d",
+    "health": "healthy"
+  },
+  "red_test": {
+    "command": "go test ./internal/infrastructure/docparser -run '^TestPaddleOCRVLReadPreservesFootnotes$' -count=1",
+    "exit_code": 1,
+    "output": "INFO [2026-11-05 12:18:46.734] [] paddleocr_vl_converter.go:59[Read] | [PaddleOCR-VL] Parsing file=law.pdf size=4 via http://127.0.0.1:43261\nINFO [2026-11-05 12:18:46.734] [] paddleocr_vl_converter.go:211[callLayoutParsing] | [PaddleOCR-VL] parsed 1 page(s), images=0\nINFO [2026-11-05 12:18:46.734] [] paddleocr_vl_converter.go:76[Read] | [PaddleOCR-VL] Parsed successfully, markdown=115 chars, images=0\n--- FAIL: TestPaddleOCRVLReadPreservesFootnotes (0.00s)\n    paddleocr_vl_converter_test.go:68: markdownIgnoreLabels must not discard footnote\nFAIL\nFAIL\tgithub.com/Tencent/WeKnora/internal/infrastructure/docparser\t0.297s\nFAIL\n"
+  },
+  "green_tests": {
+    "command": "go test ./internal/infrastructure/docparser -count=1",
+    "exit_code": 0,
+    "output": "ok  \tgithub.com/Tencent/WeKnora/internal/infrastructure/docparser\t3.728s\n"
+  },
+  "e2e": {
+    "command": "python3 scripts/e2e.py --keep-kb --out docs/validation/issue-6-e2e.json",
+    "result": "issue-6-e2e.json",
+    "output": "Đăng nhập admin@example.com, tenant 10000\nTạo knowledge base 'e2e-20261105-122122': a0ac138f-270f-401c-8cd0-273f0c21e11f\nUpload fixtures/legal/32-2024-tt-bca.pdf\nUpload fixtures/legal/117-2026-vbhn-nd-nhnn.pdf\nUpload fixtures/legal/136-2026-vbhn-tt-bct.pdf\nParse fixtures/legal/32-2024-tt-bca.pdf: finalizing\nParse fixtures/legal/117-2026-vbhn-nd-nhnn.pdf: finalizing\nParse fixtures/legal/136-2026-vbhn-tt-bct.pdf: finalizing\nKiểm tra chunk footnotes: FAIL (6/6 lỗi)\nKiểm tra chunk dieu_headings: PASS (0/27 lỗi)\nKiểm tra chunk breadcrumbs: PASS (0/5 lỗi)\nKiểm tra chunk nfc: PASS (0/352 lỗi)\nkeyword  R@1=0.50 R@3=0.54 R@5=0.62 R@10=0.65 MRR=0.54 trượt=9\nvector   R@1=0.65 R@3=0.73 R@5=0.77 R@10=0.81 MRR=0.70 trượt=5\nhybrid   R@1=0.62 R@3=0.73 R@5=0.81 R@10=0.85 MRR=0.68 trượt=4\nKết quả: docs/validation/issue-6-e2e.json\n",
+    "note": "The harness reports chunk-check failures in JSON but does not exit nonzero for them."
+  },
+  "chunk_noise_checks": {
+    "normalization": "NFC, remove **, retain newlines",
+    "patterns": {
+      "gazette_header": "CÔNG BÁO\\s*/\\s*Số\\s+(?:576|577)-VBHN",
+      "signature_header": "Ký bởi:|Cơ quan:\\s*VĂN PHÒNG CHÍNH PHỦ|Ngày ký:",
+      "page_number_candidate": "(?m)^[ \\t]*(?:#{1,6}[ \\t]+)?(?:Trang[ \\t]+)?[0-9]{1,3}(?:[ \\t]*/[ \\t]*[0-9]{1,3})?[ \\t]*$"
+    },
+    "documents": [
+      {
+        "doc": "tt-32-2024-bca",
+        "chunks_checked": 62,
+        "matches": [],
+        "pass": true
+      },
+      {
+        "doc": "vbhn-117-2026-nd-nhnn",
+        "chunks_checked": 124,
+        "matches": [],
+        "pass": true
+      },
+      {
+        "doc": "vbhn-136-2026-tt-bct",
+        "chunks_checked": 166,
+        "matches": [],
+        "pass": true
+      }
+    ],
+    "limit": "Pattern checks for source gazette/signature headers and standalone page-number candidates; not proof that every possible footer/aside is absent. The Go test verifies those labels remain ignored."
+  },
+  "ocr_probe": {
+    "result": "issue-6-ocr-probe.json",
+    "source": "fixtures/legal/117-2026-vbhn-nd-nhnn.pdf",
+    "page": 1,
+    "extract_command": "pdfseparate -f 1 -l 1 fixtures/legal/117-2026-vbhn-nd-nhnn.pdf /tmp/weknora-issue6-page%d.pdf",
+    "request": {
+      "method": "POST",
+      "path": "/layout-parsing",
+      "file": "Base64 of extracted page 1",
+      "fileType": 0,
+      "visualize": false,
+      "markdownIgnoreLabels": [
+        "header",
+        "header_image",
+        "footer",
+        "footer_image",
+        "number",
+        "aside_text"
+      ],
+      "useDocOrientationClassify": false,
+      "useDocUnwarping": false,
+      "useLayoutDetection": true,
+      "useChartRecognition": false,
+      "useSealRecognition": true,
+      "useOcrForImageBlock": false,
+      "mergeTables": true,
+      "relevelTitles": true,
+      "restructurePages": true,
+      "layoutShapeMode": "auto",
+      "promptLabel": "ocr",
+      "layoutNms": true,
+      "repetitionPenalty": 1,
+      "temperature": 0,
+      "topP": 1,
+      "minPixels": 147384,
+      "maxPixels": 2822400
+    },
+    "footnote_blocks": 13,
+    "empty_footnote_blocks": 13,
+    "gateway_mode": "two-stage"
+  },
+  "blocker": {
+    "issue_url": "https://github.com/hiennguyen9874/MonkeyOCRv2-B-Parsing-Gateway/issues/19",
+    "observed": "Gateway honours markdownIgnoreLabels without footnote but returns empty footnote block_content in two-stage mode. All six E2E footnote checks and hybrid queries q07, q25, q26 fail.",
+    "source_evidence": [
+      "references/MonkeyOCRv2-B-Parsing-Gateway/src/monkeyocr_gateway/upstream.py:20-25",
+      "references/MonkeyOCRv2-B-Parsing-Gateway/src/monkeyocr_gateway/page_parser.py:87-113"
+    ],
+    "needed": "Enable footnote recognition in the OCR gateway, deploy that fix, then rerun the full E2E. Gateway code and parser mode were not changed in this task."
+  },
+  "cleanup": {
+    "kb_id": "a0ac138f-270f-401c-8cd0-273f0c21e11f",
+    "deleted_at": "2026-11-05T12:28:23+07:00",
+    "get_after_delete_status": 404
+  }
+}
