@@ -1,0 +1,52 @@
+{
+  "ngay": "2026-11-17",
+  "fork_commit": "818f53a46830d4de8272146e2202ffb8e1248b9d",
+  "upstream_commit": "7d064bc3a259f87634840199f565ec4dd644ba1e",
+  "phạm_vi": "Merge mã nguồn, không triển khai stack",
+  "build": {
+    "command": "GOMAXPROCS=2 go build -p 2 ./...",
+    "exit_code": 0
+  },
+  "regression": {
+    "command": "GOMAXPROCS=2 go test -p 2 ./internal/infrastructure/chunker ./internal/infrastructure/docparser ./internal/sourceloc ./internal/types ./internal/application/repository/retriever/postgres ./internal/application/service ./internal/application/service/chat_pipeline ./internal/database -count=1",
+    "exit_code": 1,
+    "passed_packages": [
+      "github.com/Tencent/WeKnora/internal/infrastructure/chunker",
+      "github.com/Tencent/WeKnora/internal/infrastructure/docparser",
+      "github.com/Tencent/WeKnora/internal/sourceloc",
+      "github.com/Tencent/WeKnora/internal/types",
+      "github.com/Tencent/WeKnora/internal/application/repository/retriever/postgres",
+      "github.com/Tencent/WeKnora/internal/application/service/chat_pipeline",
+      "github.com/Tencent/WeKnora/internal/database"
+    ],
+    "failures": [
+      "TestDataSourceReplacementCommitsBeforeEnqueueAndCleanup/url",
+      "TestDataSourceReplacementCommitsBeforeEnqueueAndCleanup/file_url",
+      "TestUpdateMCPService_AppliesNonScalarUpdateWithoutName"
+    ]
+  },
+  "upstream_baseline": {
+    "commit": "7d064bc3a259f87634840199f565ec4dd644ba1e",
+    "exit_code": 1,
+    "kết_quả": "Cùng hai test service lỗi do DNS/SSRF trên example.com"
+  },
+  "service_filtered": {
+    "command": "GOMAXPROCS=2 go test -p 2 ./internal/application/service -skip \"^(TestDataSourceReplacementCommitsBeforeEnqueueAndCleanup|TestUpdateMCPService_AppliesNonScalarUpdateWithoutName)$\" -count=1",
+    "exit_code": 0
+  },
+  "frontend_node": {
+    "command": "node --test frontend/src/utils/citationMarkdownMath.test.mjs frontend/src/utils/agent-tool-display.test.mjs frontend/src/components/css/chat-hljs.test.mjs",
+    "exit_code": 0,
+    "passed": 24,
+    "failed": 0
+  },
+  "entrypoint": {
+    "command": "bash scripts/docker-entrypoint_test.sh",
+    "exit_code": 0
+  },
+  "đang_chờ": [
+    "Migration SQL PostgreSQL/ParadeDB thật (thiếu DSN)",
+    "Dựng image và E2E trên stack WeKnora (chưa chạy stack)",
+    "Full frontend/Python docreader/make test"
+  ]
+}
