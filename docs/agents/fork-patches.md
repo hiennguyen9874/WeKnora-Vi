@@ -1,6 +1,6 @@
 # Fork patches
 
-Every change to WeKnora behaviour is a commit in the Fork (`references/WeKnora`), then a submodule pin in the Repo triển khai.
+Every change to WeKnora behaviour is a commit in the Fork (`references/WeKnora`), then a submodule pin in the Repo triển khai. What the existing patches do: `fork-behaviour.md`.
 
 ## Steps
 
@@ -11,6 +11,21 @@ Every change to WeKnora behaviour is a commit in the Fork (`references/WeKnora`)
 5. In the Repo triển khai, `git add references/WeKnora` and commit the pin with the docs and evidence for the issue (see `validation.md`). Push to `master`.
 
 Done when both repos are pushed, the pin points at the pushed Fork commit, and `git -C references/WeKnora status` is clean.
+
+## Syncing upstream
+
+Merge `upstream/main` into the Fork's `main`; history stays append-only (merge commits, plain push). The last sync (#15) reached Tencent `7d064bc3a`; `docs/validation/issue-15.md` and `issue-14.md` are worked examples.
+
+```sh
+git -C references/WeKnora fetch upstream
+git -C references/WeKnora switch main
+git -C references/WeKnora merge --no-ff upstream/main
+ls references/WeKnora/migrations/versioned | cut -c1-6 | sort | uniq -c | awk '$1>2'   # must print nothing
+```
+
+- golang-migrate refuses two migrations with the same number. Migrations already applied on the Fork database keep their identity; renumber the incoming upstream one to the next free number and update tests that reference the file name. That is why upstream's IM migration is `138` while the Fork's ICU migration stays `137`.
+- `schema_migrations` stores a single version. A migration whose content changes under an already-applied number is **skipped** by the app. From Fork `137`, the current pin only needs `138` to run; leave the recorded version alone. The version adjustment in `issue-14.md` is history, not a recipe.
+- After the merge: rebuild `./scripts/compose.sh up -d --build --no-deps app docreader frontend`, resync `config/prompt_templates/` (below), run E2E, then pin as in step 5.
 
 ## Images and reload
 

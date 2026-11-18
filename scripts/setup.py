@@ -149,7 +149,7 @@ GRAPH_EXAMPLE = {
 }
 
 
-# Cấu hình chunk đã chốt, xem README › Kích thước chunk.
+# Cấu hình chunk đã chốt, xem docs/agents/fork-behaviour.md và docs/validation/issue-7.md.
 # - strategy auto: chunker chọn tầng theo cấu trúc tài liệu, nên cắt theo tiêu đề
 #   Chương/Mục/Điều và gắn breadcrumb. Bỏ trống là tầng legacy, không cắt theo tiêu đề.
 # - languages vi: token limit dùng tỉ lệ 2,5 ký tự/token đo trên Qwen3-VL-Embedding-2B.
